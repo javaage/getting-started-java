@@ -16,13 +16,10 @@
 <project>
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.example.flex.gettingstarted</groupId>
-  <artifactId>helloworld-springboot</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>helloworld-springboot</name>
-  <description>Demo project for Spring Boot</description>
+  <name>la</name>
 	<!-- Get parameters and allow bulk testing
   <parent>                               
     <artifactId>getting-started-java</artifactId>
@@ -177,4 +174,7 @@
 <!-- END plugin -->
     </plugins>
   </build>
+  <groupId>com.cisco</groupId>
+  <artifactId>la</artifactId>
+  <description>learning assistant</description>
 </project>

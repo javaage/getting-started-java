@@ -8,7 +8,7 @@
   </typeAliases>
 
   <environments default="product">
-    <environment id="development">
+    <environment id="local">
       <transactionManager type="JDBC" />
       <dataSource type="POOLED">
         <property name="driver" value="org.postgresql.Driver" />
@@ -29,14 +29,14 @@
   </environments>
 
   <mappers>
-  	<!-- 
+
     <mapper resource="com/cisco/la/mapper/CourseModelMapper.xml" />
     <mapper resource="com/cisco/la/mapper/CourseHistoryModelMapper.xml" />
     <mapper resource="com/cisco/la/mapper/GoldenSampleModelMapper.xml" />
     <mapper resource="com/cisco/la/mapper/RoleHistoryModelMapper.xml" />
     <mapper resource="com/cisco/la/mapper/RoleModelMapper.xml" />
     <mapper resource="com/cisco/la/mapper/UserModelMapper.xml" />
-     -->
+
   </mappers>
 </configuration>
 

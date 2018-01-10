@@ -2,7 +2,7 @@
 <!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 <generatorConfiguration>
 	<!-- C:\Users\p9030576\.m2\repository\postgresql\postgresql\9.1-901-1.jdbc4\postgresql-9.1-901-1.jdbc4.jar -->
-  <classPathEntry location="C:\Users\p9030576\.m2\repository\postgresql\postgresql\9.1-901-1.jdbc4\postgresql-9.1-901-1.jdbc4.jar" />
+  <classPathEntry location="C:\Users\javaage\.m2\repository\postgresql\postgresql\9.1-901-1.jdbc4\postgresql-9.1-901-1.jdbc4.jar" />
   <context id="context1">
     <jdbcConnection connectionURL="jdbc:postgresql://localhost:5432/la" driverClass="org.postgresql.Driver" password="19786028" userId="postgres" />
     <javaModelGenerator targetPackage="com.cisco.la.model" targetProject="la" />

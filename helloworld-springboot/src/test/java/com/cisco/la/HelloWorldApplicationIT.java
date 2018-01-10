@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.java.gettingstarted.it;
+package com.cisco.la;
 
 import static org.junit.Assert.assertTrue;
 
