@@ -1,7 +1,12 @@
 package com.cisco.la;
 
+import java.io.Reader;
+
 import javax.sql.DataSource;
 
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -18,7 +23,7 @@ import org.springframework.web.filter.CorsFilter;
 public class AppConfiguration {
 
 	@Bean
-	public PlatformTransactionManager txManager(DataSource dataSource) {
+	public PlatformTransactionManager txManager(DataSource dataSource) throws Exception {
 		return new DataSourceTransactionManager(dataSource);
 	}
 
