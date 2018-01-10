@@ -16,17 +16,27 @@
 
 package com.cisco.la;
 
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cisco.la.mapper.UserModelMapper;
+import com.cisco.la.model.UserModel;
+
 @SpringBootApplication
 @RestController
 public class HelloworldApplication {
+	@Autowired
+	private SqlSession sqlSession;
+	
   @RequestMapping("/")
-  public String home() {
-    return "Hello World!";
+  public Object home() {
+    UserModelMapper userModelMapper = sqlSession.getMapper(UserModelMapper.class);
+    UserModel userModel = userModelMapper.selectByPrimaryKey("test@test.com");
+    return userModel;
   }
 
   /**
