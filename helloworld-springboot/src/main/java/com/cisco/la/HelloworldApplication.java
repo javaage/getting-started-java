@@ -38,22 +38,28 @@ public class HelloworldApplication {
 	 private SqlSession sqlSession;
 
 	@RequestMapping("/")
-  public Object home(){
-		UserModelMapper userModelMapper = sqlSession.getMapper(UserModelMapper.class);
-	    UserModel userModel = userModelMapper.selectByPrimaryKey("test@test.com");
-	    return userModel;
-//	  try {
-//		  Reader reader = Resources.getResourceAsReader("mybatis-config.xml");
-//		  SqlSessionFactoryBuilder builder = new SqlSessionFactoryBuilder();
-//		  SqlSessionFactory sqlSessionFactory = builder.build(reader);
-//		  SqlSession sqlSession = sqlSessionFactory.openSession();
-//		    UserModelMapper userModelMapper = sqlSession.getMapper(UserModelMapper.class);
-//		    UserModel userModel = userModelMapper.selectByPrimaryKey("test@test.com");
-//		    return userModel;
-//	  }catch(Exception exp) {
-//		  return exp;
-//	  }
-  }
+	  public Object home(){
+			UserModelMapper userModelMapper = sqlSession.getMapper(UserModelMapper.class);
+		    UserModel userModel = userModelMapper.selectByPrimaryKey("test@test.com");
+		    return userModel;
+	  }
+	
+	@RequestMapping("/add")
+	  public Object add(){
+			UserModelMapper userModelMapper = sqlSession.getMapper(UserModelMapper.class);
+			UserModel userModel = new UserModel();
+			userModel.setActive(true);
+			userModel.setBalance(1.0d);
+			userModel.setBu("test");
+			userModel.setBudget(10.0d);
+			userModel.setGrade("test");
+			userModel.setId("test1@test.com");
+			userModel.setName("test");
+			userModel.setRoleName("test");
+			userModel.setTitle("title");
+			userModelMapper.insert(userModel);
+			return userModel;
+	  }
 
 	/**
 	 * (Optional) App Engine health check endpoint mapping.
