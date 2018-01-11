@@ -34,12 +34,14 @@ import com.cisco.la.model.UserModel;
 @SpringBootApplication
 @RestController
 public class HelloworldApplication {
-	// @Autowired
-	// private SqlSession sqlSession;
+	 @Autowired
+	 private SqlSession sqlSession;
 
 	@RequestMapping("/")
   public Object home(){
-		return "Home";
+		UserModelMapper userModelMapper = sqlSession.getMapper(UserModelMapper.class);
+	    UserModel userModel = userModelMapper.selectByPrimaryKey("test@test.com");
+	    return userModel;
 //	  try {
 //		  Reader reader = Resources.getResourceAsReader("mybatis-config.xml");
 //		  SqlSessionFactoryBuilder builder = new SqlSessionFactoryBuilder();
