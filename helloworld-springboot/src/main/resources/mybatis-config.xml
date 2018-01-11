@@ -6,7 +6,7 @@
   <typeAliases>
     <package name="com.cisco.la.model"/>
   </typeAliases>
-
+	<!-- 
   <environments default="product">
     <environment id="local">
       <transactionManager type="JDBC" />
@@ -27,16 +27,14 @@
       </dataSource>
     </environment>
   </environments>
-
+	 -->
   <mappers>
-
     <mapper resource="com/cisco/la/mapper/CourseModelMapper.xml" />
     <mapper resource="com/cisco/la/mapper/CourseHistoryModelMapper.xml" />
     <mapper resource="com/cisco/la/mapper/GoldenSampleModelMapper.xml" />
     <mapper resource="com/cisco/la/mapper/RoleHistoryModelMapper.xml" />
     <mapper resource="com/cisco/la/mapper/RoleModelMapper.xml" />
     <mapper resource="com/cisco/la/mapper/UserModelMapper.xml" />
-
   </mappers>
 </configuration>
 

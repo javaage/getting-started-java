@@ -39,17 +39,18 @@ public class HelloworldApplication {
 
 	@RequestMapping("/")
   public Object home(){
-	  try {
-		  Reader reader = Resources.getResourceAsReader("mybatis-config.xml");
-		  SqlSessionFactoryBuilder builder = new SqlSessionFactoryBuilder();
-		  SqlSessionFactory sqlSessionFactory = builder.build(reader);
-		  SqlSession sqlSession = sqlSessionFactory.openSession();
-		    UserModelMapper userModelMapper = sqlSession.getMapper(UserModelMapper.class);
-		    UserModel userModel = userModelMapper.selectByPrimaryKey("test@test.com");
-		    return userModel;
-	  }catch(Exception exp) {
-		  return exp;
-	  }
+		return "Home";
+//	  try {
+//		  Reader reader = Resources.getResourceAsReader("mybatis-config.xml");
+//		  SqlSessionFactoryBuilder builder = new SqlSessionFactoryBuilder();
+//		  SqlSessionFactory sqlSessionFactory = builder.build(reader);
+//		  SqlSession sqlSession = sqlSessionFactory.openSession();
+//		    UserModelMapper userModelMapper = sqlSession.getMapper(UserModelMapper.class);
+//		    UserModel userModel = userModelMapper.selectByPrimaryKey("test@test.com");
+//		    return userModel;
+//	  }catch(Exception exp) {
+//		  return exp;
+//	  }
   }
 
 	/**
