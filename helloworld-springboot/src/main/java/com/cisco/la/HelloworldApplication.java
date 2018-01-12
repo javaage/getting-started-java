@@ -37,7 +37,7 @@ public class HelloworldApplication {
 	 @Autowired
 	 private SqlSession sqlSession;
 
-	@RequestMapping("/")
+	@RequestMapping("/get")
 	  public Object home(){
 			UserModelMapper userModelMapper = sqlSession.getMapper(UserModelMapper.class);
 		    UserModel userModel = userModelMapper.selectByPrimaryKey("test@test.com");
