@@ -40,7 +40,7 @@ public class HelloworldApplication {
 	@RequestMapping("/get")
 	  public Object home(){
 			UserModelMapper userModelMapper = sqlSession.getMapper(UserModelMapper.class);
-		    UserModel userModel = userModelMapper.selectByPrimaryKey("test@test.com");
+		    UserModel userModel = userModelMapper.selectByPrimaryKey("test1@test.com");
 		    return userModel;
 	  }
 	
