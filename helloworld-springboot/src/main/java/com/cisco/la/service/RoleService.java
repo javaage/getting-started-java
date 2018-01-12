@@ -11,4 +11,6 @@ public interface RoleService {
   public void updateRole(RoleModel roleModel);
 
   public RoleModel getRoleByID(String id);
+  
+  public List<RoleModel> getRoleList();
 }

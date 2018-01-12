@@ -16,45 +16,103 @@
 
 package com.cisco.la.controller;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cisco.la.mapper.UserModelMapper;
 import com.cisco.la.model.UserModel;
 import com.cisco.la.service.UserService;
 
+import net.sf.json.JSONObject;
+
 @Controller
 @RestController
-@RequestMapping(value="/user")
+@RequestMapping(value="/api/user")
 public class UserController {
 	@Autowired
 	private UserService userService;
 	
-	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public Object getUser(HttpServletRequest request){
-		return userService.getUserByID("test1@test.com");
+	@RequestMapping(value = "{id:.+}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Object getUser(HttpServletRequest request, @PathVariable("id") String id){
+		UserModel userModel = userService.getUserByID(id);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("code", 1);
+		map.put("message", "Successfully");
+		map.put("data", userModel);
+		return map;
+	}
+	
+	@RequestMapping(value = "list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Object getUserList(HttpServletRequest request){
+		List<UserModel> userModelList = userService.getUserList();
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("code", 1);
+		map.put("message", "Successfully");
+		map.put("data", userModelList);
+		return map;
+	}
+	
+	@RequestMapping(value = "{id:.+}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Object deleteUser(HttpServletRequest request, @PathVariable("id") String id){
+		userService.inactiveUser(id);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("code", 1);
+		map.put("message", "Successfully");
+		return map;
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public Object addUser(HttpServletRequest request, String strJson){
+	public Object addUser(HttpServletRequest request, @RequestBody String json){
+		JSONObject jsonObject = JSONObject.fromObject(json);
 		UserModel userModel = new UserModel();
 		userModel.setActive(true);
-		userModel.setBalance(1.0d);
-		userModel.setBu("test");
-		userModel.setBudget(10.0d);
-		userModel.setGrade("test");
-		userModel.setId("test1@test.com");
-		userModel.setName("test");
-		userModel.setRoleName("test");
-		userModel.setTitle("title");
+		userModel.setBalance(jsonObject.getDouble("balance"));
+		userModel.setBu(jsonObject.getString("bu"));
+		userModel.setBudget(jsonObject.getDouble("budget"));
+		userModel.setGrade(jsonObject.getString("grade"));
+		userModel.setId(jsonObject.getString("id"));
+		userModel.setName(jsonObject.getString("name"));
+		userModel.setRoleName(jsonObject.getString("roleName"));
+		userModel.setTitle(jsonObject.getString("title"));
 		userService.addUser(userModel);
 		
-		return userModel;
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("code", 1);
+		map.put("message", "Successfully");
+		return map;
+	}
+	
+	@RequestMapping(method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Object updateUser(HttpServletRequest request, @RequestBody String json){
+		JSONObject jsonObject = JSONObject.fromObject(json);
+		UserModel userModel = new UserModel();
+		userModel.setBalance(jsonObject.getDouble("balance"));
+		userModel.setBu(jsonObject.getString("bu"));
+		userModel.setBudget(jsonObject.getDouble("budget"));
+		userModel.setGrade(jsonObject.getString("grade"));
+		userModel.setId(jsonObject.getString("id"));
+		userModel.setName(jsonObject.getString("name"));
+		userModel.setRoleName(jsonObject.getString("roleName"));
+		userModel.setTitle(jsonObject.getString("title"));
+		userService.updateUser(userModel); 
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("code", 1);
+		map.put("message", "Successfully");
+		return map;
 	}
 }

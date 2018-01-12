@@ -1,4 +1,5 @@
 package com.cisco.la.service.impl;
+
 import com.cisco.la.model.RoleModel;
 import com.cisco.la.service.RoleService;
 
@@ -10,19 +11,30 @@ import java.util.ArrayList;
 
 @Service
 public class RoleServiceImpl implements RoleService {
-  public void addRole(RoleModel roleModel){
+	public void addRole(RoleModel roleModel) {
 
-  }
+	}
 
-  public void inactiveRole(String id){
+	public void inactiveRole(String id) {
 
-  }
+	}
 
-  public void updateRole(RoleModel roleModel){
+	public void updateRole(RoleModel roleModel) {
 
-  }
+	}
 
-  public RoleModel getRoleByID(String id){
-    return null;
-  }
+	public RoleModel getRoleByID(String id) {
+		return null;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.cisco.la.service.RoleService#getRoleList()
+	 */
+	@Override
+	public List<RoleModel> getRoleList() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

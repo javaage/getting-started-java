@@ -11,4 +11,6 @@ public interface UserService {
   public void updateUser(UserModel userModel);
 
   public UserModel getUserByID(String id);
+  
+  public List<UserModel> getUserList();
  }
