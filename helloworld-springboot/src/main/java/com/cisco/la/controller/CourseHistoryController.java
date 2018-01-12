@@ -1,5 +1,5 @@
-/*
- * Copyright 2015 Google Inc. All Rights Reserved.
+/**
+ * Copyright 2017 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,15 @@
  * limitations under the License.
  */
 
-package com.cisco.la;
+package com.cisco.la.controller;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@SpringBootApplication
+@Controller
 @RestController
-public class HelloworldApplication {
+@RequestMapping(value="/coursehistory")
+public class CourseHistoryController {
 
-	public static void main(String[] args) {
-		SpringApplication.run(HelloworldApplication.class, args);
-	}
 }
