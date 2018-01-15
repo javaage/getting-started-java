@@ -13,19 +13,23 @@ angular.module('RDash').config(['$stateProvider', '$urlRouterProvider',
         $stateProvider
             .state('employee', {
                 url: '/employee',
-                templateUrl: 'templates/employee.html'
+                templateUrl: 'templates/employee.html',
+                controller: 'EmployeeCtrl'
             }) 
             .state('role', {
                 url: '/role',
-                templateUrl: 'templates/role.html'
+                templateUrl: 'templates/role.html',
+                controller: 'RoleCtrl'
             }) 
             .state('course', {
                 url: '/course',
-                templateUrl: 'templates/course.html'
+                templateUrl: 'templates/course.html',
+                controller: 'CourseCtrl'
             }) 
             .state('sample', {
                 url: '/sample',
-                templateUrl: 'templates/sample.html'
+                templateUrl: 'templates/sample.html',
+                controller: 'SampleCtrl'
             })        
             // .state('index', {
             //     url: '/',

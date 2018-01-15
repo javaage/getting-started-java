@@ -22,6 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Controller
 @RestController
-@RequestMapping(value="/goldensample")
+@RequestMapping(value="/api/goldensample")
 public class GoldenSampleController {
 }

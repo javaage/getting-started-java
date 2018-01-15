@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Controller
 @RestController
-@RequestMapping(value="/course")
+@RequestMapping(value="/api/course")
 public class CourseController {
 	
 }

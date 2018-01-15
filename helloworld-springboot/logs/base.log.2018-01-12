@@ -1,0 +1,6 @@
+2018-01-12 17:17:42,880,==>  Preparing: select usr_id, usr_name, usr_budget, usr_balance, usr_bu, usr_title, usr_grade, usr_rl_name, usr_active from public.la_user where usr_id = ? 
+2018-01-12 17:17:43,177,==> Parameters: test1@test1.com(String)
+2018-01-12 17:17:43,342,<==      Total: 0
+2018-01-12 17:19:19,791,==>  Preparing: select usr_id, usr_name, usr_budget, usr_balance, usr_bu, usr_title, usr_grade, usr_rl_name, usr_active from public.la_user where usr_id = ? 
+2018-01-12 17:19:19,792,==> Parameters: test1@test.com(String)
+2018-01-12 17:19:19,801,<==      Total: 1

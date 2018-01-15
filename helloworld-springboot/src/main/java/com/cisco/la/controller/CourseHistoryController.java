@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Controller
 @RestController
-@RequestMapping(value="/coursehistory")
+@RequestMapping(value="/api/coursehistory")
 public class CourseHistoryController {
 
 }

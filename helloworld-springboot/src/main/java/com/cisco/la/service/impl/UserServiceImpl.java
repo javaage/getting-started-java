@@ -40,7 +40,6 @@ public class UserServiceImpl implements UserService {
 	
 	public List<UserModel> getUserList(){
 		UserModelMapper userModelMapper = sqlSession.getMapper(UserModelMapper.class);
-		userModelMapper.selectByExample(null);
-		return null;
+		return userModelMapper.selectByExample(null);
 	}
 }

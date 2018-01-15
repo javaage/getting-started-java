@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Controller
 @RestController
-@RequestMapping(value="/rolehistory")
+@RequestMapping(value="/api/rolehistory")
 public class RoleHistoryController {
 	
 }
