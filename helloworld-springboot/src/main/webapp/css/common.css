@@ -1,0 +1,12 @@
+.inactive {
+  background-color: #eeeeee !important;
+}
+.help-block {
+  color: #a94442;
+}
+input.ng-invalid {
+  border: 1px solid #a94442;
+}
+input.ng-valid {
+  border: 1px solid green;
+}
