@@ -2,111 +2,94 @@
   <div class="col-lg-12">
 		<rd-widget>
 			<rd-widget-header icon="fa-users" title="Users">
-				<input type="text" placeholder="Search" class="form-control input-sm">
+
 			</rd-widget-header>
+			<input class="btn btn-default" type="button" ng-click="addUserModal()" value="Add User">
 			<rd-widget-body classes="medium no-padding">
 				<div class="table-responsive">
-					<table class="table">
-						<thead>
-							<tr>
-								<th class="text-center">Spark Account</th>
-								<th class="text-center">Name</th>
-								<th class="text-center">Budget</th>
-								<th class="text-center">Balance</th>
-								<th class="text-center">BU</th>
-								<th class="text-center">Role</th>
-								<th class="text-center">Title</th>
-								<th class="text-center">Grade</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr ng-repeat="item in users">
-				                <td class="text-center">{{item.id}}</td>
-				                <td class="text-center">{{item.name}}</td>
-				                <td class="text-center">{{item.budget}}</td>
-				                <td class="text-center">{{item.balance}}</td>
-				                <td class="text-center">{{item.bu}}</td>
-				                <td class="text-center">{{item.roleName}}</td>
-				                <td class="text-center">{{item.title}}</td>
-				                <td class="text-center">{{item.grade}}</td>
-				            </tr>
-						</tbody>
-					</table>
+					<table ng-table="tableParams" class="table table-condensed table-bordered table-striped" show-filter="false">
+			            <tr ng-repeat="item in $data" ng-class="{'inactive':!item.active}">
+			                	<td title="'Spark Account'" sortable="'id'" class="text-center">{{item.id}}</td>
+				                <td title="'Name'" sortable="'name'" class="text-center">{{item.name}}</td>
+				                <td title="'Budget'" sortable="'budget'" class="text-center">{{item.budget}}</td>
+				                <td title="'Balance'" sortable="'balance'" class="text-center">{{item.balance}}</td>
+				                <td title="'BU'" sortable="'bu'" class="text-center">{{item.bu}}</td>
+				                <td title="'Role'" sortable="'roleName'" class="text-center">{{item.roleName}}</td>
+				                <td title="'Title'" sortable="'title'" class="text-center">{{item.title}}</td>
+				                <td title="'Grade'" sortable="'grade'" class="text-center">{{item.grade}}</td>  
+				                <td title="'Operation'" class="text-center">
+				                	<span ng-if="!item.active" style="width: 80px;margin-left: 10px; margin-right: 10px">Update</span>	
+				                	<a ng-click="updateUserModal(item)" ng-if="item.active" style="width: 80px;margin-left: 10px; margin-right: 10px">Update</a>
+				                	<a ng-click="inactiveUser(item)" ng-if="item.active" style="width: 80px">Inactive</a>
+				                	<a ng-click="activeUser(item)" ng-if="!item.active" style="width: 80px">&nbsp;Active&nbsp;</a>
+				                </td>	
+			            </tr>
+			        </table>
         		</div>
 			</rd-widget-body>
 		<rd-widget>
 	</rd-widget></rd-widget></div>
 
-	<div class="modal fade" id="id_user_info" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content" style="background-color: #43596e">
-                <div class="modal-header tableHeader">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Title</h4>
-                </div>
-                <div class="modal-body" style="padding: 5px 20px">
-                    
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" ng-click="submitUser()">Submit</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-  <div class="col-lg-12">
-  	<form class="form-horizontal">
-	  <div class="form-group">
-	    <label for="inputSpark" class="col-sm-2 control-label">Spark Account*</label>
-	    <div class="col-sm-10">
-	      <input type="password" class="form-control" id="inputSpark" placeholder="Spark Account">
-	    </div>
-	  </div>
-	  <div class="form-group">
-	    <label for="inputBudget" class="col-sm-2 control-label">Budget*</label>
-	    <div class="col-sm-10">
-	      <input type="email" class="form-control" id="inputBudget" placeholder="Budget">
-	    </div>
-	  </div>
-	  <div class="form-group">
-	    <label for="inputBalance" class="col-sm-2 control-label">Balance*</label>
-	    <div class="col-sm-10">
-	      <input type="password" class="form-control" id="inputBalance" placeholder="Balance">
-	    </div>
-	  </div>
-	  <div class="form-group">
-	    <label for="inputBU" class="col-sm-2 control-label">BU*</label>
-	    <div class="col-sm-10">
-	      <input type="password" class="form-control" id="inputBU" placeholder="BU">
-	    </div>
-	  </div>
-	  <div class="form-group">
-	    <label for="inputRole" class="col-sm-2 control-label">Role*</label>
-	    <div class="col-sm-10">
-	      <input type="password" class="form-control" id="inputRole" placeholder="Role">
-	    </div>
-	  </div>
-	  <div class="form-group">
-	    <label for="inputJobTitle" class="col-sm-2 control-label">Job Title</label>
-	    <div class="col-sm-10">
-	      <input type="password" class="form-control" id="inputJobTitle" placeholder="Job Title">
-	    </div>
-	  </div>
-	  <div class="form-group">
-	    <label for="inputGrade" class="col-sm-2 control-label">Grade</label>
-	    <div class="col-sm-10">
-	      <input type="password" class="form-control" id="inputGrade" placeholder="Grade">
-	    </div>
-	  </div>
-	  
-	  <div class="form-group">
-	    <div class="col-sm-offset-2 col-sm-10">
-	      <button type="submit" class="btn btn-default">Add</button>
-	      <button type="cancel" class="btn btn-default">Cancel</button>
-	    </div>
-	  </div>
-	</form>
-  </div>
+    <script type="text/ng-template" id="addUserModal.html">  
+        <div class="modal-header">  
+            <h3 ng-if="!isModify">Add User</h3> 
+            <h3 ng-if="isModify">Update User</h3> 
+        </div>  
+        <div class="modal-body">  
+            <form class="form-horizontal" name="userForm" novalidate>
+			  <div class="form-group">
+			    <label for="inputSpark" class="col-sm-4 control-label">Spark Account*</label>
+			    <div class="col-sm-8">
+			      <input type="email" name="id" ng-model="user.id" class="form-control" id="inputSpark" placeholder="Spark Account e.g. robot@ge.com" required>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label for="inputName" class="col-sm-4 control-label">Name*</label>
+			    <div class="col-sm-8">
+			      <input type="text" ng-model="user.name" class="form-control" id="inputName" placeholder="Name" required>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label for="inputBudget" class="col-sm-4 control-label">Budget*</label>
+			    <div class="col-sm-8">
+			      <input type="number" ng-model="user.budget" class="form-control" id="inputBudget" placeholder="Budget" required>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label for="inputBalance" class="col-sm-4 control-label">Balance*</label>
+			    <div class="col-sm-8">
+			      <input type="number" ng-model="user.balance" class="form-control" id="inputBalance" placeholder="Balance" required>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label for="inputBU" class="col-sm-4 control-label">BU*</label>
+			    <div class="col-sm-8">
+			      <input type="text" ng-model="user.bu" class="form-control" id="inputBU" placeholder="BU" required>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label for="inputRole" class="col-sm-4 control-label">Role*</label>
+			    <div class="col-sm-8">
+			      <input type="text" ng-model="user.roleName" class="form-control" id="inputRole" placeholder="Role" required>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label for="inputJobTitle" class="col-sm-4 control-label">Job Title</label>
+			    <div class="col-sm-8">
+			      <input type="text" ng-model="user.title" class="form-control" id="inputJobTitle" placeholder="Job Title">
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label for="inputGrade" class="col-sm-4 control-label">Grade</label>
+			    <div class="col-sm-8">
+			      <input type="text" ng-model="user.grade" class="form-control" id="inputGrade" placeholder="Grade">
+			    </div>
+			  </div>
+			</form>
+        </div>  
+        <div class="modal-footer">  
+            <button type="submit" class="btn btn-default" ng-click="submitUserData()">Submit</button>
+			<button type="cancel" class="btn btn-default" ng-click="closeUserModal()">Cancel</button>
+        </div>  
+     
 </div>

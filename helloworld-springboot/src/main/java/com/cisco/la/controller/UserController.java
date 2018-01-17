@@ -22,6 +22,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -34,7 +36,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cisco.la.model.UserModel;
 import com.cisco.la.service.UserService;
 
-import net.sf.json.JSONObject;
 
 @Controller
 @RestController
@@ -77,42 +78,64 @@ public class UserController {
 	
 	@RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Object addUser(HttpServletRequest request, @RequestBody String json){
-		JSONObject jsonObject = JSONObject.fromObject(json);
-		UserModel userModel = new UserModel();
-		userModel.setActive(true);
-		userModel.setBalance(jsonObject.getDouble("balance"));
-		userModel.setBu(jsonObject.getString("bu"));
-		userModel.setBudget(jsonObject.getDouble("budget"));
-		userModel.setGrade(jsonObject.getString("grade"));
-		userModel.setId(jsonObject.getString("id"));
-		userModel.setName(jsonObject.getString("name"));
-		userModel.setRoleName(jsonObject.getString("roleName"));
-		userModel.setTitle(jsonObject.getString("title"));
-		userService.addUser(userModel);
 		
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("code", 1);
-		map.put("message", "Successfully");
-		return map;
+		try {  
+	        JSONObject jsonObject = new JSONObject(json);   
+	        UserModel userModel = new UserModel();
+			userModel.setActive(true);
+			userModel.setBalance(jsonObject.getDouble("balance"));
+			userModel.setBu(jsonObject.getString("bu"));
+			userModel.setBudget(jsonObject.getDouble("budget"));
+			userModel.setId(jsonObject.getString("id"));
+			userModel.setName(jsonObject.getString("name"));
+			userModel.setRoleName(jsonObject.getString("roleName"));
+			if(jsonObject.has("title"))
+				userModel.setTitle(jsonObject.getString("title"));
+			if(jsonObject.has("grade"))
+				userModel.setGrade(jsonObject.getString("grade"));
+			userService.addUser(userModel);
+			
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("code", 1);
+			map.put("message", "Successfully");
+			return map; 
+	          
+	    } catch (JSONException e) {  
+	    	Map<String, Object> map = new HashMap<String, Object>();
+			map.put("code", -1);
+			map.put("message", e.getMessage());
+			return map; 
+	    } 
 	}
 	
-	@RequestMapping(method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping( method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Object updateUser(HttpServletRequest request, @RequestBody String json){
-		JSONObject jsonObject = JSONObject.fromObject(json);
-		UserModel userModel = new UserModel();
-		userModel.setBalance(jsonObject.getDouble("balance"));
-		userModel.setBu(jsonObject.getString("bu"));
-		userModel.setBudget(jsonObject.getDouble("budget"));
-		userModel.setGrade(jsonObject.getString("grade"));
-		userModel.setId(jsonObject.getString("id"));
-		userModel.setName(jsonObject.getString("name"));
-		userModel.setRoleName(jsonObject.getString("roleName"));
-		userModel.setTitle(jsonObject.getString("title"));
-		userService.updateUser(userModel); 
+		try{
+			JSONObject jsonObject = new JSONObject(json);
+			UserModel userModel = new UserModel();
+			userModel.setBalance(jsonObject.getDouble("balance"));
+			userModel.setBu(jsonObject.getString("bu"));
+			userModel.setBudget(jsonObject.getDouble("budget"));
+			userModel.setId(jsonObject.getString("id"));
+			userModel.setName(jsonObject.getString("name"));
+			userModel.setRoleName(jsonObject.getString("roleName"));
+			if(jsonObject.has("title"))
+				userModel.setTitle(jsonObject.getString("title"));
+			if(jsonObject.has("grade"))
+				userModel.setGrade(jsonObject.getString("grade"));
+			userModel.setActive(jsonObject.getBoolean("active"));
+			userService.updateUser(userModel); 
+			
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("code", 1);
+			map.put("message", "Successfully");
+			return map;
+		}catch (JSONException e) {  
+	    	Map<String, Object> map = new HashMap<String, Object>();
+			map.put("code", -1);
+			map.put("message", e.getMessage());
+			return map; 
+	    } 
 		
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("code", 1);
-		map.put("message", "Successfully");
-		return map;
 	}
 }

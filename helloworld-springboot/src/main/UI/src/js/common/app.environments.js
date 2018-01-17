@@ -33,7 +33,7 @@
                 getUserList: '/api/user/list',
                 deleteUser: '/api/user/{0}',
                 addUser: '/api/user',
-                updateUser: '/api/user/{0}'
+                updateUser: '/api/user'
             };
             function _joinUrl(domain, path) {
                 return domain.replace(/(^http.*?)\/{0,}$/, '$1/') + path.replace(/^\/{0,}(.*)/, '$1');
@@ -73,7 +73,7 @@
                 this.config = config;
             };
             this.$get = function () {
-                this.setEnvironment(constants.environments.MOCK);
+                this.setEnvironment(constants.environments.PRO);
                 return config;
             };
 
