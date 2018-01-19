@@ -66,16 +66,6 @@ public class UserController {
 		return map;
 	}
 	
-	@RequestMapping(value = "{id:.+}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public Object deleteUser(HttpServletRequest request, @PathVariable("id") String id){
-		userService.inactiveUser(id);
-		
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("code", 1);
-		map.put("message", "Successfully");
-		return map;
-	}
-	
 	@RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Object addUser(HttpServletRequest request, @RequestBody String json){
 		
@@ -88,10 +78,11 @@ public class UserController {
 			userModel.setBudget(jsonObject.getDouble("budget"));
 			userModel.setId(jsonObject.getString("id"));
 			userModel.setName(jsonObject.getString("name"));
-			userModel.setRoleName(jsonObject.getString("roleName"));
-			if(jsonObject.has("title"))
+			if(jsonObject.has("roleID") && !jsonObject.isNull("roleID"))
+				userModel.setRoleID(jsonObject.getInt("roleID"));
+			if(jsonObject.has("title") && !jsonObject.isNull("title"))
 				userModel.setTitle(jsonObject.getString("title"));
-			if(jsonObject.has("grade"))
+			if(jsonObject.has("grade") && !jsonObject.isNull("grade"))
 				userModel.setGrade(jsonObject.getString("grade"));
 			userService.addUser(userModel);
 			
@@ -118,10 +109,11 @@ public class UserController {
 			userModel.setBudget(jsonObject.getDouble("budget"));
 			userModel.setId(jsonObject.getString("id"));
 			userModel.setName(jsonObject.getString("name"));
-			userModel.setRoleName(jsonObject.getString("roleName"));
-			if(jsonObject.has("title"))
+			if(jsonObject.has("roleID") && !jsonObject.isNull("roleID"))
+				userModel.setRoleID(jsonObject.getInt("roleID"));
+			if(jsonObject.has("title") && !jsonObject.isNull("title"))
 				userModel.setTitle(jsonObject.getString("title"));
-			if(jsonObject.has("grade"))
+			if(jsonObject.has("grade") && !jsonObject.isNull("grade"))
 				userModel.setGrade(jsonObject.getString("grade"));
 			userModel.setActive(jsonObject.getBoolean("active"));
 			userService.updateUser(userModel); 

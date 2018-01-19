@@ -118,4 +118,59 @@ angular
 
                 return deferred.promise;
             }
+
+            this.getRoleList = function(){
+                var deferred = $q.defer();
+                $http.get(url.getRoleList,{})
+                .success(function(data){
+                    console.log(data);
+                    if (data.code == 1) {
+                        deferred.resolve(data);
+                    } else {
+                        deferred.reject(data);
+                    }
+                })
+                .error(function(error){
+                    deferred.reject(error);
+                });
+
+                return deferred.promise;
+            };
+
+            this.addRole = function(role){
+                var deferred = $q.defer();
+                $http.post(url.addRole,role)
+                .success(function(data){
+                    console.log(data);
+                    if (data.code == 1) {
+                        deferred.resolve(data);
+                    } else {
+                        deferred.reject(data);
+                    }
+                })
+                .error(function(error){
+                    deferred.reject(error);
+                });
+
+                return deferred.promise;
+            };
+
+            this.updateRole = function(role){
+                var deferred = $q.defer();
+                var urlQuery = this.urlFormat(url.updateRole,role.name);
+                $http.put(urlQuery,role)
+                .success(function(data){
+                    console.log(data);
+                    if (data.code == 1) {
+                        deferred.resolve(data);
+                    } else {
+                        deferred.reject(data);
+                    }
+                })
+                .error(function(error){
+                    deferred.reject(error);
+                });
+
+                return deferred.promise;
+            }
         }]);

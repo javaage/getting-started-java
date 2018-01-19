@@ -1,10 +1,23 @@
 angular
     .module('RDash')
     .controller('EmployeeCtrl', ['$rootScope', '$scope','$log','$uibModal','app.services','NgTableParams', EmployeeCtrl])
-    .controller('OperateUserCtrl', ['$scope','$log','$uibModalInstance','app.services', AddUserCtrl]);
+    .controller('OperateUserCtrl', ['$scope','$log','$uibModalInstance','app.services', OperateUserCtrl]);
 function EmployeeCtrl($rootScope, $scope, $log,$uibModal, services,NgTableParams) {
+    
     $scope.users = [];
+    $scope.roles = [];
     $scope.isIDLegal = false;
+
+    $scope.getRoleList = function(){
+        services.getRoleList().then(function(result) {
+            if (result.code == 1) {
+                $scope.roles = result.data;
+            }
+        }, function (error) {
+            console.log(error);    
+        });       
+    };
+
     $scope.getUserList = function(){
         services.getUserList().then(function(result) {
             if (result.code == 1) {
@@ -13,7 +26,7 @@ function EmployeeCtrl($rootScope, $scope, $log,$uibModal, services,NgTableParams
                 {
                     page: 1,            // show first page
                     count: 10,           // count per page
-                    sorting: { id: 'asc'}
+                    sorting: { active: 'desc', id: 'asc'}
                 },
                 {
                     total: 0, // length of data
@@ -28,11 +41,12 @@ function EmployeeCtrl($rootScope, $scope, $log,$uibModal, services,NgTableParams
     $scope.addUserModal = function(){
         //var scope = $rootScope.$new();
         $scope.user = {};
+        $scope.user.roleID = '';
         $scope.isModify = false;
         var modalInstance = $uibModal.open({
             scope: $scope,
             animation: true,
-            templateUrl: 'addUserModal.html',
+            templateUrl: 'userModal.html',
             controller: 'OperateUserCtrl',
         });
     };
@@ -66,7 +80,7 @@ function EmployeeCtrl($rootScope, $scope, $log,$uibModal, services,NgTableParams
         var modalInstance = $uibModal.open({
             scope: $scope,
             animation: true,
-            templateUrl: 'addUserModal.html',
+            templateUrl: 'userModal.html',
             controller: 'OperateUserCtrl',
         });
     };
@@ -80,27 +94,21 @@ function EmployeeCtrl($rootScope, $scope, $log,$uibModal, services,NgTableParams
             console.log(error);    
         });
     };
-
+    $scope.getRoleList();
     $scope.getUserList();
 }
 
-function AddUserCtrl($scope, $log,$uibModalInstance, services) { 
-
+function OperateUserCtrl($scope, $log,$uibModalInstance, services) { 
 
     $scope.closeUserModal = function(){
         $uibModalInstance.dismiss();
     };
 
-    $scope.checkForm = function(){
-        
-        return true;
-    }
-
     $scope.submitUserData = function(){
-        if($scope.checkForm()){
-            if($scope.isModify){
-                services.updateUser($scope.user).then(function(result) {
+        if($scope.isModify){
+            services.updateUser($scope.user).then(function(result) {
                     if (result.code == 1) {
+                        $scope.getUserList();
                         $scope.closeUserModal();
                     }
                 }, function (error) {
@@ -114,8 +122,7 @@ function AddUserCtrl($scope, $log,$uibModalInstance, services) {
                     }
                 }, function (error) {
                     console.log(error);    
-                });
-            }
+            });
         }
     };
 

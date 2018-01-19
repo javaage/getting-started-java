@@ -1,40 +1,47 @@
 package com.cisco.la.service.impl;
 
+import com.cisco.la.mapper.RoleModelMapper;
 import com.cisco.la.model.RoleModel;
+import com.cisco.la.model.RoleModelExample;
 import com.cisco.la.service.RoleService;
 
 import java.util.List;
 
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
 @Service
 public class RoleServiceImpl implements RoleService {
+	@Autowired
+	private SqlSession sqlSession;
+	
 	public void addRole(RoleModel roleModel) {
-
-	}
-
-	public void inactiveRole(String id) {
-
+		RoleModelMapper roleModelMapper = sqlSession.getMapper(RoleModelMapper.class);
+		roleModelMapper.insert(roleModel);
 	}
 
 	public void updateRole(RoleModel roleModel) {
-
+		RoleModelMapper roleModelMapper = sqlSession.getMapper(RoleModelMapper.class);
+		roleModelMapper.updateByPrimaryKey(roleModel);
 	}
 
-	public RoleModel getRoleByID(String id) {
-		return null;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.cisco.la.service.RoleService#getRoleList()
-	 */
 	@Override
 	public List<RoleModel> getRoleList() {
-		// TODO Auto-generated method stub
-		return null;
+		RoleModelMapper roleModelMapper = sqlSession.getMapper(RoleModelMapper.class);
+		RoleModelExample roleModelExample = new RoleModelExample();
+		roleModelExample.setOrderByClause("order by rl_active desc");
+		return roleModelMapper.selectByExample(null);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.cisco.la.service.RoleService#getRoleByName(java.lang.String)
+	 */
+	@Override
+	public RoleModel getRoleByID(int id) {
+		RoleModelMapper roleModelMapper = sqlSession.getMapper(RoleModelMapper.class);
+		return roleModelMapper.selectByPrimaryKey(id);
 	}
 }

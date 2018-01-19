@@ -2,7 +2,7 @@
 <!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 <generatorConfiguration>
 	<!-- C:\Users\p9030576\.m2\repository\postgresql\postgresql\9.1-901-1.jdbc4\postgresql-9.1-901-1.jdbc4.jar -->
-  <classPathEntry location="C:\Users\javaage\.m2\repository\postgresql\postgresql\9.1-901-1.jdbc4\postgresql-9.1-901-1.jdbc4.jar" />
+  <classPathEntry location="C:\Users\p9030576\.m2\repository\postgresql\postgresql\9.1-901-1.jdbc4\postgresql-9.1-901-1.jdbc4.jar" />
   <context id="context1">
     <jdbcConnection connectionURL="jdbc:postgresql://localhost:5432/la" driverClass="org.postgresql.Driver" password="19786028" userId="postgres" />
     <javaModelGenerator targetPackage="com.cisco.la.model" targetProject="la" />
@@ -12,7 +12,7 @@
     <table schema="public" tableName="LA_COURSE" domainObjectName="CourseModel">
       <generatedKey column="CRS_ID" sqlStatement="SELECT nextval('la_course_crs_id_seq')" identity="true"/>
       <columnOverride column="CRS_ID" property="id" javaType="int" />
-      <columnOverride column="CRS_NAME" property="name"  />
+      <columnOverride column="CRS_NAME" property="courseName"  />
       <columnOverride column="CRS_PRICE" property="price"  />
       <columnOverride column="CRS_STARTDATE" property="startDate"  />
       <columnOverride column="CRS_ENDDATE" property="endDate"  />
@@ -23,9 +23,10 @@
       <columnOverride column="HSTR_CRS_ID" property="CourseID"  />
     </table>
     <table schema="public" tableName="LA_GOLDEN_SAMPLE" domainObjectName="GoldenSampleModel">
-      <columnOverride column="SMPL_NAME" property="name"  />
-      <columnOverride column="SMPL_ROLE" property="role"  />
-      <columnOverride column="SMPL_RL_NAME" property="roleName"  />
+      <generatedKey column="SMPL_ID" sqlStatement="SELECT nextval('la_golden_sample_smpl_id_seq')" identity="true"/>
+      <columnOverride column="SMPL_ID" property="id" javaType="int" />
+      <columnOverride column="SMPL_NAME" property="sampleName"  />
+      <columnOverride column="SMPL_RL_ID" property="roleID"  />
       <columnOverride column="SMPL_MANDATORY" property="mandatory"  />
       <columnOverride column="SMPL_OPTIONAL" property="optional"  />
       <columnOverride column="SMPL_UPDATE_TIME" property="updateTime"  />
@@ -38,11 +39,13 @@
       <columnOverride column="HSTR_UPDATE_TIME" property="updateTime"  />
     </table>
     <table schema="public" tableName="LA_ROLE" domainObjectName="RoleModel">
-      <columnOverride column="RL_NAME" property="id"  />
-      <columnOverride column="RL_BU" property="name"  />
-      <columnOverride column="RL_TITLE" property="budget"  />
-      <columnOverride column="RL_GRADE" property="balance"  />
-      <columnOverride column="RL_ACTIVE" property="bu"  />
+      <generatedKey column="RL_ID" sqlStatement="SELECT nextval('la_role_rl_id_seq')" identity="true"/>
+      <columnOverride column="RL_ID" property="id" javaType="int" />
+      <columnOverride column="RL_NAME" property="roleName"  />
+      <columnOverride column="RL_BU" property="bu"  />
+      <columnOverride column="RL_TITLE" property="title"  />
+      <columnOverride column="RL_GRADE" property="grade"  />
+      <columnOverride column="RL_ACTIVE" property="active"  />
     </table>
 
     <table schema="public" tableName="LA_USER" domainObjectName="UserModel">
@@ -53,7 +56,7 @@
       <columnOverride column="USR_BU" property="bu"  />
       <columnOverride column="USR_TITLE" property="title"  />
       <columnOverride column="USR_GRADE" property="grade"  />
-      <columnOverride column="USR_RL_NAME" property="roleName"  />
+      <columnOverride column="USR_RL_ID" property="roleID"  />
       <columnOverride column="USR_ACTIVE" property="active"  />
     </table>
   </context>

@@ -6,11 +6,9 @@ import java.util.ArrayList;
 public interface RoleService {
   public void addRole(RoleModel roleModel);
 
-  public void inactiveRole(String id);
-
   public void updateRole(RoleModel roleModel);
 
-  public RoleModel getRoleByID(String id);
+  public RoleModel getRoleByID(int id);
   
   public List<RoleModel> getRoleList();
 }

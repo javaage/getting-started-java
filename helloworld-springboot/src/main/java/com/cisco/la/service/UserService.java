@@ -6,8 +6,6 @@ import java.util.ArrayList;
 public interface UserService {
   public void addUser(UserModel userModel);
 
-  public void inactiveUser(String id);
-
   public void updateUser(UserModel userModel);
 
   public UserModel getUserByID(String id);
