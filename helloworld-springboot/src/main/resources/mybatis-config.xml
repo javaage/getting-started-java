@@ -17,6 +17,7 @@
     <mapper resource="com/cisco/la/mapper/RoleModelMapper.xml" />
     <mapper resource="com/cisco/la/mapper/UserModelMapper.xml" />
     <mapper resource="com/cisco/la/join/UserJoinMapper.xml" />
+    <mapper resource="com/cisco/la/mapper/RecordModelMapper.xml" />
   </mappers>
 </configuration>
 

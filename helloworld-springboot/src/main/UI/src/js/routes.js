@@ -30,6 +30,11 @@ angular.module('RDash').config(['$stateProvider', '$urlRouterProvider',
                 url: '/sample',
                 templateUrl: 'templates/sample.html',
                 controller: 'SampleCtrl'
+            })  
+            .state('record', {
+                url: '/record',
+                templateUrl: 'templates/record.html',
+                controller: 'RecordCtrl'
             })        
             // .state('index', {
             //     url: '/',

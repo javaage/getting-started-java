@@ -117,7 +117,7 @@ angular
                 });
 
                 return deferred.promise;
-            }
+            };
 
             this.getRoleList = function(){
                 var deferred = $q.defer();
@@ -172,5 +172,60 @@ angular
                 });
 
                 return deferred.promise;
-            }
+            };
+
+            this.getRecordList = function(){
+                var deferred = $q.defer();
+                $http.get(url.getRecordList,{})
+                .success(function(data){
+                    console.log(data);
+                    if (data.code == 1) {
+                        deferred.resolve(data);
+                    } else {
+                        deferred.reject(data);
+                    }
+                })
+                .error(function(error){
+                    deferred.reject(error);
+                });
+
+                return deferred.promise;
+            };
+
+            this.addRecord = function(record){
+                var deferred = $q.defer();
+                $http.post(url.addRecord,record)
+                .success(function(data){
+                    console.log(data);
+                    if (data.code == 1) {
+                        deferred.resolve(data);
+                    } else {
+                        deferred.reject(data);
+                    }
+                })
+                .error(function(error){
+                    deferred.reject(error);
+                });
+
+                return deferred.promise;
+            };
+
+            this.updateRecord = function(record){
+                var deferred = $q.defer();
+                var urlQuery = this.urlFormat(url.updateRecord,record.name);
+                $http.put(urlQuery,record)
+                .success(function(data){
+                    console.log(data);
+                    if (data.code == 1) {
+                        deferred.resolve(data);
+                    } else {
+                        deferred.reject(data);
+                    }
+                })
+                .error(function(error){
+                    deferred.reject(error);
+                });
+
+                return deferred.promise;
+            };
         }]);

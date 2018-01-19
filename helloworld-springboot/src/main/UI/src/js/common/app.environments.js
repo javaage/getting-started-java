@@ -38,7 +38,12 @@
                 getRoleList: '/api/role/list',
                 deleteRole: '/api/role/{0}',
                 addRole: '/api/role',
-                updateRole: '/api/role'
+                updateRole: '/api/role',
+                getRecord: '/api/record/{0}',
+                getRecordList: '/api/record/list',
+                deleteRecord: '/api/record/{0}',
+                addRecord: '/api/record',
+                updateRecord: '/api/record'
             };
             function _joinUrl(domain, path) {
                 return domain.replace(/(^http.*?)\/{0,}$/, '$1/') + path.replace(/^\/{0,}(.*)/, '$1');

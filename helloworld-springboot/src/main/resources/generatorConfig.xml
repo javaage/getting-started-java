@@ -59,5 +59,13 @@
       <columnOverride column="USR_RL_ID" property="roleID"  />
       <columnOverride column="USR_ACTIVE" property="active"  />
     </table>
+    
+    <table schema="public" tableName="LA_RECORD" domainObjectName="RecordModel">
+    <generatedKey column="CRD_ID" sqlStatement="SELECT nextval('la_record_crd_id_seq')" identity="true"/>
+      <columnOverride column="CRD_ID" property="id"  />
+      <columnOverride column="CRD_REQUEST" property="request"  />
+      <columnOverride column="CRD_RESPONSE" property="response"  />
+      <columnOverride column="CRD_TIME" property="time"  />
+    </table>
   </context>
 </generatorConfiguration>

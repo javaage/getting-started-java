@@ -16,6 +16,7 @@
 
 package com.cisco.la.controller;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,7 +30,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cisco.la.Application;
-import com.cisco.la.service.UserService;
+import com.cisco.la.model.RecordModel;
+import com.cisco.la.service.RecordService;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 import ai.api.AIConfiguration;
 import ai.api.AIDataService;
@@ -41,13 +45,20 @@ import ai.api.model.AIResponse;
 @RequestMapping(value="/api/hook")
 public class HookController {
 	@Autowired
-	private UserService userService;
+	private RecordService recordService;
 	
 	@RequestMapping( method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Object postResponse(@RequestBody String json) {
 		Map<String, Object> code = new HashMap<String, Object>();
 		code.put("speech", "post welcome hook speech!");
 		code.put("displayText", "post welcome hook displayText!");
+		
+		RecordModel recordModel = new RecordModel();
+		recordModel.setRequest(json);
+		Gson gson = new Gson();
+		recordModel.setResponse(gson.toJson(code));
+		recordModel.setTime(new Date());
+		recordService.addRecord(recordModel);
 		return code;
 	}
 	
@@ -84,6 +95,14 @@ public class HookController {
 		code.put("input", input);
 		code.put("speech", speech);
 		code.put("displayText", speech);
+		
+		RecordModel recordModel = new RecordModel();
+		recordModel.setRequest(input);
+		Gson gson = new Gson();
+		recordModel.setResponse(gson.toJson(code));
+		recordModel.setTime(new Date());
+		recordService.addRecord(recordModel);
+		
 		return code;
 	}
 }
