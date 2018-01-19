@@ -78,7 +78,8 @@ public class UserController {
 			userModel.setBudget(jsonObject.getDouble("budget"));
 			userModel.setId(jsonObject.getString("id"));
 			userModel.setName(jsonObject.getString("name"));
-			if(jsonObject.has("roleID") && !jsonObject.isNull("roleID"))
+			
+			if(jsonObject.optInt("roleID", 0)>0)
 				userModel.setRoleID(jsonObject.getInt("roleID"));
 			if(jsonObject.has("title") && !jsonObject.isNull("title"))
 				userModel.setTitle(jsonObject.getString("title"));
@@ -109,7 +110,7 @@ public class UserController {
 			userModel.setBudget(jsonObject.getDouble("budget"));
 			userModel.setId(jsonObject.getString("id"));
 			userModel.setName(jsonObject.getString("name"));
-			if(jsonObject.has("roleID") && !jsonObject.isNull("roleID"))
+			if(jsonObject.optInt("roleID", 0)>0)
 				userModel.setRoleID(jsonObject.getInt("roleID"));
 			if(jsonObject.has("title") && !jsonObject.isNull("title"))
 				userModel.setTitle(jsonObject.getString("title"));
