@@ -228,4 +228,113 @@ angular
 
                 return deferred.promise;
             };
+
+            this.getCourseList = function(){
+                var deferred = $q.defer();
+                $http.get(url.getCourseList,{})
+                .success(function(data){
+                    console.log(data);
+                    if (data.code == 1) {
+                        deferred.resolve(data);
+                    } else {
+                        deferred.reject(data);
+                    }
+                })
+                .error(function(error){
+                    deferred.reject(error);
+                });
+
+                return deferred.promise;
+            };
+
+            this.addCourse = function(course){
+                var deferred = $q.defer();
+                $http.post(url.addCourse,course)
+                .success(function(data){
+                    console.log(data);
+                    if (data.code == 1) {
+                        deferred.resolve(data);
+                    } else {
+                        deferred.reject(data);
+                    }
+                })
+                .error(function(error){
+                    deferred.reject(error);
+                });
+
+                return deferred.promise;
+            };
+
+            this.updateCourse = function(course){
+                var deferred = $q.defer();
+                var urlQuery = this.urlFormat(url.updateCourse,course.name);
+                $http.put(urlQuery,course)
+                .success(function(data){
+                    console.log(data);
+                    if (data.code == 1) {
+                        deferred.resolve(data);
+                    } else {
+                        deferred.reject(data);
+                    }
+                })
+                .error(function(error){
+                    deferred.reject(error);
+                });
+
+                return deferred.promise;
+            };
+            this.getGoldenSampleList = function(){
+                var deferred = $q.defer();
+                $http.get(url.getGoldenSampleList,{})
+                .success(function(data){
+                    console.log(data);
+                    if (data.code == 1) {
+                        deferred.resolve(data);
+                    } else {
+                        deferred.reject(data);
+                    }
+                })
+                .error(function(error){
+                    deferred.reject(error);
+                });
+
+                return deferred.promise;
+            };
+
+            this.addGoldenSample = function(course){
+                var deferred = $q.defer();
+                $http.post(url.addGoldenSample,course)
+                .success(function(data){
+                    console.log(data);
+                    if (data.code == 1) {
+                        deferred.resolve(data);
+                    } else {
+                        deferred.reject(data);
+                    }
+                })
+                .error(function(error){
+                    deferred.reject(error);
+                });
+
+                return deferred.promise;
+            };
+
+            this.updateGoldenSample = function(course){
+                var deferred = $q.defer();
+                var urlQuery = this.urlFormat(url.updateGoldenSample,course.name);
+                $http.put(urlQuery,course)
+                .success(function(data){
+                    console.log(data);
+                    if (data.code == 1) {
+                        deferred.resolve(data);
+                    } else {
+                        deferred.reject(data);
+                    }
+                })
+                .error(function(error){
+                    deferred.reject(error);
+                });
+
+                return deferred.promise;
+            };
         }]);

@@ -6,9 +6,9 @@ import com.cisco.la.model.CourseModel;
 public interface CourseService {
   public void addCourse(CourseModel courseModel);
 
-  public void inactiveCourse(int id);
-
   public void updateCourse(CourseModel courseModel);
 
   public List<CourseModel> getCourseList();
+  
+  public CourseModel getCourseByID(int id);
 }

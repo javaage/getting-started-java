@@ -5,19 +5,14 @@
 
 			</rd-widget-header>
 			<input class="btn btn-default" type="button" ng-click="addRecordModal()" value="Add Record">
-			<rd-widget-body classes="medium no-padding">
+			<rd-widget-body classes="large no-padding">
 				<div class="table-responsive">
 					<table ng-table="tableParams" class="table table-condensed table-bordered table-striped" show-filter="false">
 			            <tr ng-repeat="item in $data" ng-class="{'inactive':!item.active}">
-			            		<td title="'Request'" sortable="'request'" class="text-center">{{item.request}}</td>
-				                <td title="'Response'" sortable="'response'" class="text-center">{{item.response}}</td>
-				                <td title="'Time'" sortable="'time'" class="text-center">{{item.time | date:'MM-dd hh:mm:ss'}}</td>
-				                <td title="'Operation'" class="text-center">
-				                	<span ng-if="!item.active" style="width: 80px;margin-left: 10px; margin-right: 10px">Update</span>	
-				                	<a ng-click="updateRecordModal(item)" ng-if="item.active" style="width: 80px;margin-left: 10px; margin-right: 10px">Update</a>
-				                	<a ng-click="inactiveRecord(item)" ng-if="item.active" style="width: 80px">Inactive</a>
-				                	<a ng-click="activeRecord(item)" ng-if="!item.active" style="width: 80px">&nbsp;Active&nbsp;</a>
-				                </td>	
+			            		<td title="'Request'" sortable="'request'" class="text-center" style="width:45%">{{item.request}}</td>
+				                <td title="'Response'" sortable="'response'" class="text-center" style="width:45%">{{item.response}}</td>
+				                <td title="'Time'" sortable="'time'" class="text-center" style="width:10%">{{item.time | date:'MM-dd hh:mm:ss'}}</td>
+				                
 			            </tr>
 			        </table>
         		</div>

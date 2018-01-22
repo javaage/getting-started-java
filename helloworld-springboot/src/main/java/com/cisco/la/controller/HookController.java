@@ -54,7 +54,7 @@ public class HookController {
 		code.put("displayText", "post welcome hook displayText!");
 		
 		RecordModel recordModel = new RecordModel();
-		recordModel.setRequest(json);
+		recordModel.setRequest("postResponse" + json);
 		Gson gson = new Gson();
 		recordModel.setResponse(gson.toJson(code));
 		recordModel.setTime(new Date());
@@ -97,7 +97,7 @@ public class HookController {
 		code.put("displayText", speech);
 		
 		RecordModel recordModel = new RecordModel();
-		recordModel.setRequest(input);
+		recordModel.setRequest("ai" + input);
 		Gson gson = new Gson();
 		recordModel.setResponse(gson.toJson(code));
 		recordModel.setTime(new Date());

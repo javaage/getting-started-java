@@ -13,7 +13,8 @@
       <generatedKey column="CRS_ID" sqlStatement="SELECT nextval('la_course_crs_id_seq')" identity="true"/>
       <columnOverride column="CRS_ID" property="id" javaType="int" />
       <columnOverride column="CRS_NAME" property="courseName"  />
-      <columnOverride column="CRS_PRICE" property="price"  />
+      <columnOverride column="CRS_PRICE" property="price" />
+      <columnOverride column="CRS_URL" property="url" />
       <columnOverride column="CRS_STARTDATE" property="startDate"  />
       <columnOverride column="CRS_ENDDATE" property="endDate"  />
       <columnOverride column="CRS_ACTIVE" property="active"  />
@@ -25,7 +26,7 @@
     <table schema="public" tableName="LA_GOLDEN_SAMPLE" domainObjectName="GoldenSampleModel">
       <generatedKey column="SMPL_ID" sqlStatement="SELECT nextval('la_golden_sample_smpl_id_seq')" identity="true"/>
       <columnOverride column="SMPL_ID" property="id" javaType="int" />
-      <columnOverride column="SMPL_NAME" property="sampleName"  />
+      <columnOverride column="SMPL_NAME" property="goldenSampleName"  />
       <columnOverride column="SMPL_RL_ID" property="roleID"  />
       <columnOverride column="SMPL_MANDATORY" property="mandatory"  />
       <columnOverride column="SMPL_OPTIONAL" property="optional"  />

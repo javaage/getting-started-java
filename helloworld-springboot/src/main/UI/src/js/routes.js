@@ -29,7 +29,7 @@ angular.module('RDash').config(['$stateProvider', '$urlRouterProvider',
             .state('sample', {
                 url: '/sample',
                 templateUrl: 'templates/sample.html',
-                controller: 'SampleCtrl'
+                controller: 'GoldenSampleCtrl'
             })  
             .state('record', {
                 url: '/record',

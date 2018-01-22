@@ -43,7 +43,17 @@
                 getRecordList: '/api/record/list',
                 deleteRecord: '/api/record/{0}',
                 addRecord: '/api/record',
-                updateRecord: '/api/record'
+                updateRecord: '/api/record',
+                getCourse: '/api/course/{0}',
+                getCourseList: '/api/course/list',
+                deleteCourse: '/api/course/{0}',
+                addCourse: '/api/course',
+                updateCourse: '/api/course',
+                getGoldenSample: '/api/goldenSample/{0}',
+                getGoldenSampleList: '/api/goldenSample/list',
+                deleteGoldenSample: '/api/goldenSample/{0}',
+                addGoldenSample: '/api/goldenSample',
+                updateGoldenSample: '/api/goldenSample'
             };
             function _joinUrl(domain, path) {
                 return domain.replace(/(^http.*?)\/{0,}$/, '$1/') + path.replace(/^\/{0,}(.*)/, '$1');
