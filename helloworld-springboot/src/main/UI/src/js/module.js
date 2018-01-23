@@ -1,1 +1,1 @@
-angular.module('RDash', ['ui.bootstrap', 'ui.router', 'ngCookies', 'ngTable', 'ui.select']);//,  'ngSanitize'  
+angular.module('RDash', ['ui.bootstrap', 'ui.router', 'ngCookies', 'ngTable', 'ui.select', 'ngSanitize']);//

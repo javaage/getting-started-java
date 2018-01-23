@@ -7,9 +7,10 @@ angular
     .controller('GoldenSampleCtrl', ['$rootScope', '$scope','$log','$uibModal','app.services','NgTableParams', GoldenSampleCtrl])
     .controller('OperateGoldenSampleCtrl', ['$scope','$log','$uibModalInstance','app.services', OperateGoldenSampleCtrl]);
 function GoldenSampleCtrl($rootScope, $scope, $log,$uibModal, services,NgTableParams) {
-    var vm = this;
+    
     $scope.goldenSamples = [];
-    vm.people = [
+
+    $scope.people = [
         { name: 'Adam',      email: 'adam@email.com',      age: 12, country: 'United States' },
         { name: 'Amalie',    email: 'amalie@email.com',    age: 12, country: 'Argentina' },
         { name: 'Estefanía', email: 'estefania@email.com', age: 21, country: 'Argentina' },
@@ -21,6 +22,27 @@ function GoldenSampleCtrl($rootScope, $scope, $log,$uibModal, services,NgTablePa
         { name: 'Michael',   email: 'michael@email.com',   age: 15, country: 'Colombia' },
         { name: 'Nicolás',   email: 'nicolas@email.com',    age: 43, country: 'Colombia' }
     ];
+
+    $scope.getRoleList = function(){
+        services.getRoleList().then(function(result) {
+            if (result.code == 1) {
+                $scope.roles = result.data;
+            }
+        }, function (error) {
+            console.log(error);    
+        });       
+    };
+
+    $scope.getCourseList = function(){
+        services.getCourseList().then(function(result) {
+            if (result.code == 1) {
+                $scope.courses = result.data;
+            }
+        }, function (error) {
+            console.log(error);    
+        });       
+    };
+
     $scope.getGoldenSampleList = function(){
         services.getGoldenSampleList().then(function(result) {
             if (result.code == 1) {
@@ -39,7 +61,9 @@ function GoldenSampleCtrl($rootScope, $scope, $log,$uibModal, services,NgTablePa
         }, function (error) {
             console.log(error);    
         });       
-    }
+    };
+
+
 
     $scope.addGoldenSampleModal = function(){
         //var scope = $rootScope.$new();
@@ -75,15 +99,46 @@ function GoldenSampleCtrl($rootScope, $scope, $log,$uibModal, services,NgTablePa
         });
     };
 
+    Array.prototype.contains = function (obj) {  
+        var i = this.length;  
+        while (i--) {  
+            if (this[i] == obj) {  
+                return true;  
+            }  
+        }  
+        return false;  
+    };  
+
+    var loadCourseCode = function(){
+        var mandatory = $scope.goldenSample.mandatory.split(',');
+        var optional = $scope.goldenSample.optional.split(',');
+
+        $scope.goldenSample.mandatoryCourse = [];
+        $scope.goldenSample.optionalCourse = [];
+
+        for(var index in $scope.courses){
+            if(mandatory.contains($scope.courses[index].id))
+                $scope.goldenSample.mandatoryCourse.push($scope.courses[index]);
+            if(optional.contains($scope.courses[index].id))
+                $scope.goldenSample.optionalCourse.push($scope.courses[index]);
+        }
+    };
+
     $scope.updateGoldenSampleModal = function(goldenSample){
         //var scope = $rootScope.$new();
-        $scope.goldenSample =goldenSample;
+        $scope.goldenSample = goldenSample;
         $scope.isModify = true;
+        loadCourseCode();
+
         var modalInstance = $uibModal.open({
             scope: $scope,
             animation: true,
             templateUrl: 'goldenSampleModal.html',
             controller: 'OperateGoldenSampleCtrl',
+        });
+
+        modalInstance.opened.then(function(){
+            
         });
     };
 
@@ -96,7 +151,8 @@ function GoldenSampleCtrl($rootScope, $scope, $log,$uibModal, services,NgTablePa
             console.log(error);    
         });
     };
-
+    $scope.getRoleList();
+    $scope.getCourseList();
     $scope.getGoldenSampleList();
 }
 
@@ -107,9 +163,22 @@ function OperateGoldenSampleCtrl($scope, $log,$uibModalInstance, services) {
         $uibModalInstance.dismiss();
     };
 
+    var getCourseCode = function(){
+        var mandatory = [];
+        var optional = [];
+        for(var index in $scope.goldenSample.mandatoryCourse){
+            mandatory.push($scope.goldenSample.mandatoryCourse[index].id);
+        }
+        for(var index in $scope.goldenSample.optionalCourse){
+            optional.push($scope.goldenSample.optionalCourse[index].id);
+        }
 
+        $scope.goldenSample.mandatory = mandatory.join(',');
+        $scope.goldenSample.optional = optional.join(',');
+    };
 
     $scope.submitGoldenSampleData = function(){
+            getCourseCode();
         	if($scope.isModify){
                 services.updateGoldenSample($scope.goldenSample).then(function(result) {
                     if (result.code == 1) {

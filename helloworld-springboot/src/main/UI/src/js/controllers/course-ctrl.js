@@ -8,12 +8,7 @@ angular
     .controller('OperateCourseCtrl', ['$scope','$log','$uibModalInstance','app.services', OperateCourseCtrl]);
 function CourseCtrl($rootScope, $scope, $log,$uibModal, services,NgTableParams) {
     $scope.courses = [];
-
-    $('.datepicker').datepicker({
-    });
-
-
-
+    
     $scope.cancel = function() {
       $uibModalInstance.dismiss('cancel');
     };
@@ -103,8 +98,6 @@ function CourseCtrl($rootScope, $scope, $log,$uibModal, services,NgTableParams) 
 
 function OperateCourseCtrl($scope, $log,$uibModalInstance, services) { 
 
-    $('.datepicker').datepicker({
-    });
 
     $scope.closeCourseModal = function(){
         $uibModalInstance.dismiss();
