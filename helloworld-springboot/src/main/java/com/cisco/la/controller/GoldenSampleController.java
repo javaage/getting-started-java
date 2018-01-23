@@ -39,7 +39,7 @@ import com.cisco.la.service.GoldenSampleService;
 
 @Controller
 @RestController
-@RequestMapping(value="/api/goldensample")
+@RequestMapping(value="/api/goldenSample")
 public class GoldenSampleController {
 	@Autowired
 	private GoldenSampleService goldenSampleService;

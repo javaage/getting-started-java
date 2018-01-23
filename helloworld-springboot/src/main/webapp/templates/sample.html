@@ -4,6 +4,21 @@
 			<rd-widget-header icon="fa-television" title="GoldenSample">
 
 			</rd-widget-header>
+			
+			<h3>Array of objects (sorting enabled)</h3>
+			  <ui-select multiple="multiple" ng-model="GoldenSampleCtrl.multipleDemo.selectedPeople" theme="bootstrap" ng-disabled="GoldenSampleCtrl.disabled" sortable="true" close-on-select="false" style="width: 800px">
+			    <ui-select-match placeholder="Select person...">{{$item.name}} &lt;{{$item.email}}&gt;</ui-select-match>
+			    <ui-select-choices repeat="person in GoldenSampleCtrl.people | propsFilter: {name: $select.search, age: $select.search}">
+			      <div ng-bind-html="person.name | highlight: $select.search"></div>
+			      <small>
+			        email: {{person.email}}
+			        age: <span ng-bind-html="''+person.age | highlight: $select.search"></span>
+			      </small>
+			    </ui-select-choices>
+			  </ui-select>
+			  <p>Selected: {{GoldenSampleCtrl.multipleDemo.selectedPeople}}</p>
+		
+				
 			<input class="btn btn-default" type="button" ng-click="addGoldenSampleModal()" value="Add GoldenSample">
 			<rd-widget-body classes="large no-padding">
 				<div class="table-responsive">
