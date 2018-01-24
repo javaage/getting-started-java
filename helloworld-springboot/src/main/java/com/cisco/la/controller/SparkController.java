@@ -20,6 +20,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -54,11 +55,7 @@ public class SparkController {
 	@RequestMapping( value = "{email}",  method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Object postResponse(@PathVariable("email") String email) {
 		try{
-			boolean result = httpService.checkSparkPeople(email);
-			
-			Map<String, Object> code = new HashMap<String, Object>();
-			code.put("code", 1);
-			code.put("result", result);
+			Object code = httpService.checkSparkPeople(email);
 			
 			RecordModel recordModel = new RecordModel();
 			recordModel.setRequest("postResponse" + email);
@@ -69,7 +66,28 @@ public class SparkController {
 			return code;
 		}catch(Exception exp){
 			Map<String, Object> code = new HashMap<String, Object>();
-			code.put("code", -1);
+			code.put("code", -2);
+			code.put("message", exp.getMessage());
+			return code;
+		}
+		
+	}
+	
+	@RequestMapping( value = "sendMessage",  method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Object postResponse() {
+		try{
+			JSONObject code = httpService.sendMessage("subing.xiao@pactera.com", "Hello");
+			
+			RecordModel recordModel = new RecordModel();
+			recordModel.setRequest("sendMessage" + "subing.xiao@pactera.com");
+			Gson gson = new Gson();
+			recordModel.setResponse(gson.toJson(code));
+			recordModel.setTime(new Date());
+			recordService.addRecord(recordModel);
+			return code;
+		}catch(Exception exp){
+			Map<String, Object> code = new HashMap<String, Object>();
+			code.put("code", -2);
 			code.put("message", exp.getMessage());
 			return code;
 		}
