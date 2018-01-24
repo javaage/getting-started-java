@@ -52,10 +52,10 @@ public class SparkController {
 	@Autowired
 	private HttpService httpService;
 	
-	@RequestMapping( value = "check/{email}",  method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping( value = "check/{email:.+}",  method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Object postResponse(@PathVariable("email") String email) {
 		try{
-			Object code = httpService.checkSparkPeople(email);
+			Object code = httpService.getSparkPeople(email);
 			
 			RecordModel recordModel = new RecordModel();
 			recordModel.setRequest("postResponse" + email);
@@ -73,7 +73,7 @@ public class SparkController {
 		
 	}
 	
-	@RequestMapping( value = "sendMessage",  method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping( value = "message",  method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Object postResponse() {
 		try{
 			JSONObject code = httpService.sendMessage("subing.xiao@pactera.com", "Hello");

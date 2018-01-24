@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cisco.la.common.HttpService;
 import com.cisco.la.model.UserModel;
 import com.cisco.la.service.UserService;
 
@@ -44,6 +45,9 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
+	@Autowired
+	private HttpService httpService;
+	
 	@RequestMapping(value = "{id:.+}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Object getUser(HttpServletRequest request, @PathVariable("id") String id){
 		UserModel userModel = userService.getUserByID(id);
@@ -53,6 +57,23 @@ public class UserController {
 		map.put("message", "Successfully");
 		map.put("data", userModel);
 		return map;
+	}
+	
+	@RequestMapping(value = "check/{id:.+}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Object checkUserID(HttpServletRequest request, @PathVariable("id") String id){
+		try{
+			boolean result = httpService.checkSparkPeople(id);
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("code", 1);
+			map.put("message", "Successfully");
+			map.put("data", result);
+			return map;
+		} catch (Exception e) {  
+	    	Map<String, Object> map = new HashMap<String, Object>();
+			map.put("code", -1);
+			map.put("message", e.getMessage());
+			return map; 
+	    } 
 	}
 	
 	@RequestMapping(value = "list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

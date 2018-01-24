@@ -49,7 +49,7 @@ public class HttpService {
 		}
 	}
 	
-	public Map<String, Object> checkSparkPeople(String email) throws Exception{
+	public Map<String, Object> getSparkPeople(String email) throws Exception{
 		String urlGetPeople = "https://api.ciscospark.com/v1/people";
 		try {
 			String content = "email=" + email;
@@ -72,6 +72,27 @@ public class HttpService {
 				Map<String, Object> code = new HashMap<String, Object>();
 				code.put("code", -1);
 				return code;
+			}
+		} catch (Exception ex) {
+			throw ex;
+		}
+	}
+	
+	public boolean checkSparkPeople(String email) throws Exception{
+		String urlGetPeople = "https://api.ciscospark.com/v1/people";
+		try {
+			String content = "email=" + email;
+			
+			Map<String, String> headers = new HashMap<String, String>();
+			headers.put("content-type", "application/json; charset=utf-8");
+			headers.put("authorization", "Bearer " + boltToken);
+			
+			JSONObject jsonObject = httpsConnection(urlGetPeople,"GET",content, headers);
+			JSONArray jSONArray = jsonObject.optJSONArray("items");
+			if(jSONArray!=null && jSONArray.length()>0){
+				return true;
+			}else{
+				return false;
 			}
 		} catch (Exception ex) {
 			throw ex;
