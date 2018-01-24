@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cisco.la.entity.GoldenSampleJoin;
 import com.cisco.la.model.GoldenSampleModel;
 import com.cisco.la.service.GoldenSampleService;
 
@@ -57,7 +58,7 @@ public class GoldenSampleController {
 	
 	@RequestMapping(value = "list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Object getUserList(HttpServletRequest request){
-		List<GoldenSampleModel> goldenSampleModelList = goldenSampleService.getGoldenSampleList();
+		List<GoldenSampleJoin> goldenSampleModelList = goldenSampleService.getGoldenSampleList();
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("code", 1);
@@ -98,6 +99,7 @@ public class GoldenSampleController {
 		try{
 			JSONObject jsonObject = new JSONObject(json);   
 	        GoldenSampleModel goldenSampleModel = new GoldenSampleModel();
+	        goldenSampleModel.setId(jsonObject.getInt("id"));
 	        goldenSampleModel.setGoldenSampleName(jsonObject.getString("goldenSampleName"));
 	        goldenSampleModel.setRoleID(jsonObject.getInt("roleID"));
 	        goldenSampleModel.setMandatory(jsonObject.getString("mandatory"));

@@ -182,6 +182,7 @@ function OperateGoldenSampleCtrl($scope, $log,$uibModalInstance, services) {
         	if($scope.isModify){
                 services.updateGoldenSample($scope.goldenSample).then(function(result) {
                     if (result.code == 1) {
+                        $scope.getGoldenSampleList();
                         $scope.closeGoldenSampleModal();
                     }
                 }, function (error) {

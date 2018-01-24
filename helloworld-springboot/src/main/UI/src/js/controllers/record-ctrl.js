@@ -101,6 +101,7 @@ function OperateRecordCtrl($scope, $log,$uibModalInstance, services) {
         	if($scope.isModify){
                 services.updateRecord($scope.record).then(function(result) {
                     if (result.code == 1) {
+                        $scope.getRecordList();
                         $scope.closeRecordModal();
                     }
                 }, function (error) {

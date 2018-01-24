@@ -121,6 +121,7 @@ function OperateCourseCtrl($scope, $log,$uibModalInstance, services) {
         	if($scope.isModify){
                 services.updateCourse($scope.course).then(function(result) {
                     if (result.code == 1) {
+                        $scope.getCourseList();
                         $scope.closeCourseModal();
                     }
                 }, function (error) {

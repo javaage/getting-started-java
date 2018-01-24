@@ -101,6 +101,7 @@ function OperateRoleCtrl($scope, $log,$uibModalInstance, services) {
         	if($scope.isModify){
                 services.updateRole($scope.role).then(function(result) {
                     if (result.code == 1) {
+                        $scope.getRoleList();
                         $scope.closeRoleModal();
                     }
                 }, function (error) {

@@ -14,11 +14,18 @@
     <result column="smpl_optional" jdbcType="VARCHAR" property="optional" />
     <result column="smpl_update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="smpl_active" jdbcType="BIT" property="active" />
-    <result column="role_name" jdbcType="VARCHAR" property="roleName" />
+    <result column="rl_name" jdbcType="VARCHAR" property="roleName" />
     <result column="mandatory_name" jdbcType="VARCHAR" property="mandatoryName" />
     <result column="optional_name" jdbcType="VARCHAR" property="optionalName" />
   </resultMap>
   <select id="getGoldenSampleJoin" parameterType="string" resultMap="GoldenSampleResultMap">
-		
+	SELECT smpl_id, smpl_name, smpl_rl_id, smpl_mandatory, smpl_optional, 
+       smpl_update_time, smpl_active,r.rl_name as rl_name,
+       (select string_agg(crs_name,', ') from la_course where position(','||crs_id||',' in ','||smpl_mandatory||',')>0) as mandatory_name,
+       (select string_agg(crs_name,', ') from la_course where position(','||crs_id||',' in ','||smpl_optional||',')>0) as optional_name
+	  FROM public.la_golden_sample g
+	  left join la_role r
+	  on g.smpl_rl_id = r.rl_id
+	  order by smpl_active desc
   </select>
 </mapper>

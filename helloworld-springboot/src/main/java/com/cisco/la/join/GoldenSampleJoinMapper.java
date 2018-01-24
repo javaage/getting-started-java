@@ -2,8 +2,8 @@ package com.cisco.la.join;
 
 import java.util.List;
 
-import com.cisco.la.model.UserModel;
+import com.cisco.la.entity.GoldenSampleJoin;
 
 public interface GoldenSampleJoinMapper {
-	List<UserModel> getUserJoin();
+	List<GoldenSampleJoin> getGoldenSampleJoin();
 }

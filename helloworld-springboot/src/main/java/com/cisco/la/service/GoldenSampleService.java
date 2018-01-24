@@ -1,6 +1,7 @@
 package com.cisco.la.service;
 import java.util.List;
 
+import com.cisco.la.entity.GoldenSampleJoin;
 import com.cisco.la.model.GoldenSampleModel;
 
 public interface GoldenSampleService {
@@ -10,5 +11,5 @@ public interface GoldenSampleService {
 
 	  public GoldenSampleModel getGoldenSampleByID(int id);
 	  
-	  public List<GoldenSampleModel> getGoldenSampleList();
+	  public List<GoldenSampleJoin> getGoldenSampleList();
 }

@@ -1,7 +1,7 @@
 <div class="row" data-ng-controller="GoldenSampleCtrl">
   <div class="col-lg-12">
 		<rd-widget>
-			<rd-widget-header icon="fa-television" title="GoldenSample">
+			<rd-widget-header icon="fa-university" title="GoldenSample1">
 
 			</rd-widget-header>
 			
@@ -15,8 +15,20 @@
 			            <tr ng-repeat="item in $data" ng-class="{'inactive':!item.active}">
 			            		<td title="'GoldenSample'" sortable="'goldenSampleName'" class="text-center">{{item.goldenSampleName}}</td>
 				                <td title="'Role'" sortable="'roleName'" class="text-center">{{item.roleName}}</td>
-				                <td title="'Mandatory'" sortable="'mandatory'" class="text-center">{{item.mandatory}}</td>
-				                <td title="'Optional'" sortable="'optional'" class="text-center">{{item.optional}}</td>  
+				                <td title="'Mandatory'" sortable="'mandatoryName'" class="text-center">
+				                	<ul>
+									   <li ng-repeat="subCourse in item.mandatoryName.split(',')">
+									   		{{subCourse}}
+									   </li>
+									</ul>
+				                </td>
+				                <td title="'Optional'" sortable="'optionalName'" class="text-center">
+				                	<ul>
+									   <li ng-repeat="subCourse in item.optionalName.split(',')">
+									   		{{subCourse}}
+									   </li>
+									</ul>
+				                </td>  
 				                <td title="'Operation'" class="text-center" >
 				                	<span  ng-if="!item.active" style="width: 80px;margin-left: 10px; margin-right: 10px;">Update</span>	
 				                	<a ng-click="updateGoldenSampleModal(item)" ng-if="item.active" style="width: 80px;margin-left: 10px; margin-right: 10px;">Update</a>

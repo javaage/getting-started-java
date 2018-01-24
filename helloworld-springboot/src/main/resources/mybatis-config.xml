@@ -18,6 +18,7 @@
     <mapper resource="com/cisco/la/mapper/UserModelMapper.xml" />
     <mapper resource="com/cisco/la/join/UserJoinMapper.xml" />
     <mapper resource="com/cisco/la/mapper/RecordModelMapper.xml" />
+    <mapper resource="com/cisco/la/join/GoldenSampleJoinMapper.xml" />
   </mappers>
 </configuration>
 

@@ -1,4 +1,6 @@
 package com.cisco.la.service.impl;
+import com.cisco.la.entity.GoldenSampleJoin;
+import com.cisco.la.join.GoldenSampleJoinMapper;
 import com.cisco.la.mapper.GoldenSampleModelMapper;
 import com.cisco.la.model.GoldenSampleModel;
 import com.cisco.la.model.GoldenSampleModel;
@@ -29,11 +31,10 @@ public class GoldenSampleServiceImpl implements GoldenSampleService {
 	}
 
 	@Override
-	public List<GoldenSampleModel> getGoldenSampleList() {
-		GoldenSampleModelMapper goldenSampleModelMapper = sqlSession.getMapper(GoldenSampleModelMapper.class);
-		GoldenSampleModelExample goldenSampleModelExample = new GoldenSampleModelExample();
-		goldenSampleModelExample.setOrderByClause("order by rl_active desc");
-		return goldenSampleModelMapper.selectByExample(null);
+	public List<GoldenSampleJoin> getGoldenSampleList() {
+		GoldenSampleJoinMapper goldenSampleJoinMapper = sqlSession.getMapper(GoldenSampleJoinMapper.class);
+
+		return goldenSampleJoinMapper.getGoldenSampleJoin();
 	}
 
 	/* (non-Javadoc)
