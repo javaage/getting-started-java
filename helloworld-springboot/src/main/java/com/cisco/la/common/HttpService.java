@@ -111,6 +111,11 @@ public class HttpService {
 			if (!method.equals("GET")) {
 				httpUrlConn.setDoOutput(true);
 				httpUrlConn.setDoInput(true);
+			} 
+			
+			if(outputStr!=null && !outputStr.isEmpty()){
+				httpUrlConn.setDoOutput(true);
+				httpUrlConn.setDoInput(true);
 			}
 
 			httpUrlConn.setRequestMethod(method);

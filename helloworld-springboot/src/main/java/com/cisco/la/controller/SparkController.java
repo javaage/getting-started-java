@@ -52,7 +52,7 @@ public class SparkController {
 	@Autowired
 	private HttpService httpService;
 	
-	@RequestMapping( value = "{email}",  method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping( value = "check/{email}",  method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Object postResponse(@PathVariable("email") String email) {
 		try{
 			Object code = httpService.checkSparkPeople(email);
