@@ -22,10 +22,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.web.bind.annotation.RestController;
-
 
 @EnableAutoConfiguration
 @ComponentScan(basePackages = "com.cisco.la")
@@ -33,10 +32,15 @@ import org.springframework.web.bind.annotation.RestController;
 @EnableTransactionManagement
 @SpringBootApplication
 public class Application {
+	public enum Env {
+		local, gehc, beta, alpha, bj, diliu, test, security
+	};
+	
 	public final static Logger logger = LoggerFactory.getLogger(Application.class);
+	public static Env envCurrent = Env.local;
 	
 	public static void main(String[] args) {
-		SpringApplication.run(Application.class, args);
-		logger.debug("begin");
+		ApplicationContext ctx = SpringApplication.run(Application.class, args);
+		envCurrent = Enum.valueOf(Env.class, ctx.getEnvironment().getProperty("spring.profiles.active"));
 	}
 }

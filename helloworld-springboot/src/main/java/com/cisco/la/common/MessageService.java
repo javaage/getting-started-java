@@ -21,16 +21,17 @@ import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import com.cisco.la.Application;
+import com.google.gson.Gson;
 
 /**
  * @author P9030576
  *
  */
 @Service
-public class HttpService {
+public class MessageService {
 	private String boltToken = "YjI0NDYxNjktYjFjYS00NTUyLTllZjQtMDU4OWIwMDgyZDdlNzAwNGM5NzUtZTgz";
 	
-	public JSONObject sendMessage(String email, String message)throws Exception{
+	public String sendMessage(String email, String message){
 		String urlSendMessage = "https://api.ciscospark.com/v1/messages";
 		try {
 			JSONObject request = new JSONObject();
@@ -41,24 +42,23 @@ public class HttpService {
 			headers.put("content-type", "application/json; charset=utf-8");
 			headers.put("authorization", "Bearer " + boltToken);
 			
-			JSONObject jsonObject = httpsConnection(urlSendMessage,"POST",request.toString(), headers);
-			
-			return jsonObject;
+			JSONObject jSONObject = httpsConnection(urlSendMessage,"POST",request.toString(), headers);
+			return jSONObject.toString();
 		} catch (Exception ex) {
-			throw ex;
+			Application.logger.debug(ex.getMessage());
+			return ex.getMessage();
 		}
 	}
 	
 	public Map<String, Object> getSparkPeople(String email) throws Exception{
-		String urlGetPeople = "https://api.ciscospark.com/v1/people";
+		String urlGetPeople = "https://api.ciscospark.com/v1/people?email=" + email;
 		try {
-			String content = "email=" + email;
 			
 			Map<String, String> headers = new HashMap<String, String>();
 			headers.put("content-type", "application/json; charset=utf-8");
 			headers.put("authorization", "Bearer " + boltToken);
 			
-			JSONObject jsonObject = httpsConnection(urlGetPeople,"GET",content, headers);
+			JSONObject jsonObject = httpsConnection(urlGetPeople,"GET",null, headers);
 			JSONArray jSONArray = jsonObject.optJSONArray("items");
 			if(jSONArray!=null && jSONArray.length()>0){
 				JSONObject infoJson = jSONArray.getJSONObject(0);
@@ -79,15 +79,14 @@ public class HttpService {
 	}
 	
 	public boolean checkSparkPeople(String email) throws Exception{
-		String urlGetPeople = "https://api.ciscospark.com/v1/people";
+		String urlGetPeople = "https://api.ciscospark.com/v1/people?email=" + email;
 		try {
-			String content = "email=" + email;
 			
 			Map<String, String> headers = new HashMap<String, String>();
 			headers.put("content-type", "application/json; charset=utf-8");
 			headers.put("authorization", "Bearer " + boltToken);
 			
-			JSONObject jsonObject = httpsConnection(urlGetPeople,"GET",content, headers);
+			JSONObject jsonObject = httpsConnection(urlGetPeople,"GET",null, headers);
 			JSONArray jSONArray = jsonObject.optJSONArray("items");
 			if(jSONArray!=null && jSONArray.length()>0){
 				return true;
@@ -112,7 +111,13 @@ public class HttpService {
 	
 	public String httpsRequest(String requestUrl, String method, String outputStr, Map<String, String> headers)
 			throws Exception {
+		Gson gson = new Gson();
+		Application.logger.debug(requestUrl);
+		Application.logger.debug(method);
+		Application.logger.debug(outputStr);
+		Application.logger.debug(gson.toJson(headers));
 		try {
+			Application.logger.debug("1");
 			TrustManager[] tm = { new MyX509TrustManager() };
 			SSLContext sslContext = SSLContext.getInstance("SSL", "SunJSSE");
 			sslContext.init(null, tm, new SecureRandom());
@@ -122,7 +127,7 @@ public class HttpService {
 			URL url = new URL(requestUrl);
 			HttpsURLConnection httpUrlConn = (HttpsURLConnection) url.openConnection();
 			httpUrlConn.setSSLSocketFactory(ssf);
-			
+			Application.logger.debug("2");
 			if (null != headers) {
 				for (String key : headers.keySet()) {
 					httpUrlConn.setRequestProperty(key, headers.get(key));
@@ -132,16 +137,11 @@ public class HttpService {
 			if (!method.equals("GET")) {
 				httpUrlConn.setDoOutput(true);
 				httpUrlConn.setDoInput(true);
-			} 
-			
-			if(outputStr!=null && !outputStr.isEmpty()){
-				httpUrlConn.setDoOutput(true);
-				httpUrlConn.setDoInput(true);
 			}
 
 			httpUrlConn.setRequestMethod(method);
 			httpUrlConn.connect();
-
+			Application.logger.debug("3");
 			if (outputStr != null) {
 				DataOutputStream out = new DataOutputStream(httpUrlConn.getOutputStream());
 				out.writeBytes(outputStr);
@@ -156,7 +156,7 @@ public class HttpService {
 				buffer.append(line);
 			}
 			reader.close();
-			
+			Application.logger.debug("4");
 			httpUrlConn.disconnect();
 			return buffer.toString();
 		} catch (Exception ex) {

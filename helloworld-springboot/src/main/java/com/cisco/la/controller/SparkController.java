@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cisco.la.Application;
-import com.cisco.la.common.HttpService;
+import com.cisco.la.common.MessageService;
 import com.cisco.la.model.RecordModel;
 import com.cisco.la.service.RecordService;
 import com.google.gson.Gson;
@@ -50,7 +50,7 @@ public class SparkController {
 	private RecordService recordService;
 	
 	@Autowired
-	private HttpService httpService;
+	private MessageService httpService;
 	
 	@RequestMapping( value = "check/{email:.+}",  method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Object postResponse(@PathVariable("email") String email) {
@@ -63,7 +63,7 @@ public class SparkController {
 			recordModel.setResponse(gson.toJson(code));
 			recordModel.setTime(new Date());
 			recordService.addRecord(recordModel);
-			return code;
+			return recordModel;
 		}catch(Exception exp){
 			Map<String, Object> code = new HashMap<String, Object>();
 			code.put("code", -2);
@@ -76,15 +76,14 @@ public class SparkController {
 	@RequestMapping( value = "message",  method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Object postResponse() {
 		try{
-			JSONObject code = httpService.sendMessage("subing.xiao@pactera.com", "Hello");
+			String response = httpService.sendMessage("subing.xiao@pactera.com", "Hello");
 			
 			RecordModel recordModel = new RecordModel();
 			recordModel.setRequest("sendMessage" + "subing.xiao@pactera.com");
-			Gson gson = new Gson();
-			recordModel.setResponse(gson.toJson(code));
+			recordModel.setResponse(response);
 			recordModel.setTime(new Date());
 			recordService.addRecord(recordModel);
-			return code;
+			return recordModel;
 		}catch(Exception exp){
 			Map<String, Object> code = new HashMap<String, Object>();
 			code.put("code", -2);

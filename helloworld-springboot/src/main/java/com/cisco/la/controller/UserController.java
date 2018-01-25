@@ -33,7 +33,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cisco.la.common.HttpService;
+import com.cisco.la.Application;
+import com.cisco.la.Application.Env;
+import com.cisco.la.common.MessageService;
 import com.cisco.la.model.UserModel;
 import com.cisco.la.service.UserService;
 
@@ -42,11 +44,13 @@ import com.cisco.la.service.UserService;
 @RestController
 @RequestMapping(value="/api/user")
 public class UserController {
+	public final String CHAT_BOLT_WELCOME_MESSAGE = "Hello";
+	
 	@Autowired
 	private UserService userService;
 	
 	@Autowired
-	private HttpService httpService;
+	private MessageService messageService;
 	
 	@RequestMapping(value = "{id:.+}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Object getUser(HttpServletRequest request, @PathVariable("id") String id){
@@ -62,7 +66,11 @@ public class UserController {
 	@RequestMapping(value = "check/{id:.+}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Object checkUserID(HttpServletRequest request, @PathVariable("id") String id){
 		try{
-			boolean result = httpService.checkSparkPeople(id);
+			boolean result = true;
+			if(Application.envCurrent != Env.local){
+				result = messageService.checkSparkPeople(id);
+			}
+			
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("code", 1);
 			map.put("message", "Successfully");
@@ -108,9 +116,14 @@ public class UserController {
 				userModel.setGrade(jsonObject.getString("grade"));
 			userService.addUser(userModel);
 			
+			String message = "Successfully";
+//			if(Application.envCurrent != Env.local){
+//				message = messageService.sendMessage(userModel.getId(), CHAT_BOLT_WELCOME_MESSAGE);
+//			}
+			
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("code", 1);
-			map.put("message", "Successfully");
+			map.put("message", message);
 			return map; 
 	          
 	    } catch (JSONException e) {  
