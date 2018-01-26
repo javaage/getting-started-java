@@ -67,13 +67,23 @@ public class UserController {
 	public Object checkUserID(HttpServletRequest request, @PathVariable("id") String id){
 		try{
 			boolean result = true;
+			String message = "Successfully.";
 			if(Application.envCurrent != Env.local){
 				result = messageService.checkSparkPeople(id);
+				if(result){
+					UserModel userModel = userService.getUserByID(id);
+					if(userModel==null){
+						result = false;
+						message = "Spark account already exist.";
+					}
+				}else{
+					message = "Invalid Spark account.";
+				}
 			}
 			
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("code", 1);
-			map.put("message", "Successfully");
+			map.put("message", message);
 			map.put("data", result);
 			return map;
 		} catch (Exception e) {  

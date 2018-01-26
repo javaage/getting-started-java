@@ -32,6 +32,7 @@
                 getUser: '/api/user/{0}',
                 getUserList: '/api/user/list',
                 deleteUser: '/api/user/{0}',
+                checkUser: '/api/user/check/{0}',
                 addUser: '/api/user',
                 updateUser: '/api/user',
                 getRole: '/api/role/{0}',

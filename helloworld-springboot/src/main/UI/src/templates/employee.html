@@ -40,31 +40,39 @@
 			  <div class="form-group">
 			    <label for="inputSpark" class="col-sm-4 control-label">Spark Account*</label>
 			    <div class="col-sm-8">
-			      <input type="email" name="id" ng-model="user.id" class="form-control" id="inputSpark" placeholder="Spark Account e.g. robot@ge.com" required>
+			      <input type="email" name="id" ng-model="user.id" ng-disabled="isModify" class="form-control" id="inputSpark" placeholder="Spark Account e.g. robot@cisco.com" required ng-blur="checkUserID(user.id)">
+			      <span class="error" ng-show="userForm.id.$dirty && userForm.id.$error.required">Spark account is required. </span>
+			      <span class="error" ng-show="userForm.id.$error.acountvalid">Invalid Spark account. </span>
 			    </div>
 			  </div>
 			  <div class="form-group">
 			    <label for="inputName" class="col-sm-4 control-label">Name*</label>
 			    <div class="col-sm-8">
-			      <input type="text" ng-model="user.name" class="form-control" id="inputName" placeholder="Name" required>
+			      <input type="text" name="name" ng-model="user.name" class="form-control" id="inputName" placeholder="Name" required>
+			      <span class="error" ng-show="userForm.name.$dirty && userForm.name.$error.required">Name is required. </span>
 			    </div>
 			  </div>
 			  <div class="form-group">
 			    <label for="inputBudget" class="col-sm-4 control-label">Budget*</label>
 			    <div class="col-sm-8">
-			      <input type="number" ng-model="user.budget" class="form-control" id="inputBudget" placeholder="Budget" required>
+			      <input type="number" name="budget" ng-model="user.budget" class="form-control" id="inputBudget" placeholder="Budget" required budgetvalid>
+			      <span class="error" ng-show="userForm.budget.$dirty && userForm.budget.$error.required">Budget is required. </span>
+			      <span class="error" ng-show="userForm.budget.$error.budgetvalid">Budget should be greater than balance. </span>
 			    </div>
 			  </div>
 			  <div class="form-group">
 			    <label for="inputBalance" class="col-sm-4 control-label">Balance*</label>
 			    <div class="col-sm-8">
-			      <input type="number" ng-model="user.balance" class="form-control" id="inputBalance" placeholder="Balance" required>
+			      <input type="number" name="balance" ng-model="user.balance" class="form-control" id="inputBalance" placeholder="Balance" required budgetvalid>
+			      <span class="error" ng-show="userForm.balance.$dirty && userForm.balance.$error.required">Balance is required. </span>
+			      <span class="error" ng-show="userForm.balance.$error.budgetvalid">Budget should be greater than balance. </span>
 			    </div>
 			  </div>
 			  <div class="form-group">
 			    <label for="inputBU" class="col-sm-4 control-label">BU*</label>
 			    <div class="col-sm-8">
-			      <input type="text" ng-model="user.bu" class="form-control" id="inputBU" placeholder="BU" required>
+			      <input type="text" name="bu" ng-model="user.bu" class="form-control" id="inputBU" placeholder="BU" required>
+			      <span class="error" ng-show="userForm.bu.$dirty && userForm.bu.$error.required">BU is required. </span>
 			    </div>
 			  </div>
 			  <div class="form-group">
@@ -75,13 +83,7 @@
                                     ng-options="role.id as role.roleName for role in roles">
                         <option value="">Please choose one role...</option>
                     </select>
-			    		<!--
-			        <input type="text" ng-model="user.roleName" class="form-control" id="inputRole" placeholder="Role" required>
-			        
-			        <select id="slt_role" ng-model="user.roleID" class="form-control" >
-			        	 <option value="">Please choose one role...</option>
-                         <option ng-repeat="role in roles" value="{{role.id}}">{{role.roleName}}</option>
-                    </select>-->
+			    		
 			    </div>
 			  </div>
 			  <div class="form-group">
@@ -99,7 +101,7 @@
 			</form>
         </div>  
         <div class="modal-footer">  
-            <button type="submit" class="btn btn-default" ng-click="submitUserData()">Submit</button>
+            <button type="submit" class="btn btn-default" ng-click="submitUserData()" ng-disabled="userForm.id.$invalid || userForm.name.$invalid ||userForm.budget.$invalid || userForm.balance.$invalid || userForm.bu.$invalid">Submit</button> <!--  -->
 			<button type="cancel" class="btn btn-default" ng-click="closeUserModal()">Cancel</button>
         </div>  
     </script> 

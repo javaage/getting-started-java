@@ -10,6 +10,9 @@ input.ng-invalid {
 input.ng-valid {
   border: 1px solid green;
 }
+.error {
+  color: #a94442;
+}
 ul {
   margin: 0;
   padding: 0;

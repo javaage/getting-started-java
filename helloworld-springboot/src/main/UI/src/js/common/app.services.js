@@ -119,6 +119,25 @@ angular
                 return deferred.promise;
             };
 
+            this.checkUser = function(id){
+                var deferred = $q.defer();
+                var urlCheck = this.urlFormat(url.checkUser,id);
+                $http.get(urlCheck,{})
+                .success(function(data){
+                    console.log(data);
+                    if (data.code == 1) {
+                        deferred.resolve(data);
+                    } else {
+                        deferred.reject(data);
+                    }
+                })
+                .error(function(error){
+                    deferred.reject(error);
+                });
+
+                return deferred.promise;
+            }
+
             this.getRoleList = function(){
                 var deferred = $q.defer();
                 $http.get(url.getRoleList,{})

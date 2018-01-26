@@ -66,7 +66,7 @@ function EmployeeCtrl($rootScope, $scope, $log,$uibModal, services,NgTableParams
         user.active = true;
         services.updateUser(user).then(function(result) {
             if (result.code == 1) {
-                //alert("success");
+
             }
         }, function (error) {
             console.log(error);    
@@ -104,6 +104,23 @@ function OperateUserCtrl($scope, $log,$uibModalInstance, services) {
         $uibModalInstance.dismiss();
     };
 
+    $scope.checkUserID = function(id){
+        services.checkUser(id).then(function(result) {
+            if (result.code == 1) {
+                if(result.data == true){
+                    $scope.userForm.id.$setValidity('acountvalid', true);
+                    $scope.userForm.id.$invalid = false;
+
+                }else{
+                    $scope.userForm.id.$setValidity('acountvalid', false);
+                    $scope.userForm.id.$invalid = true;
+                }
+            }
+        }, function (error) {
+            console.log(error);    
+        });
+    }
+    
     $scope.submitUserData = function(){
         if($scope.isModify){
             services.updateUser($scope.user).then(function(result) {

@@ -33,7 +33,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @SpringBootApplication
 public class Application {
 	public enum Env {
-		local, gehc, beta, alpha, bj, diliu, test, security
+		local, alpha, prod
 	};
 	
 	public final static Logger logger = LoggerFactory.getLogger(Application.class);
