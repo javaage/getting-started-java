@@ -20,6 +20,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -29,9 +30,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cisco.la.Application;
 import com.cisco.la.model.RecordModel;
+import com.cisco.la.model.RoleModel;
+import com.cisco.la.model.UserModel;
 import com.cisco.la.service.RecordService;
+import com.cisco.la.service.RoleService;
+import com.cisco.la.service.UserService;
+import com.cisco.la.Application;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -47,11 +52,58 @@ public class HookController {
 	@Autowired
 	private RecordService recordService;
 	
+	@Autowired
+	private UserService userService;
+	
+	@Autowired
+	private RoleService roleService;
+	
 	@RequestMapping( method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Object postResponse(@RequestBody String json) {
 		Map<String, Object> code = new HashMap<String, Object>();
-		code.put("speech", "post welcome hook speech!");
-		code.put("displayText", "post welcome hook displayText!");
+		JSONObject jsonObject = new JSONObject(json); 
+		JSONObject result = jsonObject.getJSONObject("result");
+		JSONObject parameters = result.getJSONObject("parameters");
+		JSONObject metadata = result.getJSONObject("metadata");
+		String intentName = metadata.getString("intentName");
+		JSONObject fulfillment = result.getJSONObject("fulfillment");
+		String speech = fulfillment.getString("speech");
+		switch(intentName){
+		case "Change Role":
+			String role = parameters.getString("Role");
+			speech = speech.replace("@Role", role);
+			code.put("speech", speech);
+			code.put("displayText", speech);
+			
+			JSONObject originalRequest = jsonObject.optJSONObject("originalRequest");
+			if(originalRequest!=null){
+				String source = originalRequest.optString("source");
+				JSONObject data = originalRequest.optJSONObject("data");
+				if(data!=null){
+					JSONObject subData = data.optJSONObject("data");
+					if(subData!=null){
+						String personEmail = subData.optString("personEmail");
+						UserModel userModel = userService.getUserByID(personEmail);
+						
+						RoleModel roleModel = roleService.getRoleByName(role);
+						if(userModel!=null && roleModel!=null){
+							userModel.setRoleID(roleModel.getId());
+							userService.updateUser(userModel);
+						}else{
+							
+						}
+						
+					}
+				}
+			}
+			
+			break;
+		default:
+			speech = "What is your role?";
+			code.put("speech", speech);
+			code.put("displayText", speech);
+			break;
+		}
 		
 		RecordModel recordModel = new RecordModel();
 		recordModel.setRequest("postResponse" + json);

@@ -10,5 +10,7 @@ public interface RoleService {
 
   public RoleModel getRoleByID(int id);
   
+  public RoleModel getRoleByName(String roleName);
+  
   public List<RoleModel> getRoleList();
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.cisco.la.controller;
+package com.cisco.la.test.controller;
 
 import java.util.HashMap;
 import java.util.List;
@@ -38,8 +38,8 @@ import com.cisco.la.service.RoleService;
 
 @Controller
 @RestController
-@RequestMapping(value="/api/role")
-public class RoleController {
+@RequestMapping(value="/api/role/test")
+public class RoleTestController {
 	@Autowired
 	private RoleService roleService;
 	

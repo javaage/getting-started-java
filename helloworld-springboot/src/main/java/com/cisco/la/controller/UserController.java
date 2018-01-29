@@ -16,6 +16,7 @@
 
 package com.cisco.la.controller;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,16 +36,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cisco.la.Application;
 import com.cisco.la.Application.Env;
+import com.cisco.la.common.CustomMessage;
 import com.cisco.la.common.MessageService;
 import com.cisco.la.model.UserModel;
 import com.cisco.la.service.UserService;
+
 
 
 @Controller
 @RestController
 @RequestMapping(value="/api/user")
 public class UserController {
-	public final String CHAT_BOLT_WELCOME_MESSAGE = "Hello";
 	
 	@Autowired
 	private UserService userService;
@@ -72,7 +74,7 @@ public class UserController {
 				result = messageService.checkSparkPeople(id);
 				if(result){
 					UserModel userModel = userService.getUserByID(id);
-					if(userModel==null){
+					if(userModel!=null){
 						result = false;
 						message = "Spark account already exist.";
 					}
@@ -124,6 +126,7 @@ public class UserController {
 				userModel.setTitle(jsonObject.getString("title"));
 			if(jsonObject.has("grade") && !jsonObject.isNull("grade"))
 				userModel.setGrade(jsonObject.getString("grade"));
+			userModel.setSession(new Date(1));
 			userService.addUser(userModel);
 			
 			String message = "Successfully";
@@ -161,7 +164,27 @@ public class UserController {
 			if(jsonObject.has("grade") && !jsonObject.isNull("grade"))
 				userModel.setGrade(jsonObject.getString("grade"));
 			userModel.setActive(jsonObject.getBoolean("active"));
+			
+			if(userModel.getRoleID() == null || userModel.getRoleID()<=0){
+				userModel.setSession(new Date());
+			}else{
+				userModel.setSession(new Date(1));
+			}
+			
 			userService.updateUser(userModel); 
+			
+			Application.logger.debug("begin send");
+			if(Application.envCurrent != Env.local){
+				if(userModel.getRoleID() == null || userModel.getRoleID()<=0){
+					Application.logger.debug(String.format(CustomMessage.CHAT_BOLT_QUERY_ROLE_MESSAGE, userModel.getName()));
+					String result = messageService.sendMessage(userModel.getId(), String.format(CustomMessage.CHAT_BOLT_QUERY_ROLE_MESSAGE, userModel.getName()));
+					Application.logger.debug(result);
+				}
+			}
+			/**
+			 {"toPersonEmail":"subing.xiao@pactera.com","created":"2018-01-29T06:53:35.339Z","personEmail":"LnDBot@sparkbot.io","personId":"Y2lzY29zcGFyazovL3VzL1BFT1BMRS9kYzBiMjJlMy00MGI1LTRhOWEtYTVhNS0xNzQ2YWQ1NTMxMzA","id":"Y2lzY29zcGFyazovL3VzL01FU1NBR0UvMjA2MzdiYjAtMDRjMS0xMWU4LWEzZGItYzdmMzc0NWViYTQw","text":"Hello Spring, what is your role?","roomId":"Y2lzY29zcGFyazovL3VzL1JPT00vOWVmYTZlYjYtOWQyZS0zOGQwLTkwZTMtN2QwYzljZDhhOWYw","roomType":"direct"}
+			 */
+			
 			
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("code", 1);
