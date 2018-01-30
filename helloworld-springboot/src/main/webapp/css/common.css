@@ -13,10 +13,11 @@ input.ng-valid {
 .error {
   color: #a94442;
 }
-ul {
+ol {
+  list-style-type: demical;
   margin: 0;
-  padding: 0;
 }
-ul li {
-  list-style-type: none;
+ol li {
+  list-style-position: outside;
+  text-align: left;
 }

@@ -12,4 +12,8 @@ public interface GoldenSampleService {
 	  public GoldenSampleModel getGoldenSampleByID(int id);
 	  
 	  public List<GoldenSampleJoin> getGoldenSampleList();
+	  
+	  public List<GoldenSampleModel> getGoldenSampleListByRoleID(int roleID);
+	  
+	  public String getGoldenSampleStringByRoleID(int roleID);
 }

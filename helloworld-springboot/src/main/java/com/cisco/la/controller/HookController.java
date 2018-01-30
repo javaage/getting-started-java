@@ -30,15 +30,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cisco.la.Application;
+import com.cisco.la.common.CustomMessage;
+import com.cisco.la.common.MessageService;
 import com.cisco.la.model.RecordModel;
 import com.cisco.la.model.RoleModel;
 import com.cisco.la.model.UserModel;
+import com.cisco.la.service.GoldenSampleService;
 import com.cisco.la.service.RecordService;
 import com.cisco.la.service.RoleService;
 import com.cisco.la.service.UserService;
-import com.cisco.la.Application;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 
 import ai.api.AIConfiguration;
 import ai.api.AIDataService;
@@ -58,6 +60,12 @@ public class HookController {
 	@Autowired
 	private RoleService roleService;
 	
+	@Autowired
+	private GoldenSampleService goldenSampleService;
+	
+	@Autowired
+	private MessageService messageService;
+	
 	@RequestMapping( method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Object postResponse(@RequestBody String json) {
 		Map<String, Object> code = new HashMap<String, Object>();
@@ -68,13 +76,10 @@ public class HookController {
 		String intentName = metadata.getString("intentName");
 		JSONObject fulfillment = result.getJSONObject("fulfillment");
 		String speech = fulfillment.getString("speech");
+		code.put("speech", speech);
+		code.put("displayText", speech);
 		switch(intentName){
 		case "Change Role":
-			String role = parameters.getString("Role");
-			speech = speech.replace("@Role", role);
-			code.put("speech", speech);
-			code.put("displayText", speech);
-			
 			JSONObject originalRequest = jsonObject.optJSONObject("originalRequest");
 			if(originalRequest!=null){
 				String source = originalRequest.optString("source");
@@ -82,17 +87,31 @@ public class HookController {
 				if(data!=null){
 					JSONObject subData = data.optJSONObject("data");
 					if(subData!=null){
+						String role = parameters.getString("Role");
 						String personEmail = subData.optString("personEmail");
 						UserModel userModel = userService.getUserByID(personEmail);
-						
 						RoleModel roleModel = roleService.getRoleByName(role);
 						if(userModel!=null && roleModel!=null){
 							userModel.setRoleID(roleModel.getId());
 							userService.updateUser(userModel);
-						}else{
 							
+							String prefCourse = goldenSampleService.getGoldenSampleStringByRoleID(roleModel.getId());
+							
+							speech = speech.replace("@Role", role);
+							speech = speech.replace("@Course", prefCourse);
+//							code.put("speech", "# " + speech);
+//							code.put("displayText", speech);
+							
+							code.put("speech", " ");
+							code.put("displayText", " ");
+							
+							messageService.sendMarkdownMessage(personEmail, speech);
+							
+						}else{
+							speech = CustomMessage.CHAT_BOLT_INVALID_ROLE_MESSAGE.replace("@Role", role);
+							code.put("speech", speech);
+							code.put("displayText", speech);
 						}
-						
 					}
 				}
 			}

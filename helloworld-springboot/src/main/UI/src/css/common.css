@@ -19,9 +19,11 @@ input.ng-valid{
 	color: #a94442;
 }
 
-ul{ 
-	margin:0; 
-	padding: 0;
-}
-
-ul li { list-style-type:none; }
+ol{
+	list-style-type:demical;
+	margin: 0;
+}  
+ol li{ 
+	list-style-position:outside;
+	text-align: left;
+} 

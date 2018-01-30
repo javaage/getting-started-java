@@ -16,18 +16,19 @@
 			            		<td title="'GoldenSample'" sortable="'goldenSampleName'" class="text-center">{{item.goldenSampleName}}</td>
 				                <td title="'Role'" sortable="'roleName'" class="text-center">{{item.roleName}}</td>
 				                <td title="'Mandatory'" sortable="'mandatoryName'" class="text-center">
-				                	<ul>
+				                	<ol>
 									   <li ng-repeat="subCourse in item.mandatoryName.split(',')">
 									   		{{subCourse}}
 									   </li>
-									</ul>
+									</ol>
 				                </td>
 				                <td title="'Optional'" sortable="'optionalName'" class="text-center">
-				                	<ul>
+				                	
+				                	<ol>
 									   <li ng-repeat="subCourse in item.optionalName.split(',')">
 									   		{{subCourse}}
 									   </li>
-									</ul>
+									</ol>
 				                </td>  
 				                <td title="'Operation'" class="text-center" >
 				                	<span  ng-if="!item.active" style="width: 80px;margin-left: 10px; margin-right: 10px;">Update</span>	

@@ -50,6 +50,25 @@ public class MessageService {
 		}
 	}
 	
+	public String sendMarkdownMessage(String email, String message){
+		String urlSendMessage = "https://api.ciscospark.com/v1/messages";
+		try {
+			JSONObject request = new JSONObject();
+			request.put("toPersonEmail", email);
+			request.put("markdown", message);
+			
+			Map<String, String> headers = new HashMap<String, String>();
+			headers.put("content-type", "application/json; charset=utf-8");
+			headers.put("authorization", "Bearer " + boltToken);
+			
+			JSONObject jSONObject = httpsConnection(urlSendMessage,"POST",request.toString(), headers);
+			return jSONObject.toString();
+		} catch (Exception ex) {
+			Application.logger.debug(ex.getMessage());
+			return ex.getMessage();
+		}
+	}
+	
 	public Map<String, Object> getSparkPeople(String email) throws Exception{
 		String urlGetPeople = "https://api.ciscospark.com/v1/people?email=" + email;
 		try {
