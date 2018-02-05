@@ -68,19 +68,26 @@ public class HookController {
 	
 	@RequestMapping( method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Object postResponse(@RequestBody String json) {
+		String speech = "";
 		Map<String, Object> code = new HashMap<String, Object>();
 		JSONObject jsonObject = new JSONObject(json); 
 		JSONObject result = jsonObject.getJSONObject("result");
 		JSONObject parameters = result.getJSONObject("parameters");
 		JSONObject metadata = result.getJSONObject("metadata");
 		String intentName = metadata.getString("intentName");
-		JSONObject fulfillment = result.getJSONObject("fulfillment");
-		String speech = fulfillment.getString("speech");
+		JSONObject originalRequest = jsonObject.optJSONObject("originalRequest");
+		 
+		if(result.optString("fulfillment")!=null){
+			JSONObject fulfillment = result.getJSONObject("fulfillment");
+			speech = fulfillment.getString("speech");
+		}else if(result.optString("speech")!=null){
+			speech = result.getString("speech");
+		}
+		
 		code.put("speech", speech);
 		code.put("displayText", speech);
 		switch(intentName){
-		case "Change Role":
-			JSONObject originalRequest = jsonObject.optJSONObject("originalRequest");
+		case "role":
 			if(originalRequest!=null){
 				String source = originalRequest.optString("source");
 				JSONObject data = originalRequest.optJSONObject("data");
@@ -91,24 +98,54 @@ public class HookController {
 						String personEmail = subData.optString("personEmail");
 						UserModel userModel = userService.getUserByID(personEmail);
 						RoleModel roleModel = roleService.getRoleByName(role);
-						if(userModel!=null && roleModel!=null){
+						if(userModel==null){
+							speech = CustomMessage.CHAT_BOLT_INVALID_USER_MESSAGE;
+							code.put("speech", speech);
+							code.put("displayText", speech);
+						}else if(userModel!=null && roleModel==null){
+							speech = CustomMessage.CHAT_BOLT_INVALID_ROLE_MESSAGE.replace("@Role", role);
+							code.put("speech", speech);
+							code.put("displayText", speech);
+						}else if(userModel!=null && roleModel!=null){
 							userModel.setRoleID(roleModel.getId());
 							userService.updateUser(userModel);
-							
 							String prefCourse = goldenSampleService.getGoldenSampleStringByRoleID(roleModel.getId());
-							
 							speech = speech.replace("@Role", role);
 							speech = speech.replace("@Course", prefCourse);
-//							code.put("speech", "# " + speech);
-//							code.put("displayText", speech);
-							
 							code.put("speech", " ");
 							code.put("displayText", " ");
 							
 							messageService.sendMarkdownMessage(personEmail, speech);
-							
+						}
+					}
+				}
+			}
+			
+			break;
+		case "role:suggestions":
+			if(originalRequest!=null){
+				String source = originalRequest.optString("source");
+				JSONObject data = originalRequest.optJSONObject("data");
+				if(data!=null){
+					JSONObject subData = data.optJSONObject("data");
+					if(subData!=null){
+						String personEmail = subData.optString("personEmail");
+						UserModel userModel = userService.getUserByID(personEmail);
+						
+						if(userModel==null){
+							speech = CustomMessage.CHAT_BOLT_INVALID_USER_MESSAGE;
+							code.put("speech", speech);
+							code.put("displayText", speech);
+						}else if(userModel!=null && userModel.getRoleID()!=null && userModel.getRoleID() > 0){
+							String prefCourse = goldenSampleService.getGoldenSampleStringByRoleID(userModel.getRoleID());
+							RoleModel roleModel = roleService.getRoleByID(userModel.getRoleID());
+							speech = speech.replace("@Role", roleModel.getRoleName());
+							speech = speech.replace("@Course", prefCourse);
+							code.put("speech", " ");
+							code.put("displayText", " ");
+							messageService.sendMarkdownMessage(personEmail, speech);
 						}else{
-							speech = CustomMessage.CHAT_BOLT_INVALID_ROLE_MESSAGE.replace("@Role", role);
+							speech = CustomMessage.CHAT_BOLT_QUERY_ROLE_MESSAGE_ONLY;
 							code.put("speech", speech);
 							code.put("displayText", speech);
 						}
@@ -118,11 +155,13 @@ public class HookController {
 			
 			break;
 		default:
-			speech = "What is your role?";
+			speech = CustomMessage.CHAT_BOLT_FALLBACK_MESSAGE;
 			code.put("speech", speech);
 			code.put("displayText", speech);
 			break;
 		}
+
+		Application.logger.debug(speech);
 		
 		RecordModel recordModel = new RecordModel();
 		recordModel.setRequest("postResponse" + json);
@@ -132,6 +171,8 @@ public class HookController {
 		recordService.addRecord(recordModel);
 		return code;
 	}
+	
+	
 	
 	@RequestMapping(value = "ai/{input}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Object aiResponse(@PathVariable("input") String input) {

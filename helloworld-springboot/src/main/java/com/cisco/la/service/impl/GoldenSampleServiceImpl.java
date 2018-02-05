@@ -1,4 +1,6 @@
 package com.cisco.la.service.impl;
+import com.cisco.la.Application;
+import com.cisco.la.common.CustomMessage;
 import com.cisco.la.entity.GoldenSampleJoin;
 import com.cisco.la.join.GoldenSampleJoinMapper;
 import com.cisco.la.mapper.GoldenSampleModelMapper;
@@ -17,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 @Service
 public class GoldenSampleServiceImpl implements GoldenSampleService {
@@ -79,21 +82,68 @@ public class GoldenSampleServiceImpl implements GoldenSampleService {
 			List<CourseModel> listMandatory = courseService.getCourseListByList(strMandatory);
 			List<CourseModel> listOptional = courseService.getCourseListByList(strOptional);
 			
-			result.append("<br>## Mandatory:");
-			for(CourseModel courseModel : listMandatory){
-				if(courseModel.getUrl()!=null && !courseModel.getUrl().isEmpty())
-					result.append(String.format("<br>[%s](%s)",courseModel.getCourseName(), courseModel.getUrl()));
-				else
-					result.append("<br>" + courseModel.getCourseName());
+			if(listMandatory.size()>0){
+				result.append("<br>\r\n### Mandatory:");
+				for(CourseModel courseModel : listMandatory){
+					if(courseModel.getUrl()!=null && !courseModel.getUrl().isEmpty())
+						result.append(String.format("<br>\r\n[%s](%s)",courseModel.getCourseName(), courseModel.getUrl()));
+					else
+						result.append("<br>\r\n" + courseModel.getCourseName());
+				}
 			}
-			result.append("<br>## Optional:");
-			for(CourseModel courseModel : listOptional){
-				if(courseModel.getUrl()!=null && !courseModel.getUrl().isEmpty())
-					result.append(String.format("<br>[%s](%s)",courseModel.getCourseName(), courseModel.getUrl()));
-				else
-					result.append("<br>" + courseModel.getCourseName());
+			
+			if(listOptional.size()>0){
+				result.append("<br>\r\n### Optional:");
+				for(CourseModel courseModel : listOptional){
+					if(courseModel.getUrl()!=null && !courseModel.getUrl().isEmpty())
+						result.append(String.format("<br>\r\n[%s](%s)",courseModel.getCourseName(), courseModel.getUrl()));
+					else
+						result.append("<br>\r\n" + courseModel.getCourseName());
+				}
 			}
+			
 		}
 		return result.toString();
+	}
+
+	/* (non-Javadoc)
+	 * @see com.cisco.la.service.GoldenSampleService#getRecentCourseModel(int)
+	 */
+	@Override
+	public CourseModel getRecentCourseModel(int roleID) {
+		List<GoldenSampleModel> listSample = getGoldenSampleListByRoleID(roleID);
+		Long recent = new Date().getTime();
+		CourseModel recentCourse = null;
+		
+		if(listSample!=null && listSample.size()>0){
+			String strMandatory = listSample.get(0).getMandatory();
+			List<CourseModel> listMandatory = courseService.getCourseListByList(strMandatory);
+			
+			for(CourseModel courseModel : listMandatory){
+				if(courseModel.getStartDate()!=null && courseModel.getStartDate().getTime() >= recent){
+					recent = courseModel.getStartDate().getTime();
+					recentCourse = courseModel;
+				}
+			}
+		}
+		return recentCourse;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.cisco.la.service.GoldenSampleService#getRecentCoursePref(int)
+	 */
+	@Override
+	public String getRecentCoursePref(int roleID) { //CHAT_BOLT_PREFER_RECENT_COURSE
+		CourseModel courseModel = getRecentCourseModel(roleID);
+		if(courseModel!=null){
+			Application.logger.debug(courseModel.getStartDate().toString());
+			Application.logger.debug(new Date().toString());
+			long delta = courseModel.getStartDate().getTime() - new Date().getTime();
+			int days = (int)delta/(1000 * 60 * 60 * 24);
+			Application.logger.debug(days+"");
+			return String.format(CustomMessage.CHAT_BOLT_PREFER_RECENT_COURSE, courseModel.getCourseName(),courseModel.getUrl(), days + " days");
+		}else{
+			return "";
+		}
 	}
 }

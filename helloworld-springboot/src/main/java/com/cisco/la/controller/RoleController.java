@@ -109,6 +109,7 @@ public class RoleController {
 		try{
 			JSONObject jsonObject = new JSONObject(json);   
 	        RoleModel roleModel = new RoleModel();
+	        roleModel.setId(jsonObject.getInt("id"));
 	        roleModel.setRoleName(jsonObject.getString("roleName"));
 			roleModel.setBu(jsonObject.getString("bu"));
 			if(jsonObject.has("title") && !jsonObject.isNull("title"))

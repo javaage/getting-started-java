@@ -29,8 +29,6 @@ import com.google.gson.Gson;
  */
 @Service
 public class MessageService {
-	private String boltToken = "YjI0NDYxNjktYjFjYS00NTUyLTllZjQtMDU4OWIwMDgyZDdlNzAwNGM5NzUtZTgz";
-	
 	public String sendMessage(String email, String message){
 		String urlSendMessage = "https://api.ciscospark.com/v1/messages";
 		try {
@@ -40,7 +38,7 @@ public class MessageService {
 			
 			Map<String, String> headers = new HashMap<String, String>();
 			headers.put("content-type", "application/json; charset=utf-8");
-			headers.put("authorization", "Bearer " + boltToken);
+			headers.put("authorization", "Bearer " + Application.boltToken);
 			
 			JSONObject jSONObject = httpsConnection(urlSendMessage,"POST",request.toString(), headers);
 			return jSONObject.toString();
@@ -59,7 +57,7 @@ public class MessageService {
 			
 			Map<String, String> headers = new HashMap<String, String>();
 			headers.put("content-type", "application/json; charset=utf-8");
-			headers.put("authorization", "Bearer " + boltToken);
+			headers.put("authorization", "Bearer " + Application.boltToken);
 			
 			JSONObject jSONObject = httpsConnection(urlSendMessage,"POST",request.toString(), headers);
 			return jSONObject.toString();
@@ -72,10 +70,9 @@ public class MessageService {
 	public Map<String, Object> getSparkPeople(String email) throws Exception{
 		String urlGetPeople = "https://api.ciscospark.com/v1/people?email=" + email;
 		try {
-			
 			Map<String, String> headers = new HashMap<String, String>();
 			headers.put("content-type", "application/json; charset=utf-8");
-			headers.put("authorization", "Bearer " + boltToken);
+			headers.put("authorization", "Bearer " + Application.boltToken);
 			
 			JSONObject jsonObject = httpsConnection(urlGetPeople,"GET",null, headers);
 			JSONArray jSONArray = jsonObject.optJSONArray("items");
@@ -103,7 +100,7 @@ public class MessageService {
 			
 			Map<String, String> headers = new HashMap<String, String>();
 			headers.put("content-type", "application/json; charset=utf-8");
-			headers.put("authorization", "Bearer " + boltToken);
+			headers.put("authorization", "Bearer " + Application.boltToken);
 			
 			JSONObject jsonObject = httpsConnection(urlGetPeople,"GET",null, headers);
 			JSONArray jSONArray = jsonObject.optJSONArray("items");

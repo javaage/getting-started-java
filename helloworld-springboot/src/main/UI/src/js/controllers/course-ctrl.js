@@ -5,7 +5,7 @@
 angular
     .module('RDash')
     .controller('CourseCtrl', ['$rootScope', '$scope','$log','$uibModal','app.services','NgTableParams', CourseCtrl])
-    .controller('OperateCourseCtrl', ['$scope','$log','$uibModalInstance','app.services', OperateCourseCtrl]);
+    .controller('OperateCourseCtrl', ['$scope','$filter','$log','$uibModalInstance','app.services', OperateCourseCtrl]);
 function CourseCtrl($rootScope, $scope, $log,$uibModal, services,NgTableParams) {
     $scope.courses = [];
     
@@ -16,6 +16,14 @@ function CourseCtrl($rootScope, $scope, $log,$uibModal, services,NgTableParams) 
     $scope.getCourseList = function(){
         services.getCourseList().then(function(result) {
             if (result.code == 1) {
+
+                angular.forEach(result.data,function(value,key){
+                    if(value.startDate>0)
+                        value.startDate = new Date(value.startDate);
+                    if(value.endDate>0)
+                        value.endDate = new Date(value.endDate);
+                });
+
                 $scope.courses = result.data;
                 $scope.tableParams = new NgTableParams(
                 {
@@ -44,8 +52,6 @@ function CourseCtrl($rootScope, $scope, $log,$uibModal, services,NgTableParams) 
             controller: 'OperateCourseCtrl'
         });
         modalInstance.opened.then(function(){
-            $('.datepicker').datepicker({
-            });
         });
     };
 
@@ -96,7 +102,7 @@ function CourseCtrl($rootScope, $scope, $log,$uibModal, services,NgTableParams) 
     $scope.getCourseList();
 }
 
-function OperateCourseCtrl($scope, $log,$uibModalInstance, services) { 
+function OperateCourseCtrl($scope,$filter,$log,$uibModalInstance,services) { 
 
 
     $scope.closeCourseModal = function(){
@@ -118,6 +124,9 @@ function OperateCourseCtrl($scope, $log,$uibModalInstance, services) {
     };
 
     $scope.submitCourseData = function(){
+        $scope.course.startDate = $filter('date')($scope.course.startDate,'yyyy-MM-dd');
+        $scope.course.endDate = $filter('date')($scope.course.endDate,'yyyy-MM-dd');
+
         	if($scope.isModify){
                 services.updateCourse($scope.course).then(function(result) {
                     if (result.code == 1) {

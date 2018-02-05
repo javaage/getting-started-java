@@ -38,9 +38,11 @@ public class Application {
 	
 	public final static Logger logger = LoggerFactory.getLogger(Application.class);
 	public static Env envCurrent = Env.local;
+	public static String boltToken = "YjI0NDYxNjktYjFjYS00NTUyLTllZjQtMDU4OWIwMDgyZDdlNzAwNGM5NzUtZTgz";
 	
 	public static void main(String[] args) {
 		ApplicationContext ctx = SpringApplication.run(Application.class, args);
+		boltToken = ctx.getEnvironment().getProperty("boltToken");
 		envCurrent = Enum.valueOf(Env.class, ctx.getEnvironment().getProperty("spring.profiles.active"));
 	}
 }

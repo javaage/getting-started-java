@@ -18,6 +18,7 @@ package com.cisco.la.controller;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -104,12 +105,15 @@ public class CourseController {
 		try{
 			JSONObject jsonObject = new JSONObject(json);   
 	        CourseModel courseModel = new CourseModel();
+	        courseModel.setId(jsonObject.getInt("id"));
 	        courseModel.setCourseName(jsonObject.getString("courseName"));
 	        courseModel.setPrice(jsonObject.getDouble("price"));
+	        
 	        if(jsonObject.optString("startDate",null)!=null)
 	        	courseModel.setStartDate(formatter.parse(jsonObject.getString("startDate")));
 	        if(jsonObject.optString("endDate",null)!=null)
 	        	courseModel.setEndDate(formatter.parse(jsonObject.getString("endDate")));
+	        
 	        if(jsonObject.optString("url",null)!=null){
 	        	courseModel.setUrl(jsonObject.getString("url"));
 	        }
