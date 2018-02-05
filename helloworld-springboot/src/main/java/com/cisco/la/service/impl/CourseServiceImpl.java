@@ -33,7 +33,7 @@ public class CourseServiceImpl implements CourseService {
 	public List<CourseModel> getCourseList() {
 		CourseModelMapper courseModelMapper = sqlSession.getMapper(CourseModelMapper.class);
 		CourseModelExample courseModelExample = new CourseModelExample();
-		courseModelExample.setOrderByClause("order by rl_active desc");
+		courseModelExample.setOrderByClause("order by crs_active desc");
 		return courseModelMapper.selectByExample(null);
 	}
 

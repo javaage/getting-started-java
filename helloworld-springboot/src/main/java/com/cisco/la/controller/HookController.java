@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cisco.la.Application;
 import com.cisco.la.common.CustomMessage;
-import com.cisco.la.common.MessageService;
+import com.cisco.la.common.SparkService;
 import com.cisco.la.model.RecordModel;
 import com.cisco.la.model.RoleModel;
 import com.cisco.la.model.UserModel;
@@ -64,7 +64,7 @@ public class HookController {
 	private GoldenSampleService goldenSampleService;
 	
 	@Autowired
-	private MessageService messageService;
+	private SparkService messageService;
 	
 	@RequestMapping( method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Object postResponse(@RequestBody String json) {

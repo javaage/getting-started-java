@@ -28,7 +28,7 @@ import com.google.gson.Gson;
  *
  */
 @Service
-public class MessageService {
+public class SparkService {
 	public String sendMessage(String email, String message){
 		String urlSendMessage = "https://api.ciscospark.com/v1/messages";
 		try {

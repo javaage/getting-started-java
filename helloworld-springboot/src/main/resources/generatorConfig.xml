@@ -69,5 +69,17 @@
       <columnOverride column="CRD_RESPONSE" property="response"  />
       <columnOverride column="CRD_TIME" property="time"  />
     </table>
+    
+    <table schema="public" tableName="LA_MESSAGE" domainObjectName="MessageModel">
+    <generatedKey column="MSG_ID" sqlStatement="SELECT nextval('la_message_msg_id_seq')" identity="true"/>
+      <columnOverride column="MSG_ID" property="id"  />
+      <columnOverride column="MSG_USER_ID" property="userID"  />
+      <columnOverride column="MSG_CONTENT" property="content"  />
+      <columnOverride column="MSG_SESSION" property="session"  />
+      <columnOverride column="MSG_SERIAL" property="serial"  />
+      <columnOverride column="MSG_LEVEL" property="level"  />
+      <columnOverride column="MSG_CREATE_DATE" property="createDate"  />
+      <columnOverride column="MSG_ACTIVE" property="active"  />
+    </table>
   </context>
 </generatorConfiguration>

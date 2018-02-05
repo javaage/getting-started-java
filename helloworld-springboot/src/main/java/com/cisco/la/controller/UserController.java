@@ -39,10 +39,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cisco.la.Application;
 import com.cisco.la.Application.Env;
 import com.cisco.la.common.CustomMessage;
-import com.cisco.la.common.MessageService;
+import com.cisco.la.common.SparkService;
+import com.cisco.la.model.MessageModel;
 import com.cisco.la.model.RoleModel;
 import com.cisco.la.model.UserModel;
 import com.cisco.la.service.GoldenSampleService;
+import com.cisco.la.service.MessageService;
 import com.cisco.la.service.RoleService;
 import com.cisco.la.service.UserService;
 
@@ -59,10 +61,13 @@ public class UserController {
 	private RoleService roleService;
 	
 	@Autowired
-	private MessageService messageService;
+	private SparkService sparkService;
 	
 	@Autowired
 	private GoldenSampleService goldenSampleService;
+	
+	@Autowired
+	private MessageService messageService;
 	
 	private Timer timer = new Timer();
 	
@@ -83,7 +88,7 @@ public class UserController {
 			boolean result = true;
 			String message = "Successfully.";
 			if(Application.envCurrent != Env.local){
-				result = messageService.checkSparkPeople(id);
+				result = sparkService.checkSparkPeople(id);
 				if(result){
 					UserModel userModel = userService.getUserByID(id);
 					if(userModel!=null){
@@ -188,36 +193,75 @@ public class UserController {
 			
 			userService.updateUser(userModel); 
 			
+			MessageModel latestMessageModel = messageService.getLatestMessageByUserID(userModel.getId());
+			int session = 1;
+			int level = 1;
+			int serial = 1;
+			if(latestMessageModel!=null){
+				session = latestMessageModel.getSession()+1;
+				level = latestMessageModel.getLevel()+1;
+				serial = latestMessageModel.getSerial()+1;
+			}
+			
 			Application.logger.debug("begin send");
 			if(Application.envCurrent != Env.local){
 				if(userModel.getRoleID() == null || userModel.getRoleID()<=0){
 					Application.logger.debug(String.format(CustomMessage.CHAT_BOLT_QUERY_ROLE_MESSAGE, userModel.getName()));
-					String result = messageService.sendMessage(userModel.getId(), String.format(CustomMessage.CHAT_BOLT_QUERY_ROLE_MESSAGE, userModel.getName()));
+					String result = sparkService.sendMessage(userModel.getId(), String.format(CustomMessage.CHAT_BOLT_QUERY_ROLE_MESSAGE, userModel.getName()));
 					Application.logger.debug(result);
 				}else if(userModel.getRoleID() != oldUserModel.getRoleID()){
 					RoleModel roleModel = roleService.getRoleByID(userModel.getRoleID());
 					Application.logger.debug(String.format(CustomMessage.CHAT_BOLT_CONGRATS_ROLE_MESSAGE, userModel.getName(), roleModel.getRoleName()));
-					String result = messageService.sendMessage(userModel.getId(), String.format(CustomMessage.CHAT_BOLT_CONGRATS_ROLE_MESSAGE, userModel.getName(), roleModel.getRoleName()));
+					String result = sparkService.sendMessage(userModel.getId(), String.format(CustomMessage.CHAT_BOLT_CONGRATS_ROLE_MESSAGE, userModel.getName(), roleModel.getRoleName()));
 					Application.logger.debug(result);
 					
 					String prefCourse = goldenSampleService.getGoldenSampleStringByRoleID(roleModel.getId());
 	            	if(!prefCourse.isEmpty()){
 	            		Application.logger.debug(String.format(CustomMessage.CHAT_BOLT_PREFER_ROLE_MESSAGE, roleModel.getRoleName(), prefCourse));
-						result = messageService.sendMarkdownMessage(userModel.getId(), String.format(CustomMessage.CHAT_BOLT_PREFER_ROLE_MESSAGE, roleModel.getRoleName(), prefCourse));
-						Application.logger.debug(result);
-	            	}
-					
-					String recentCourse = goldenSampleService.getRecentCoursePref(roleModel.getId());
-					if(!recentCourse.isEmpty()){
-						Application.logger.debug(recentCourse);
-						result = messageService.sendMarkdownMessage(userModel.getId(), recentCourse);
-						Application.logger.debug(result);
+						//result = sparkService.sendMarkdownMessage(userModel.getId(), String.format(CustomMessage.CHAT_BOLT_PREFER_ROLE_MESSAGE, roleModel.getRoleName(), prefCourse));
+	            		MessageModel messageModelPreferRole = new MessageModel();
+	            		messageModelPreferRole.setActive(true);
+	            		messageModelPreferRole.setContent(String.format(CustomMessage.CHAT_BOLT_PREFER_ROLE_MESSAGE, roleModel.getRoleName(), prefCourse));
+	            		messageModelPreferRole.setCreateDate(new Date());
+	            		messageModelPreferRole.setLevel(level);
+	            		messageModelPreferRole.setSerial(serial);
+	            		messageModelPreferRole.setSession(session);
+	            		messageModelPreferRole.setUserID(userModel.getId());
+	            		messageService.addMessage(messageModelPreferRole);
+	            		Application.logger.debug(result);
 						
-						Application.logger.debug(CustomMessage.CHAT_BOLT_REGISTER_URL);
-						result = messageService.sendMarkdownMessage(userModel.getId(), CustomMessage.CHAT_BOLT_REGISTER_URL);
-						Application.logger.debug(result);
-					}
-					
+						String recentCourse = goldenSampleService.getRecentCoursePref(roleModel.getId());
+						if(!recentCourse.isEmpty()){
+							Application.logger.debug(recentCourse);
+							//result = sparkService.sendMarkdownMessage(userModel.getId(), recentCourse);
+							serial += 1;
+							MessageModel messageModelPreferCourse = new MessageModel();
+		            		messageModelPreferRole.setActive(true);
+		            		messageModelPreferRole.setContent(recentCourse);
+		            		messageModelPreferRole.setCreateDate(new Date());
+		            		messageModelPreferRole.setLevel(level);
+		            		messageModelPreferRole.setSerial(serial);
+		            		messageModelPreferRole.setSession(session);
+		            		messageModelPreferRole.setUserID(userModel.getId());
+		            		messageService.addMessage(messageModelPreferRole);
+							Application.logger.debug(result);
+							
+							Application.logger.debug(CustomMessage.CHAT_BOLT_REGISTER_URL);
+							//result = sparkService.sendMarkdownMessage(userModel.getId(), CustomMessage.CHAT_BOLT_REGISTER_URL);
+							serial += 1;
+							level += 1;
+							MessageModel messageModelRegistUrl = new MessageModel();
+		            		messageModelPreferRole.setActive(true);
+		            		messageModelPreferRole.setContent(CustomMessage.CHAT_BOLT_REGISTER_URL);
+		            		messageModelPreferRole.setCreateDate(new Date());
+		            		messageModelPreferRole.setLevel(level);
+		            		messageModelPreferRole.setSerial(serial);
+		            		messageModelPreferRole.setSession(session);
+		            		messageModelPreferRole.setUserID(userModel.getId());
+		            		messageService.addMessage(messageModelPreferRole);
+							Application.logger.debug(result);
+						}
+	            	}
 				}
 			}
 			/**

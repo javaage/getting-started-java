@@ -139,7 +139,7 @@ public class GoldenSampleServiceImpl implements GoldenSampleService {
 			Application.logger.debug(courseModel.getStartDate().toString());
 			Application.logger.debug(new Date().toString());
 			long delta = courseModel.getStartDate().getTime() - new Date().getTime();
-			int days = (int)delta/(1000 * 60 * 60 * 24);
+			long days = delta/(1000 * 60 * 60 * 24);
 			Application.logger.debug(days+"");
 			return String.format(CustomMessage.CHAT_BOLT_PREFER_RECENT_COURSE, courseModel.getCourseName(),courseModel.getUrl(), days + " days");
 		}else{
