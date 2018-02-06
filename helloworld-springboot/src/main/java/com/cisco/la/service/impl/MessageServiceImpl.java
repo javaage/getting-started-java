@@ -32,7 +32,7 @@ public class MessageServiceImpl implements MessageService {
 	public List<MessageModel> getMessageList() {
 		MessageModelMapper messageModelMapper = sqlSession.getMapper(MessageModelMapper.class);
 		MessageModelExample messageModelExample = new MessageModelExample();
-		messageModelExample.setOrderByClause("order by msg_id desc");
+		messageModelExample.setOrderByClause(" msg_id desc");
 		return messageModelMapper.selectByExample(messageModelExample);
 	}
 
@@ -54,7 +54,7 @@ public class MessageServiceImpl implements MessageService {
 		MessageModelExample messageModelExample = new MessageModelExample();
 		Criteria criteria = messageModelExample.createCriteria();
 		criteria.andUserIDEqualTo(userID);
-		messageModelExample.setOrderByClause("order by msg_id desc limit 1");
+		messageModelExample.setOrderByClause(" msg_id desc limit 1");
 		List<MessageModel> listMessage = messageModelMapper.selectByExample(messageModelExample);
 		if(listMessage.size()>0)
 			return listMessage.get(0);
@@ -72,7 +72,7 @@ public class MessageServiceImpl implements MessageService {
 		Criteria criteria = messageModelExample.createCriteria();
 		criteria.andUserIDEqualTo(userID);
 		criteria.andActiveEqualTo(true);
-		messageModelExample.setOrderByClause("order by msg_level desc");
+		messageModelExample.setOrderByClause(" msg_level desc");
 		List<MessageModel> listMessage = messageModelMapper.selectByExample(messageModelExample);
 		
 		if(listMessage.size()>0){
@@ -80,7 +80,7 @@ public class MessageServiceImpl implements MessageService {
 			MessageModelExample messageModelExampleDetail = new MessageModelExample();
 			Criteria criteriaDetail = messageModelExampleDetail.createCriteria();
 			criteriaDetail.andLevelEqualTo(messageModel.getLevel());
-			messageModelExampleDetail.setOrderByClause("order by msg_serial");
+			messageModelExampleDetail.setOrderByClause(" msg_serial");
 			return messageModelMapper.selectByExample(messageModelExampleDetail);
 		}else{
 			return new ArrayList<MessageModel>();

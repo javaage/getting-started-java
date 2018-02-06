@@ -143,7 +143,7 @@ public class UserController {
 				userModel.setTitle(jsonObject.getString("title"));
 			if(jsonObject.has("grade") && !jsonObject.isNull("grade"))
 				userModel.setGrade(jsonObject.getString("grade"));
-			userModel.setSession(new Date(1));
+			userModel.setSession(new Date());
 			userService.addUser(userModel);
 			
 			String message = "Successfully";
@@ -185,11 +185,7 @@ public class UserController {
 				userModel.setGrade(jsonObject.getString("grade"));
 			userModel.setActive(jsonObject.getBoolean("active"));
 			
-			if(userModel.getRoleID() == null || userModel.getRoleID()<=0){
-				userModel.setSession(new Date());
-			}else{
-				userModel.setSession(new Date(1));
-			}
+			userModel.setSession(new Date());
 			
 			userService.updateUser(userModel); 
 			
@@ -204,16 +200,16 @@ public class UserController {
 			}
 			
 			Application.logger.debug("begin send");
-			if(Application.envCurrent != Env.local){
+			//if(Application.envCurrent != Env.local){
 				if(userModel.getRoleID() == null || userModel.getRoleID()<=0){
 					Application.logger.debug(String.format(CustomMessage.CHAT_BOLT_QUERY_ROLE_MESSAGE, userModel.getName()));
-					String result = sparkService.sendMessage(userModel.getId(), String.format(CustomMessage.CHAT_BOLT_QUERY_ROLE_MESSAGE, userModel.getName()));
-					Application.logger.debug(result);
+					//String result = sparkService.sendMessage(userModel.getId(), String.format(CustomMessage.CHAT_BOLT_QUERY_ROLE_MESSAGE, userModel.getName()));
+					//Application.logger.debug(result);
 				}else if(userModel.getRoleID() != oldUserModel.getRoleID()){
 					RoleModel roleModel = roleService.getRoleByID(userModel.getRoleID());
 					Application.logger.debug(String.format(CustomMessage.CHAT_BOLT_CONGRATS_ROLE_MESSAGE, userModel.getName(), roleModel.getRoleName()));
-					String result = sparkService.sendMessage(userModel.getId(), String.format(CustomMessage.CHAT_BOLT_CONGRATS_ROLE_MESSAGE, userModel.getName(), roleModel.getRoleName()));
-					Application.logger.debug(result);
+					//String result = sparkService.sendMessage(userModel.getId(), String.format(CustomMessage.CHAT_BOLT_CONGRATS_ROLE_MESSAGE, userModel.getName(), roleModel.getRoleName()));
+					//Application.logger.debug(result);
 					
 					String prefCourse = goldenSampleService.getGoldenSampleStringByRoleID(roleModel.getId());
 	            	if(!prefCourse.isEmpty()){
@@ -228,7 +224,6 @@ public class UserController {
 	            		messageModelPreferRole.setSession(session);
 	            		messageModelPreferRole.setUserID(userModel.getId());
 	            		messageService.addMessage(messageModelPreferRole);
-	            		Application.logger.debug(result);
 						
 						String recentCourse = goldenSampleService.getRecentCoursePref(roleModel.getId());
 						if(!recentCourse.isEmpty()){
@@ -236,34 +231,32 @@ public class UserController {
 							//result = sparkService.sendMarkdownMessage(userModel.getId(), recentCourse);
 							serial += 1;
 							MessageModel messageModelPreferCourse = new MessageModel();
-		            		messageModelPreferRole.setActive(true);
-		            		messageModelPreferRole.setContent(recentCourse);
-		            		messageModelPreferRole.setCreateDate(new Date());
-		            		messageModelPreferRole.setLevel(level);
-		            		messageModelPreferRole.setSerial(serial);
-		            		messageModelPreferRole.setSession(session);
-		            		messageModelPreferRole.setUserID(userModel.getId());
-		            		messageService.addMessage(messageModelPreferRole);
-							Application.logger.debug(result);
+							messageModelPreferCourse.setActive(true);
+							messageModelPreferCourse.setContent(recentCourse);
+							messageModelPreferCourse.setCreateDate(new Date());
+							messageModelPreferCourse.setLevel(level);
+							messageModelPreferCourse.setSerial(serial);
+							messageModelPreferCourse.setSession(session);
+							messageModelPreferCourse.setUserID(userModel.getId());
+		            		messageService.addMessage(messageModelPreferCourse);
 							
 							Application.logger.debug(CustomMessage.CHAT_BOLT_REGISTER_URL);
 							//result = sparkService.sendMarkdownMessage(userModel.getId(), CustomMessage.CHAT_BOLT_REGISTER_URL);
 							serial += 1;
 							level += 1;
 							MessageModel messageModelRegistUrl = new MessageModel();
-		            		messageModelPreferRole.setActive(true);
-		            		messageModelPreferRole.setContent(CustomMessage.CHAT_BOLT_REGISTER_URL);
-		            		messageModelPreferRole.setCreateDate(new Date());
-		            		messageModelPreferRole.setLevel(level);
-		            		messageModelPreferRole.setSerial(serial);
-		            		messageModelPreferRole.setSession(session);
-		            		messageModelPreferRole.setUserID(userModel.getId());
-		            		messageService.addMessage(messageModelPreferRole);
-							Application.logger.debug(result);
+							messageModelRegistUrl.setActive(true);
+							messageModelRegistUrl.setContent(CustomMessage.CHAT_BOLT_REGISTER_URL);
+							messageModelRegistUrl.setCreateDate(new Date());
+							messageModelRegistUrl.setLevel(level);
+							messageModelRegistUrl.setSerial(serial);
+							messageModelRegistUrl.setSession(session);
+							messageModelRegistUrl.setUserID(userModel.getId());
+		            		messageService.addMessage(messageModelRegistUrl);
 						}
 	            	}
 				}
-			}
+			//}
 			/**
 			 {"toPersonEmail":"subing.xiao@pactera.com","created":"2018-01-29T06:53:35.339Z","personEmail":"LnDBot@sparkbot.io","personId":"Y2lzY29zcGFyazovL3VzL1BFT1BMRS9kYzBiMjJlMy00MGI1LTRhOWEtYTVhNS0xNzQ2YWQ1NTMxMzA","id":"Y2lzY29zcGFyazovL3VzL01FU1NBR0UvMjA2MzdiYjAtMDRjMS0xMWU4LWEzZGItYzdmMzc0NWViYTQw","text":"Hello Spring, what is your role?","roomId":"Y2lzY29zcGFyazovL3VzL1JPT00vOWVmYTZlYjYtOWQyZS0zOGQwLTkwZTMtN2QwYzljZDhhOWYw","roomType":"direct"}
 			 */

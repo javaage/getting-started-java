@@ -15,6 +15,7 @@
     <mapper resource="com/cisco/la/mapper/GoldenSampleModelMapper.xml" />
     <mapper resource="com/cisco/la/mapper/RoleHistoryModelMapper.xml" />
     <mapper resource="com/cisco/la/mapper/RoleModelMapper.xml" />
+    <mapper resource="com/cisco/la/mapper/MessageModelMapper.xml" />
     <mapper resource="com/cisco/la/mapper/UserModelMapper.xml" />
     <mapper resource="com/cisco/la/join/UserJoinMapper.xml" />
     <mapper resource="com/cisco/la/mapper/RecordModelMapper.xml" />

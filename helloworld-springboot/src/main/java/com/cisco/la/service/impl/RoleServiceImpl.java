@@ -34,7 +34,7 @@ public class RoleServiceImpl implements RoleService {
 	public List<RoleModel> getRoleList() {
 		RoleModelMapper roleModelMapper = sqlSession.getMapper(RoleModelMapper.class);
 		RoleModelExample roleModelExample = new RoleModelExample();
-		roleModelExample.setOrderByClause("order by rl_active desc");
+		roleModelExample.setOrderByClause("rl_active desc");
 		return roleModelMapper.selectByExample(roleModelExample);
 	}
 
