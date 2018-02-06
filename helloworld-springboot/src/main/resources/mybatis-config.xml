@@ -21,6 +21,7 @@
     <mapper resource="com/cisco/la/mapper/RecordModelMapper.xml" />
     <mapper resource="com/cisco/la/join/GoldenSampleJoinMapper.xml" />
     <mapper resource="com/cisco/la/join/RoleMapper.xml" />
+    <mapper resource="com/cisco/la/join/MessageJoinMapper.xml" />
   </mappers>
 </configuration>
 

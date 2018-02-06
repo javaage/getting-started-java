@@ -24,12 +24,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @EnableAutoConfiguration
 @ComponentScan(basePackages = "com.cisco.la")
 @EnableCaching
 @EnableTransactionManagement
+@EnableScheduling
 @SpringBootApplication
 public class Application {
 	public enum Env {

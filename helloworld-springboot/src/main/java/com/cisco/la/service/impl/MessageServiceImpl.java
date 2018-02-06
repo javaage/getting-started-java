@@ -1,12 +1,14 @@
 package com.cisco.la.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.cisco.la.join.MessageJoinMapper;
 import com.cisco.la.mapper.MessageModelMapper;
 import com.cisco.la.model.MessageModel;
 import com.cisco.la.model.MessageModelExample;
@@ -72,13 +74,14 @@ public class MessageServiceImpl implements MessageService {
 		Criteria criteria = messageModelExample.createCriteria();
 		criteria.andUserIDEqualTo(userID);
 		criteria.andActiveEqualTo(true);
-		messageModelExample.setOrderByClause(" msg_level desc");
+		messageModelExample.setOrderByClause(" msg_session desc, msg_level");
 		List<MessageModel> listMessage = messageModelMapper.selectByExample(messageModelExample);
 		
 		if(listMessage.size()>0){
 			MessageModel messageModel = listMessage.get(0);
 			MessageModelExample messageModelExampleDetail = new MessageModelExample();
 			Criteria criteriaDetail = messageModelExampleDetail.createCriteria();
+			criteriaDetail.andActiveEqualTo(true);
 			criteriaDetail.andLevelEqualTo(messageModel.getLevel());
 			messageModelExampleDetail.setOrderByClause(" msg_serial");
 			return messageModelMapper.selectByExample(messageModelExampleDetail);
@@ -86,6 +89,17 @@ public class MessageServiceImpl implements MessageService {
 			return new ArrayList<MessageModel>();
 		}
 	}
+
+	/* (non-Javadoc)
+	 * @see com.cisco.la.service.MessageService#getLostSessionMessage()
+	 */
+	@Override
+	public List<MessageModel> getLostSessionMessage() {
+		MessageJoinMapper messageJoinMapper = sqlSession.getMapper(MessageJoinMapper.class);
+		return messageJoinMapper.getLostSessionMessage();
+	}
+
+
 
 
 }

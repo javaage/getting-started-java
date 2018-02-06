@@ -2,6 +2,7 @@ package com.cisco.la.service;
 import com.cisco.la.model.MessageModel;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Date;
 
 public interface MessageService {
   public void addMessage(MessageModel messageModel);
@@ -15,4 +16,6 @@ public interface MessageService {
   public MessageModel getLatestMessageByUserID(String userID);
   
   public List<MessageModel> getActiveMessage(String userID);
+  
+  public List<MessageModel> getLostSessionMessage();
 }

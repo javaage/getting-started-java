@@ -161,7 +161,8 @@ public class HookController {
 				messageModel.setActive(false);
 				messageService.updateMessage(messageModel);
 			}
-			
+			code.put("speech", " ");
+			code.put("displayText", " ");
 			break;
 		default:
 			speech = CustomMessage.CHAT_BOLT_FALLBACK_MESSAGE;
