@@ -189,7 +189,7 @@ public class UserController {
 			
 			userService.updateUser(userModel); 
 			
-			MessageModel latestMessageModel = messageService.getLatestMessageByUserID(userModel.getId());
+			MessageModel latestMessageModel = messageService.getLatestMessageByUserID();
 			int session = 1;
 			int level = 1;
 			int serial = 1;

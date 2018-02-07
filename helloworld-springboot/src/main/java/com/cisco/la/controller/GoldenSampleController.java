@@ -34,9 +34,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cisco.la.Application;
+import com.cisco.la.common.CustomMessage;
+import com.cisco.la.common.SparkService;
 import com.cisco.la.entity.GoldenSampleJoin;
 import com.cisco.la.model.GoldenSampleModel;
+import com.cisco.la.model.MessageModel;
+import com.cisco.la.model.RoleModel;
+import com.cisco.la.model.UserModel;
 import com.cisco.la.service.GoldenSampleService;
+import com.cisco.la.service.MessageService;
+import com.cisco.la.service.RoleService;
+import com.cisco.la.service.UserService;
 
 @Controller
 @RestController
@@ -44,6 +53,18 @@ import com.cisco.la.service.GoldenSampleService;
 public class GoldenSampleController {
 	@Autowired
 	private GoldenSampleService goldenSampleService;
+	
+	@Autowired
+	private UserService userService;
+	
+	@Autowired
+	private RoleService roleService;
+	
+	@Autowired
+	private SparkService sparkService;
+	
+	@Autowired
+	private MessageService messageService;
 	
 	@RequestMapping(value = "{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Object getGoldenSample(HttpServletRequest request, @PathVariable("id") int id){
@@ -106,8 +127,70 @@ public class GoldenSampleController {
 	        goldenSampleModel.setOptional(jsonObject.getString("optional"));
 	        goldenSampleModel.setUpdateTime(new Date());
 			goldenSampleModel.setActive(jsonObject.getBoolean("active"));
+			GoldenSampleModel oldGoldenSampleModel = goldenSampleService.getGoldenSampleByID(goldenSampleModel.getId());
  			goldenSampleService.updateGoldenSample(goldenSampleModel);
 			
+ 			List<UserModel> listUserModel = userService.getUserListByRoleID(goldenSampleModel.getRoleID());
+ 			RoleModel  roleModel  = roleService.getRoleByID(goldenSampleModel.getRoleID());
+ 			
+ 			String prefCourse = goldenSampleService.getGoldenSampleStringByRoleID(goldenSampleModel.getRoleID());
+ 			int session = 1;
+			int level = 1;
+			int serial = 1;
+			MessageModel latestMessageModel = messageService.getLatestMessageByUserID();
+			if(latestMessageModel!=null){
+				session = latestMessageModel.getSession()+1;
+				level = latestMessageModel.getLevel()+1;
+				serial = latestMessageModel.getSerial()+1;
+			}
+ 			if(!oldGoldenSampleModel.getMandatory().contains(goldenSampleModel.getMandatory())
+ 					|| !oldGoldenSampleModel.getOptional().contains(goldenSampleModel.getOptional())){
+ 				for(UserModel userModel : listUserModel){
+ 	 				//sparkService.sendMarkdownMessage(userModel.getId(), String.format(CustomMessage.CHAT_BOLT_CHANGE_SAMPLE_HELLO, userModel.getName()));
+ 	 				//sparkService.sendMarkdownMessage(userModel.getId(), String.format(CustomMessage.CHAT_BOLT_CHANGE_SAMPLE_CHANGE, roleModel.getRoleName(),roleModel.getBu()));
+ 					MessageModel messageModelSayHello = new MessageModel();
+            		messageModelSayHello.setActive(true);
+            		messageModelSayHello.setContent(String.format(CustomMessage.CHAT_BOLT_CHANGE_SAMPLE_HELLO, userModel.getName()));
+            		messageModelSayHello.setCreateDate(new Date());
+            		messageModelSayHello.setLevel(level);
+            		messageModelSayHello.setSerial(serial);
+            		messageModelSayHello.setSession(session);
+            		messageModelSayHello.setUserID(userModel.getId());
+            		messageModelSayHello.setAction("input.role");
+            		messageModelSayHello.setIntent("");
+            		messageService.addMessage(messageModelSayHello);
+            		
+ 					serial+=1;
+            		MessageModel messageModelSampleChange = new MessageModel();
+            		messageModelSampleChange.setActive(true);
+            		messageModelSampleChange.setContent(String.format(CustomMessage.CHAT_BOLT_CHANGE_SAMPLE_CHANGE, roleModel.getRoleName(),roleModel.getBu()));
+            		messageModelSampleChange.setCreateDate(new Date());
+            		messageModelSampleChange.setLevel(level);
+            		messageModelSampleChange.setSerial(serial);
+            		messageModelSampleChange.setSession(session);
+            		messageModelSampleChange.setUserID(userModel.getId());
+            		messageModelSampleChange.setAction("input.role");
+            		messageModelSampleChange.setIntent("");
+            		messageService.addMessage(messageModelSampleChange);
+            		
+ 					if(!prefCourse.isEmpty()){
+ 	 	        		//sparkService.sendMarkdownMessage(userModel.getId(), prefCourse);
+ 						serial+=1;
+ 	            		MessageModel messageModelPreferCourse = new MessageModel();
+ 	            		messageModelPreferCourse.setActive(true);
+ 	            		messageModelPreferCourse.setContent(prefCourse);
+ 	            		messageModelPreferCourse.setCreateDate(new Date());
+ 	            		messageModelPreferCourse.setLevel(level);
+ 	            		messageModelPreferCourse.setSerial(serial);
+ 	            		messageModelPreferCourse.setSession(session);
+ 	            		messageModelPreferCourse.setUserID(userModel.getId());
+ 	            		messageModelPreferCourse.setAction("input.role");
+ 	            		messageModelPreferCourse.setIntent("");
+ 	            		messageService.addMessage(messageModelPreferCourse);
+ 	 				}
+ 	 			}
+ 			}
+ 			
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("code", 1);
 			map.put("message", "Successfully");

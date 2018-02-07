@@ -51,11 +51,9 @@ public class MessageServiceImpl implements MessageService {
 	 * @see com.cisco.la.service.MessageService#getLatestMessageByUserID(java.lang.String)
 	 */
 	@Override
-	public MessageModel getLatestMessageByUserID(String userID) {
+	public MessageModel getLatestMessageByUserID() {
 		MessageModelMapper messageModelMapper = sqlSession.getMapper(MessageModelMapper.class);
 		MessageModelExample messageModelExample = new MessageModelExample();
-		Criteria criteria = messageModelExample.createCriteria();
-		criteria.andUserIDEqualTo(userID);
 		messageModelExample.setOrderByClause(" msg_id desc limit 1");
 		List<MessageModel> listMessage = messageModelMapper.selectByExample(messageModelExample);
 		if(listMessage.size()>0)
@@ -74,7 +72,6 @@ public class MessageServiceImpl implements MessageService {
 		Criteria criteria = messageModelExample.createCriteria();
 		criteria.andUserIDEqualTo(userID);
 		criteria.andIntentEqualTo(intentName);
-		criteria.andActiveEqualTo(true);
 		messageModelExample.setOrderByClause(" msg_session desc, msg_level");
 		List<MessageModel> listMessage = messageModelMapper.selectByExample(messageModelExample);
 		

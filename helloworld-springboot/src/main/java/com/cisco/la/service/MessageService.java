@@ -12,7 +12,7 @@ public interface MessageService {
   
   public List<MessageModel> getMessageList();
   
-  public MessageModel getLatestMessageByUserID(String userID);
+  public MessageModel getLatestMessageByUserID();
   
   public List<MessageModel> getActiveMessage(String userID,String intentName,String action);
   

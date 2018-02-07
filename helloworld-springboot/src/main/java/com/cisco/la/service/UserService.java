@@ -11,4 +11,6 @@ public interface UserService {
   public UserModel getUserByID(String id);
   
   public List<UserModel> getUserList();
+  
+  public List<UserModel> getUserListByRoleID(int roleID);
  }

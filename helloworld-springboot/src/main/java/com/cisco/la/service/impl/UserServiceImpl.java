@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import com.cisco.la.join.UserJoinMapper;
 import com.cisco.la.mapper.UserModelMapper;
 import com.cisco.la.model.UserModel;
+import com.cisco.la.model.UserModelExample;
+import com.cisco.la.model.UserModelExample.Criteria;
 import com.cisco.la.service.UserService;
 
 @Service
@@ -35,5 +37,18 @@ public class UserServiceImpl implements UserService {
 	public List<UserModel> getUserList(){
 		UserJoinMapper userJoinMapper = sqlSession.getMapper(UserJoinMapper.class);
 		return userJoinMapper.getUserJoin();
+	}
+
+	/* (non-Javadoc)
+	 * @see com.cisco.la.service.UserService#getUserListByRoleID(int)
+	 */
+	@Override
+	public List<UserModel> getUserListByRoleID(int roleID) {
+		UserModelMapper userModelMapper = sqlSession.getMapper(UserModelMapper.class);
+		UserModelExample example = new UserModelExample();
+		Criteria criteria = example.createCriteria();
+		criteria.andRoleIDEqualTo(roleID);
+		criteria.andActiveEqualTo(true);
+		return userModelMapper.selectByExample(example);
 	}
 }
