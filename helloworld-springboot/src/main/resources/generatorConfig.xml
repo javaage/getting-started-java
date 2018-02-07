@@ -80,6 +80,8 @@
       <columnOverride column="MSG_LEVEL" property="level"  />
       <columnOverride column="MSG_CREATE_DATE" property="createDate"  />
       <columnOverride column="MSG_ACTIVE" property="active"  />
+      <columnOverride column="MSG_INTENT" property="intent"  />
+      <columnOverride column="MSG_ACTION" property="action"  />
     </table>
   </context>
 </generatorConfiguration>

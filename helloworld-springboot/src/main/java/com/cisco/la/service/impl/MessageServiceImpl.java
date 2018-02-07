@@ -68,11 +68,12 @@ public class MessageServiceImpl implements MessageService {
 	 * @see com.cisco.la.service.MessageService#getActiveMessage(java.lang.String)
 	 */
 	@Override
-	public List<MessageModel> getActiveMessage(String userID) {
+	public List<MessageModel> getActiveMessage(String userID,String intentName,String action) {
 		MessageModelMapper messageModelMapper = sqlSession.getMapper(MessageModelMapper.class);
 		MessageModelExample messageModelExample = new MessageModelExample();
 		Criteria criteria = messageModelExample.createCriteria();
 		criteria.andUserIDEqualTo(userID);
+		criteria.andIntentEqualTo(intentName);
 		criteria.andActiveEqualTo(true);
 		messageModelExample.setOrderByClause(" msg_session desc, msg_level");
 		List<MessageModel> listMessage = messageModelMapper.selectByExample(messageModelExample);
@@ -82,6 +83,7 @@ public class MessageServiceImpl implements MessageService {
 			MessageModelExample messageModelExampleDetail = new MessageModelExample();
 			Criteria criteriaDetail = messageModelExampleDetail.createCriteria();
 			criteriaDetail.andActiveEqualTo(true);
+			criteria.andIntentEqualTo(intentName);
 			criteriaDetail.andLevelEqualTo(messageModel.getLevel());
 			messageModelExampleDetail.setOrderByClause(" msg_serial");
 			return messageModelMapper.selectByExample(messageModelExampleDetail);

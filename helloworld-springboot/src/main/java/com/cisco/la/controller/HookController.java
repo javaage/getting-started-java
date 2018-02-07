@@ -80,15 +80,18 @@ public class HookController {
 		JSONObject result = jsonObject.getJSONObject("result");
 		JSONObject parameters = result.getJSONObject("parameters");
 		JSONObject metadata = result.getJSONObject("metadata");
-		String intentName = metadata.getString("intentName");
+		String intentName = metadata.optString("intentName","");
+		String action = result.optString("action","");
+		
 		JSONObject originalRequest = jsonObject.optJSONObject("originalRequest");
 
 		if (result.optString("fulfillment") != null) {
 			JSONObject fulfillment = result.getJSONObject("fulfillment");
-			speech = fulfillment.getString("speech");
+			speech = fulfillment.optString("speech","");
 		} else if (result.optString("speech") != null) {
-			speech = result.getString("speech");
+			speech = result.optString("speech","");
 		}
+		
 		UserModel userModel = null;
 		RoleModel roleModel = null;
 		String role = "";
@@ -99,11 +102,13 @@ public class HookController {
 			if (data != null) {
 				JSONObject subData = data.optJSONObject("data");
 				if (subData != null) {
-					role = parameters.getString("Role");
-					personEmail = subData.optString("personEmail");
+					role = parameters.optString("Role","");
+					personEmail = subData.optString("personEmail","");
 					userModel = userService.getUserByID(personEmail);
-					userModel.setSession(new Date());
-					userService.updateUser(userModel);
+					if(userModel!=null){
+						userModel.setSession(new Date());
+						userService.updateUser(userModel);
+					}
 					roleModel = roleService.getRoleByName(role);
 				}
 			}
@@ -154,15 +159,17 @@ public class HookController {
 			}
 			break;
 		case "accept":
-			List<MessageModel> activeMessages = messageService.getActiveMessage(personEmail);
+			List<MessageModel> activeMessages = messageService.getActiveMessage(personEmail,intentName,action);
 			
-			for(MessageModel messageModel: activeMessages){
-				sparkService.sendMarkdownMessage(messageModel.getUserID(), messageModel.getContent());
-				messageModel.setActive(false);
-				messageService.updateMessage(messageModel);
+			if(activeMessages.size()>0){
+				for(MessageModel messageModel: activeMessages){
+					sparkService.sendMarkdownMessage(messageModel.getUserID(), messageModel.getContent());
+					messageModel.setActive(false);
+					messageService.updateMessage(messageModel);
+				}
+				code.put("speech", " ");
+				code.put("displayText", " ");
 			}
-			code.put("speech", " ");
-			code.put("displayText", " ");
 			break;
 		default:
 			speech = CustomMessage.CHAT_BOLT_FALLBACK_MESSAGE;

@@ -15,19 +15,21 @@
     <result column="msg_create_date" jdbcType="TIMESTAMP" property="createDate" />
     <result column="msg_active" jdbcType="BIT" property="active" />
     <result column="msg_session" jdbcType="INTEGER" property="session" />
+    <result column="msg_intent" jdbcType="VARCHAR" property="intent" />
+    <result column="msg_action" jdbcType="VARCHAR" property="action" />
   </resultMap>
   <select id="getLostSessionMessage" resultMap="BaseResultMap">
 		SELECT m.msg_id, m.msg_user_id, m.msg_content, m.msg_serial, m.msg_level, m.msg_create_date, 
-        m.msg_active, m.msg_session
-  		FROM la_message m 
-  		inner join la_user u
+        m.msg_active, m.msg_session, m.msg_intent, m.msg_action
+		FROM la_message m 
+  		inner join (select usr_id from la_user where usr_active=true and usr_session &lt; now() - interval '5 minute') u
   		on  m.msg_user_id = u.usr_id 
   		inner join (select m.msg_user_id,min(m.msg_level) as msg_level from la_message m
 		inner join
-  		(select msg_user_id,max(msg_session) as msg_session from la_message where msg_active=true group by msg_user_id) ms
-  		on m.msg_user_id = ms.msg_user_id and m.msg_session = ms.msg_session
+  		(select msg_user_id,max(msg_session) as msg_session from la_message group by msg_user_id) ms
+  		on m.msg_user_id = ms.msg_user_id and m.msg_session = ms.msg_session and m.msg_active=true
   		group by m.msg_user_id) ml
-  		on m.msg_user_id = ml.msg_user_id and m.msg_level=ml.msg_level
-  		where  m.msg_create_date > u.usr_session + interval '5 minute'
+  		on m.msg_user_id = ml.msg_user_id and m.msg_level=ml.msg_level 
+		order by msg_serial
   </select>
 </mapper>
