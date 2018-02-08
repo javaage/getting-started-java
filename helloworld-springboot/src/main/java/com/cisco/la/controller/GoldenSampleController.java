@@ -143,6 +143,7 @@ public class GoldenSampleController {
 				level = latestMessageModel.getLevel()+1;
 				serial = latestMessageModel.getSerial()+1;
 			}
+			String action = "input.changePreferCourse";
  			if(!oldGoldenSampleModel.getMandatory().contains(goldenSampleModel.getMandatory())
  					|| !oldGoldenSampleModel.getOptional().contains(goldenSampleModel.getOptional())){
  				for(UserModel userModel : listUserModel){
@@ -156,7 +157,7 @@ public class GoldenSampleController {
             		messageModelSayHello.setSerial(serial);
             		messageModelSayHello.setSession(session);
             		messageModelSayHello.setUserID(userModel.getId());
-            		messageModelSayHello.setAction("input.role");
+            		messageModelSayHello.setAction(action);
             		messageModelSayHello.setIntent("");
             		messageService.addMessage(messageModelSayHello);
             		
@@ -169,7 +170,7 @@ public class GoldenSampleController {
             		messageModelSampleChange.setSerial(serial);
             		messageModelSampleChange.setSession(session);
             		messageModelSampleChange.setUserID(userModel.getId());
-            		messageModelSampleChange.setAction("input.role");
+            		messageModelSampleChange.setAction(action);
             		messageModelSampleChange.setIntent("");
             		messageService.addMessage(messageModelSampleChange);
             		
@@ -184,10 +185,11 @@ public class GoldenSampleController {
  	            		messageModelPreferCourse.setSerial(serial);
  	            		messageModelPreferCourse.setSession(session);
  	            		messageModelPreferCourse.setUserID(userModel.getId());
- 	            		messageModelPreferCourse.setAction("input.role");
+ 	            		messageModelPreferCourse.setAction(action);
  	            		messageModelPreferCourse.setIntent("");
  	            		messageService.addMessage(messageModelPreferCourse);
  	 				}
+ 					messageService.disableMessage(userModel.getId(), action, session);
  	 			}
  			}
  			

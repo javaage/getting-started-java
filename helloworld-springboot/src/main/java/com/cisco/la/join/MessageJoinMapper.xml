@@ -26,7 +26,7 @@
   		on  m.msg_user_id = u.usr_id 
   		inner join (select m.msg_user_id,min(m.msg_level) as msg_level from la_message m
 		inner join
-  		(select msg_user_id,max(msg_session) as msg_session from la_message group by msg_user_id) ms
+  		(select msg_user_id,min(msg_session) as msg_session from la_message where msg_active=true group by msg_user_id) ms
   		on m.msg_user_id = ms.msg_user_id and m.msg_session = ms.msg_session and m.msg_active=true
   		group by m.msg_user_id) ml
   		on m.msg_user_id = ml.msg_user_id and m.msg_level=ml.msg_level 

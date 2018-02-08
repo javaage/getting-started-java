@@ -211,6 +211,7 @@ public class UserController {
 					String result = sparkService.sendMessage(userModel.getId(), String.format(CustomMessage.CHAT_BOLT_CONGRATS_ROLE_MESSAGE, userModel.getName(), roleModel.getRoleName()));
 					Application.logger.debug(result);
 					
+					String action = "input.changeRole";
 					String prefCourse = goldenSampleService.getGoldenSampleStringByRoleID(roleModel.getId());
 	            	if(!prefCourse.isEmpty()){
 	            		Application.logger.debug(String.format(CustomMessage.CHAT_BOLT_PREFER_ROLE_MESSAGE, roleModel.getRoleName(), prefCourse));
@@ -223,7 +224,7 @@ public class UserController {
 	            		messageModelPreferRole.setSerial(serial);
 	            		messageModelPreferRole.setSession(session);
 	            		messageModelPreferRole.setUserID(userModel.getId());
-	            		messageModelPreferRole.setAction("input.role");
+	            		messageModelPreferRole.setAction(action);
 	            		messageModelPreferRole.setIntent("accept");
 	            		messageService.addMessage(messageModelPreferRole);
 						
@@ -240,7 +241,7 @@ public class UserController {
 							messageModelPreferCourse.setSerial(serial);
 							messageModelPreferCourse.setSession(session);
 							messageModelPreferCourse.setUserID(userModel.getId());
-							messageModelPreferCourse.setAction("input.role");
+							messageModelPreferCourse.setAction(action);
 							messageModelPreferCourse.setIntent("accept");
 		            		messageService.addMessage(messageModelPreferCourse);
 							
@@ -256,10 +257,12 @@ public class UserController {
 							messageModelRegistUrl.setSerial(serial);
 							messageModelRegistUrl.setSession(session);
 							messageModelRegistUrl.setUserID(userModel.getId());
-							messageModelRegistUrl.setAction("input.role");
+							messageModelRegistUrl.setAction(action);
 							messageModelRegistUrl.setIntent("accept");
 		            		messageService.addMessage(messageModelRegistUrl);
 						}
+						
+						messageService.disableMessage(userModel.getId(),action,session);
 	            	}
 				}
 			}

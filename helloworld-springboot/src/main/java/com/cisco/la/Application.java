@@ -45,6 +45,6 @@ public class Application {
 	public static void main(String[] args) {
 		ApplicationContext ctx = SpringApplication.run(Application.class, args);
 		boltToken = ctx.getEnvironment().getProperty("boltToken");
-		envCurrent = Enum.valueOf(Env.class, ctx.getEnvironment().getProperty("spring.profiles.active"));
+		envCurrent = Enum.valueOf(Env.class, ctx.getEnvironment().getProperty("spring.profiles.active")); 
 	}
 }

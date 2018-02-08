@@ -106,6 +106,7 @@ public class HookController {
 					personEmail = subData.optString("personEmail","");
 					userModel = userService.getUserByID(personEmail);
 					if(userModel!=null){
+						
 						userModel.setSession(new Date());
 						userService.updateUser(userModel);
 					}
@@ -134,8 +135,8 @@ public class HookController {
 				speech = speech.replace("@Course", prefCourse);
 				code.put("speech", " ");
 				code.put("displayText", " ");
-
 				sparkService.sendMarkdownMessage(personEmail, speech);
+				sparkService.sendMarkdownMessage(personEmail, CustomMessage.CHAT_BOLT_OTHER_HELP);
 			}
 
 			break;
@@ -169,6 +170,11 @@ public class HookController {
 				}
 				code.put("speech", " ");
 				code.put("displayText", " ");
+			}else{
+				if(userModel!=null){
+					userModel.setSession(new Date(1));
+					userService.updateUser(userModel);
+				}
 			}
 			break;
 		default:
@@ -177,7 +183,14 @@ public class HookController {
 			code.put("displayText", speech);
 			break;
 		}
-
+		
+		if(userModel!=null){
+			if(messageService.checkSessionFinished(userModel.getId())){
+				userModel.setSession(new Date(1));
+				userService.updateUser(userModel);
+			}
+		}
+		
 		Application.logger.debug(speech);
 
 		RecordModel recordModel = new RecordModel();

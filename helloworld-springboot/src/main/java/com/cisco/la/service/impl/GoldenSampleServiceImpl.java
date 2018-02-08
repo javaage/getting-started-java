@@ -112,7 +112,7 @@ public class GoldenSampleServiceImpl implements GoldenSampleService {
 	@Override
 	public CourseModel getRecentCourseModel(int roleID) {
 		List<GoldenSampleModel> listSample = getGoldenSampleListByRoleID(roleID);
-		Long recent = new Date().getTime();
+		Long recent = new Date(Long.MAX_VALUE).getTime();
 		CourseModel recentCourse = null;
 		
 		if(listSample!=null && listSample.size()>0){
@@ -120,7 +120,7 @@ public class GoldenSampleServiceImpl implements GoldenSampleService {
 			List<CourseModel> listMandatory = courseService.getCourseListByList(strMandatory);
 			
 			for(CourseModel courseModel : listMandatory){
-				if(courseModel.getStartDate()!=null && courseModel.getStartDate().getTime() >= recent){
+				if(courseModel.getStartDate()!=null && courseModel.getStartDate().getTime() <= recent){
 					recent = courseModel.getStartDate().getTime();
 					recentCourse = courseModel;
 				}

@@ -59,7 +59,7 @@
       <columnOverride column="USR_GRADE" property="grade"  />
       <columnOverride column="USR_RL_ID" property="roleID"  />
       <columnOverride column="USR_ACTIVE" property="active"  />
-      <columnOverride column="USR_SESSION" property="session"  />
+      <columnOverride column="USR_SESSION" property="session" jdbcType="TIMESTAMP" />
     </table>
     
     <table schema="public" tableName="LA_RECORD" domainObjectName="RecordModel">

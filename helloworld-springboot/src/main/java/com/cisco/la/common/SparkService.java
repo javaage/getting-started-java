@@ -43,7 +43,6 @@ public class SparkService {
 			JSONObject jSONObject = httpsConnection(urlSendMessage,"POST",request.toString(), headers);
 			return jSONObject.toString();
 		} catch (Exception ex) {
-			Application.logger.debug(ex.getMessage());
 			return ex.getMessage();
 		}
 	}
@@ -62,7 +61,6 @@ public class SparkService {
 			JSONObject jSONObject = httpsConnection(urlSendMessage,"POST",request.toString(), headers);
 			return jSONObject.toString();
 		} catch (Exception ex) {
-			Application.logger.debug(ex.getMessage());
 			return ex.getMessage();
 		}
 	}
@@ -128,12 +126,8 @@ public class SparkService {
 	public String httpsRequest(String requestUrl, String method, String outputStr, Map<String, String> headers)
 			throws Exception {
 		Gson gson = new Gson();
-		Application.logger.debug(requestUrl);
-		Application.logger.debug(method);
-		Application.logger.debug(outputStr);
-		Application.logger.debug(gson.toJson(headers));
+
 		try {
-			Application.logger.debug("1");
 			TrustManager[] tm = { new MyX509TrustManager() };
 			SSLContext sslContext = SSLContext.getInstance("SSL", "SunJSSE");
 			sslContext.init(null, tm, new SecureRandom());
@@ -143,7 +137,7 @@ public class SparkService {
 			URL url = new URL(requestUrl);
 			HttpsURLConnection httpUrlConn = (HttpsURLConnection) url.openConnection();
 			httpUrlConn.setSSLSocketFactory(ssf);
-			Application.logger.debug("2");
+
 			if (null != headers) {
 				for (String key : headers.keySet()) {
 					httpUrlConn.setRequestProperty(key, headers.get(key));
@@ -157,7 +151,7 @@ public class SparkService {
 
 			httpUrlConn.setRequestMethod(method);
 			httpUrlConn.connect();
-			Application.logger.debug("3");
+
 			if (outputStr != null) {
 				DataOutputStream out = new DataOutputStream(httpUrlConn.getOutputStream());
 				out.writeBytes(outputStr);
@@ -172,7 +166,7 @@ public class SparkService {
 				buffer.append(line);
 			}
 			reader.close();
-			Application.logger.debug("4");
+
 			httpUrlConn.disconnect();
 			return buffer.toString();
 		} catch (Exception ex) {

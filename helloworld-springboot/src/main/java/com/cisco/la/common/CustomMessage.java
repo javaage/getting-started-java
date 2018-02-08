@@ -15,6 +15,9 @@ public class CustomMessage {
 	public static final String CHAT_BOLT_PREFER_RECENT_COURSE = "The training %s is %s away, do you want to register?(Yes/No)";
 	public static final String CHAT_BOLT_REGISTER_URL = "Here is the registration link [https://www.cisco.com/](https://www.cisco.com/)";
 	
+	public static final String CHAT_BOLT_OTHER_HELP = "What else can I do for you?";
+	
+	
 	public static final String CHAT_BOLT_QUERY_ROLE_MESSAGE_ONLY = "What is your role?";
 	public static final String CHAT_BOLT_INVALID_USER_MESSAGE = "You are not in the system. Please contact your admin.";
 	public static final String CHAT_BOLT_INVALID_ROLE_MESSAGE = "I can't find the role of @Role. Can you try it again?";

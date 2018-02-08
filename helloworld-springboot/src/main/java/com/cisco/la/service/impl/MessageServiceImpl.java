@@ -1,7 +1,6 @@
 package com.cisco.la.service.impl;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
@@ -19,6 +18,8 @@ import com.cisco.la.service.MessageService;
 public class MessageServiceImpl implements MessageService {
 	@Autowired
 	private SqlSession sqlSession;
+	
+
 	
 	public void addMessage(MessageModel messageModel) {
 		MessageModelMapper messageModelMapper = sqlSession.getMapper(MessageModelMapper.class);
@@ -72,6 +73,7 @@ public class MessageServiceImpl implements MessageService {
 		Criteria criteria = messageModelExample.createCriteria();
 		criteria.andUserIDEqualTo(userID);
 		criteria.andIntentEqualTo(intentName);
+		criteria.andActiveEqualTo(true);
 		messageModelExample.setOrderByClause(" msg_session desc, msg_level");
 		List<MessageModel> listMessage = messageModelMapper.selectByExample(messageModelExample);
 		
@@ -96,6 +98,40 @@ public class MessageServiceImpl implements MessageService {
 	public List<MessageModel> getLostSessionMessage() {
 		MessageJoinMapper messageJoinMapper = sqlSession.getMapper(MessageJoinMapper.class);
 		return messageJoinMapper.getLostSessionMessage();
+	}
+
+	/* (non-Javadoc)
+	 * @see com.cisco.la.service.MessageService#disableMessage(java.lang.String, int)
+	 */
+	@Override
+	public void disableMessage(String userID, String action, int session) {
+		MessageModelMapper messageModelMapper = sqlSession.getMapper(MessageModelMapper.class);
+		MessageModelExample messageModelExample = new MessageModelExample();
+		Criteria criteria = messageModelExample.createCriteria();
+		criteria.andUserIDEqualTo(userID);
+		criteria.andActionEqualTo(action);
+		criteria.andSerialLessThan(session);
+		MessageModel messageModel = new MessageModel();
+		messageModel.setActive(false);
+		messageModelMapper.updateByExampleSelective(messageModel, messageModelExample);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.cisco.la.service.MessageService#checkSessionFinished(java.lang.String)
+	 */
+	@Override
+	public boolean checkSessionFinished(String userID) {
+		MessageModelMapper messageModelMapper = sqlSession.getMapper(MessageModelMapper.class);
+		MessageModelExample messageModelExample = new MessageModelExample();
+		Criteria criteria = messageModelExample.createCriteria();
+		criteria.andUserIDEqualTo(userID);
+		criteria.andActiveEqualTo(true);
+		List<MessageModel> listMessageModel = messageModelMapper.selectByExample(messageModelExample);
+		if(listMessageModel.size()>0){
+			return false;
+		}else{
+			return true;
+		}
 	}
 
 

@@ -17,4 +17,8 @@ public interface MessageService {
   public List<MessageModel> getActiveMessage(String userID,String intentName,String action);
   
   public List<MessageModel> getLostSessionMessage();
+  
+  public void disableMessage(String userID, String action, int session);
+
+  public boolean checkSessionFinished(String userID);
 }
