@@ -1,12 +1,15 @@
 package com.cisco.la.service.impl;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
+import com.cisco.la.join.CourseJoinMapper;
 import com.cisco.la.mapper.CourseModelMapper;
 import com.cisco.la.model.CourseModel;
 import com.cisco.la.model.CourseModel;
@@ -63,6 +66,26 @@ public class CourseServiceImpl implements CourseService {
 		Criteria criteria = example.createCriteria();
 		criteria.andIdIn(ids);
 		return courseModelMapper.selectByExample(example);
+		
+	}
+	
+	@Override
+	public List<CourseModel> getUserCourseListByList(String userID, String strList) {
+		String[] list = strList.split(",");
+		List<Integer> ids = new ArrayList<Integer>();
+		
+		for(int i = 0; i < list.length; i++){
+			ids.add(Integer.parseInt(list[i])); 
+		}
+		
+		CourseJoinMapper courseJoinMapper = sqlSession.getMapper(CourseJoinMapper.class);
+		
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("userID", userID);
+		map.put("ids", ids);
+		
+		List<CourseModel> listCourseModel = courseJoinMapper.getUserCourseListByList(map);
+		return listCourseModel;
 	}
 
 }

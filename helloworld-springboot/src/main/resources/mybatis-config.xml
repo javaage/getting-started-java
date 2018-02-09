@@ -22,6 +22,7 @@
     <mapper resource="com/cisco/la/join/GoldenSampleJoinMapper.xml" />
     <mapper resource="com/cisco/la/join/RoleMapper.xml" />
     <mapper resource="com/cisco/la/join/MessageJoinMapper.xml" />
+    <mapper resource="com/cisco/la/join/CourseJoinMapper.xml" />
   </mappers>
 </configuration>
 

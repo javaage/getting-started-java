@@ -130,13 +130,18 @@ public class HookController {
 			} else if (userModel != null && roleModel != null) {
 				userModel.setRoleID(roleModel.getId());
 				userService.updateUser(userModel);
-				String prefCourse = goldenSampleService.getGoldenSampleStringByRoleID(roleModel.getId());
-				speech = speech.replace("@Role", role);
-				speech = speech.replace("@Course", prefCourse);
-				code.put("speech", " ");
-				code.put("displayText", " ");
-				sparkService.sendMarkdownMessage(personEmail, speech);
-				sparkService.sendMarkdownMessage(personEmail, CustomMessage.CHAT_BOLT_OTHER_HELP);
+				String prefCourse = goldenSampleService.getGoldenSampleStringByRoleID(userModel.getId(), roleModel.getId());
+				
+				if(prefCourse.isEmpty()){
+					code.put("speech", speech);
+					code.put("displayText", speech);
+				}else{
+					speech += " " + String.format(CustomMessage.CHAT_BOLT_COURSE_NEED_MESSAGE, roleModel.getRoleName(), prefCourse);
+					sparkService.sendMarkdownMessage(personEmail, speech);
+					sparkService.sendMarkdownMessage(personEmail, CustomMessage.CHAT_BOLT_OTHER_HELP);
+					code.put("speech", " ");
+					code.put("displayText", " ");
+				}
 			}
 
 			break;
@@ -146,7 +151,7 @@ public class HookController {
 				code.put("speech", speech);
 				code.put("displayText", speech);
 			} else if (userModel != null && userModel.getRoleID() != null && userModel.getRoleID() > 0) {
-				String prefCourse = goldenSampleService.getGoldenSampleStringByRoleID(userModel.getRoleID());
+				String prefCourse = goldenSampleService.getGoldenSampleStringByRoleID(userModel.getId(), userModel.getRoleID());
 				roleModel = roleService.getRoleByID(userModel.getRoleID());
 				speech = speech.replace("@Role", roleModel.getRoleName());
 				speech = speech.replace("@Course", prefCourse);

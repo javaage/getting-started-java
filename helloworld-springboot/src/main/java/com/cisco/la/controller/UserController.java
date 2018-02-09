@@ -212,7 +212,7 @@ public class UserController {
 					Application.logger.debug(result);
 					
 					String action = "input.changeRole";
-					String prefCourse = goldenSampleService.getGoldenSampleStringByRoleID(roleModel.getId());
+					String prefCourse = goldenSampleService.getGoldenSampleStringByRoleID(userModel.getId(), roleModel.getId());
 	            	if(!prefCourse.isEmpty()){
 	            		Application.logger.debug(String.format(CustomMessage.CHAT_BOLT_PREFER_ROLE_MESSAGE, roleModel.getRoleName(), prefCourse));
 						//result = sparkService.sendMarkdownMessage(userModel.getId(), String.format(CustomMessage.CHAT_BOLT_PREFER_ROLE_MESSAGE, roleModel.getRoleName(), prefCourse));
@@ -228,7 +228,7 @@ public class UserController {
 	            		messageModelPreferRole.setIntent("accept");
 	            		messageService.addMessage(messageModelPreferRole);
 						
-						String recentCourse = goldenSampleService.getRecentCoursePref(roleModel.getId());
+						String recentCourse = goldenSampleService.getRecentCoursePref(userModel.getId(), roleModel.getId());
 						if(!recentCourse.isEmpty()){
 							Application.logger.debug(recentCourse);
 							//result = sparkService.sendMarkdownMessage(userModel.getId(), recentCourse);

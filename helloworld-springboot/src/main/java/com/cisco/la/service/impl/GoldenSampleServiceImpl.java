@@ -72,15 +72,15 @@ public class GoldenSampleServiceImpl implements GoldenSampleService {
 	 * @see com.cisco.la.service.GoldenSampleService#getGoldenSampleStringByRoleID(int)
 	 */
 	@Override
-	public String getGoldenSampleStringByRoleID(int roleID) {
+	public String getGoldenSampleStringByRoleID(String userID, int roleID) {
 		StringBuilder result = new StringBuilder("");
 		List<GoldenSampleModel> listSample = getGoldenSampleListByRoleID(roleID);
 		if(listSample!=null && listSample.size()>0){
 			String strMandatory = listSample.get(0).getMandatory();
 			String strOptional = listSample.get(0).getOptional();
 			
-			List<CourseModel> listMandatory = courseService.getCourseListByList(strMandatory);
-			List<CourseModel> listOptional = courseService.getCourseListByList(strOptional);
+			List<CourseModel> listMandatory = courseService.getUserCourseListByList(userID, strMandatory);
+			List<CourseModel> listOptional = courseService.getUserCourseListByList(userID, strOptional);
 			
 			if(listMandatory.size()>0){
 				result.append("<br>\r\n### Mandatory:");
@@ -110,14 +110,14 @@ public class GoldenSampleServiceImpl implements GoldenSampleService {
 	 * @see com.cisco.la.service.GoldenSampleService#getRecentCourseModel(int)
 	 */
 	@Override
-	public CourseModel getRecentCourseModel(int roleID) {
+	public CourseModel getRecentCourseModel(String userID, int roleID) {
 		List<GoldenSampleModel> listSample = getGoldenSampleListByRoleID(roleID);
 		Long recent = new Date(Long.MAX_VALUE).getTime();
 		CourseModel recentCourse = null;
 		
 		if(listSample!=null && listSample.size()>0){
 			String strMandatory = listSample.get(0).getMandatory();
-			List<CourseModel> listMandatory = courseService.getCourseListByList(strMandatory);
+			List<CourseModel> listMandatory = courseService.getUserCourseListByList(userID, strMandatory);
 			
 			for(CourseModel courseModel : listMandatory){
 				if(courseModel.getStartDate()!=null && courseModel.getStartDate().getTime() <= recent){
@@ -133,8 +133,8 @@ public class GoldenSampleServiceImpl implements GoldenSampleService {
 	 * @see com.cisco.la.service.GoldenSampleService#getRecentCoursePref(int)
 	 */
 	@Override
-	public String getRecentCoursePref(int roleID) { //CHAT_BOLT_PREFER_RECENT_COURSE
-		CourseModel courseModel = getRecentCourseModel(roleID);
+	public String getRecentCoursePref(String userID, int roleID) { //CHAT_BOLT_PREFER_RECENT_COURSE
+		CourseModel courseModel = getRecentCourseModel(userID, roleID);
 		if(courseModel!=null){
 			Application.logger.debug(courseModel.getStartDate().toString());
 			Application.logger.debug(new Date().toString());

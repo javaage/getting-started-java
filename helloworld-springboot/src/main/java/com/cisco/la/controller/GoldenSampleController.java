@@ -78,7 +78,7 @@ public class GoldenSampleController {
 	}
 	
 	@RequestMapping(value = "list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public Object getUserList(HttpServletRequest request){
+	public Object getGoldenSampleList(HttpServletRequest request){
 		List<GoldenSampleJoin> goldenSampleModelList = goldenSampleService.getGoldenSampleList();
 		
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -116,7 +116,7 @@ public class GoldenSampleController {
 	}
 	
 	@RequestMapping( method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-	public Object updateUser(HttpServletRequest request, @RequestBody String json){
+	public Object updateGoldenSample(HttpServletRequest request, @RequestBody String json){
 		try{
 			JSONObject jsonObject = new JSONObject(json);   
 	        GoldenSampleModel goldenSampleModel = new GoldenSampleModel();
@@ -133,7 +133,6 @@ public class GoldenSampleController {
  			List<UserModel> listUserModel = userService.getUserListByRoleID(goldenSampleModel.getRoleID());
  			RoleModel  roleModel  = roleService.getRoleByID(goldenSampleModel.getRoleID());
  			
- 			String prefCourse = goldenSampleService.getGoldenSampleStringByRoleID(goldenSampleModel.getRoleID());
  			int session = 1;
 			int level = 1;
 			int serial = 1;
@@ -147,6 +146,8 @@ public class GoldenSampleController {
  			if(!oldGoldenSampleModel.getMandatory().contains(goldenSampleModel.getMandatory())
  					|| !oldGoldenSampleModel.getOptional().contains(goldenSampleModel.getOptional())){
  				for(UserModel userModel : listUserModel){
+ 					String prefCourse = goldenSampleService.getGoldenSampleStringByRoleID(userModel.getId(), goldenSampleModel.getRoleID());
+ 					
  	 				//sparkService.sendMarkdownMessage(userModel.getId(), String.format(CustomMessage.CHAT_BOLT_CHANGE_SAMPLE_HELLO, userModel.getName()));
  	 				//sparkService.sendMarkdownMessage(userModel.getId(), String.format(CustomMessage.CHAT_BOLT_CHANGE_SAMPLE_CHANGE, roleModel.getRoleName(),roleModel.getBu()));
  					MessageModel messageModelSayHello = new MessageModel();

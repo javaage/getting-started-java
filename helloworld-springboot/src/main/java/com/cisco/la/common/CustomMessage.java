@@ -10,6 +10,9 @@ package com.cisco.la.common;
 public class CustomMessage {
 	public static final String CHAT_BOLT_WELCOME_MESSAGE = "Hi";
 	public static final String CHAT_BOLT_QUERY_ROLE_MESSAGE = "Hi %s, what is your role?";
+	
+	public static final String CHAT_BOLT_COURSE_NEED_MESSAGE = "Here is the training you need to take as %s.%s";
+	
 	public static final String CHAT_BOLT_CONGRATS_ROLE_MESSAGE = "Hi %s, congrats to your new promotion as a %s?";
 	public static final String CHAT_BOLT_PREFER_ROLE_MESSAGE = "Here are the trainings other successful %s are taking. %s";
 	public static final String CHAT_BOLT_PREFER_RECENT_COURSE = "The training %s is %s away, do you want to register?(Yes/No)";

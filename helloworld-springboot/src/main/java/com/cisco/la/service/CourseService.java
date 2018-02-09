@@ -12,5 +12,7 @@ public interface CourseService {
   
   public CourseModel getCourseByID(int id);
   
+  public List<CourseModel> getUserCourseListByList(String userID, String strList);
+  
   public List<CourseModel> getCourseListByList(String strList);
 }
