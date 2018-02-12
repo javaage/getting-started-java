@@ -1,7 +1,7 @@
 package com.cisco.la.service;
-import com.cisco.la.model.RoleModel;
 import java.util.List;
-import java.util.ArrayList;
+
+import com.cisco.la.model.RoleModel;
 
 public interface RoleService {
   public void addRole(RoleModel roleModel);

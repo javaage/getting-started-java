@@ -1,7 +1,8 @@
 angular
     .module('RDash')
     .controller('EmployeeCtrl', ['$rootScope', '$scope','$log','$uibModal','app.services','NgTableParams', EmployeeCtrl])
-    .controller('OperateUserCtrl', ['$scope','$log','$uibModalInstance','app.services', OperateUserCtrl]);
+    .controller('OperateUserCtrl', ['$scope','$log','$uibModalInstance','app.services', OperateUserCtrl])
+    .controller('RoleHistoryCtrl', ['$scope','$log','$uibModalInstance','app.services', RoleHistoryCtrl]);
 function EmployeeCtrl($rootScope, $scope, $log,$uibModal, services,NgTableParams) {
     
     $scope.users = [];
@@ -39,15 +40,46 @@ function EmployeeCtrl($rootScope, $scope, $log,$uibModal, services,NgTableParams
     }
 
     $scope.addUserModal = function(){
-        //var scope = $rootScope.$new();
+        $scope.userView = false;
         $scope.user = {};
         $scope.user.roleID = '';
         $scope.isModify = false;
         var modalInstance = $uibModal.open({
             scope: $scope,
             animation: true,
-            templateUrl: 'userModal.html',
+            templateUrl: 'templates/userModal.html',
             controller: 'OperateUserCtrl',
+        });
+    };
+
+    $scope.getRoleHistoryListByUserID = function(userID){
+        services.getRoleHistoryListByUserID(userID).then(function(result) {
+            if (result.code == 1) {
+                $scope.histories = result.data;
+                $scope.tableHistoryParams = new NgTableParams(
+                    {
+                        page: 1,            // show first page
+                        count: 10,           // count per page
+                        sorting: { updateTime: 'desc'}
+                    },
+                    {
+                        total: 0, // length of data
+                        dataset: result.data
+                    });
+            }
+        }, function (error) {
+            console.log(error);    
+        });
+    };
+
+    $scope.getHistoryModal = function(user){
+        $scope.user = user;
+        $scope.getRoleHistoryListByUserID($scope.user.id);
+        var modalInstance = $uibModal.open({
+            scope: $scope,
+            animation: true,
+            templateUrl: 'templates/historyModal.html',
+            controller: 'RoleHistoryCtrl',
         });
     };
 
@@ -72,17 +104,33 @@ function EmployeeCtrl($rootScope, $scope, $log,$uibModal, services,NgTableParams
             console.log(error);    
         });
     };
-
-    $scope.updateUserModal = function(user){
-        //var scope = $rootScope.$new();
+    
+    $scope.viewUserModal = function(user){
+        $scope.userView = true;
         $scope.user =user;
         $scope.isModify = true;
         var modalInstance = $uibModal.open({
             scope: $scope,
             animation: true,
-            templateUrl: 'userModal.html',
+            templateUrl: 'templates/userModal.html',
             controller: 'OperateUserCtrl',
         });
+    };
+
+    $scope.updateUserModal = function(user){
+        $scope.userView = false;
+        $scope.user =user;
+        $scope.isModify = true;
+        var modalInstance = $uibModal.open({
+            scope: $scope,
+            animation: true,
+            templateUrl: 'templates/userModal.html',
+            controller: 'OperateUserCtrl',
+        });
+    };
+
+    $scope.showCourseHistory = function(user){
+
     };
 
     $scope.updateUser = function(user){
@@ -142,6 +190,13 @@ function OperateUserCtrl($scope, $log,$uibModalInstance, services) {
             });
         }
     };
+}
 
+function RoleHistoryCtrl($scope, $log,$uibModalInstance, services) { 
+    
+    
+    $scope.closeHistoryModal = function(){
+        $uibModalInstance.dismiss();
+    };
     
 }

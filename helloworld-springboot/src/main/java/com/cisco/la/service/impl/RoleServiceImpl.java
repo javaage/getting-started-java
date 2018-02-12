@@ -56,4 +56,5 @@ public class RoleServiceImpl implements RoleService {
 		
 		return roleMapper.getRoleByName(roleName);
 	}
+
 }

@@ -21,3 +21,6 @@ ol li {
   list-style-position: outside;
   text-align: left;
 }
+a {
+  cursor: pointer;
+}

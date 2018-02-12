@@ -54,7 +54,8 @@
                 getGoldenSampleList: '/api/goldenSample/list',
                 deleteGoldenSample: '/api/goldenSample/{0}',
                 addGoldenSample: '/api/goldenSample',
-                updateGoldenSample: '/api/goldenSample'
+                updateGoldenSample: '/api/goldenSample',
+                getRoleHistoryListByUserID: '/api/rolehistory/{0}'
             };
             function _joinUrl(domain, path) {
                 return domain.replace(/(^http.*?)\/{0,}$/, '$1/') + path.replace(/^\/{0,}(.*)/, '$1');

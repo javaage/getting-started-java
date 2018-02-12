@@ -1,0 +1,17 @@
+        <div class="modal-header bg-info">  
+            <span>Career Path</span>
+        </div>  
+        <div class="modal-body">  
+            <div class="table-responsive" style="max-height: 500px;" ng-if="histories.length>0">
+					<table ng-table="tableHistoryParams" class="table table-condensed table-bordered table-striped" show-filter="false">
+			            <tr ng-repeat="item in $data">
+			                	<td title="'Role'" sortable="'roleName'" class="text-center">{{item.roleName}}</td>
+				                <td title="'Update Time'" sortable="'updateTime'" class="text-center">{{item.updateTime | date:'yyyy-MM-dd hh:mm:ss'}}</td>
+			            </tr>
+			        </table>
+        		</div>
+        	<div  ng-if="!(histories.length>0)">This user hasn't been assigned any role.</div>
+        </div>  
+        <div class="modal-footer"> 
+			<button type="cancel" class="btn btn-default" ng-click="closeHistoryModal()">Cancel</button>
+        </div> 

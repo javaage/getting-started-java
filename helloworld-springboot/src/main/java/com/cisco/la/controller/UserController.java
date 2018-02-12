@@ -41,10 +41,12 @@ import com.cisco.la.Application.Env;
 import com.cisco.la.common.CustomMessage;
 import com.cisco.la.common.SparkService;
 import com.cisco.la.model.MessageModel;
+import com.cisco.la.model.RoleHistoryModel;
 import com.cisco.la.model.RoleModel;
 import com.cisco.la.model.UserModel;
 import com.cisco.la.service.GoldenSampleService;
 import com.cisco.la.service.MessageService;
+import com.cisco.la.service.RoleHistoryService;
 import com.cisco.la.service.RoleService;
 import com.cisco.la.service.UserService;
 
@@ -69,6 +71,8 @@ public class UserController {
 	@Autowired
 	private MessageService messageService;
 	
+	@Autowired
+	private RoleHistoryService roleHistoryService;
 	private Timer timer = new Timer();
 	
 	@RequestMapping(value = "{id:.+}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -137,8 +141,15 @@ public class UserController {
 			userModel.setId(jsonObject.getString("id"));
 			userModel.setName(jsonObject.getString("name"));
 			
-			if(jsonObject.optInt("roleID", 0)>0)
+			if(jsonObject.optInt("roleID", 0)>0){
 				userModel.setRoleID(jsonObject.getInt("roleID"));
+				
+				RoleHistoryModel roleHistoryModel = new RoleHistoryModel();
+				roleHistoryModel.setUserID(userModel.getId());
+				roleHistoryModel.setRoleID(userModel.getRoleID());
+				roleHistoryModel.setUpdateTime(new Date());
+				roleHistoryService.addRoleHistory(roleHistoryModel);
+			}
 			if(jsonObject.has("title") && !jsonObject.isNull("title"))
 				userModel.setTitle(jsonObject.getString("title"));
 			if(jsonObject.has("grade") && !jsonObject.isNull("grade"))
@@ -264,6 +275,11 @@ public class UserController {
 						
 						messageService.disableMessage(userModel.getId(),action,session);
 	            	}
+	            	RoleHistoryModel roleHistoryModel = new RoleHistoryModel();
+					roleHistoryModel.setUserID(userModel.getId());
+					roleHistoryModel.setRoleID(userModel.getRoleID());
+					roleHistoryModel.setUpdateTime(new Date());
+					roleHistoryService.addRoleHistory(roleHistoryModel);
 				}
 			}
 			/**

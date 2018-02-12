@@ -1,0 +1,75 @@
+		<div class="modal-header bg-info">  
+            <span ng-if="!isModify && !userView">Add User</span> 
+            <span ng-if="isModify && !userView">Update User</span> 
+            <span ng-if="userView">User Infomation</span>
+            <a ng-click="showCourseHistory(user)" style="float: right;">Course History &nbsp;&nbsp;<span class="menu-icon fa fa-history"></span></a>
+        </div>  
+        <div class="modal-body">  
+            <form class="form-horizontal" name="userForm" novalidate>
+			  <div class="form-group">
+			    <label for="inputSpark" class="col-sm-4 control-label">Spark Account*</label>
+			    <div class="col-sm-8">
+			      <input type="email" name="id" ng-model="user.id" ng-disabled="isModify" class="form-control" id="inputSpark" placeholder="Spark Account e.g. robot@cisco.com" required ng-blur="checkUserID(user.id)">
+			      <span class="error" ng-show="userForm.id.$dirty && userForm.id.$error.required">Spark account is required. </span>
+			      <span class="error" ng-show="userForm.id.$error.acountvalid">Invalid Spark account. </span>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label for="inputName" class="col-sm-4 control-label">Name*</label>
+			    <div class="col-sm-8">
+			      <input type="text" name="name" ng-model="user.name" class="form-control" id="inputName" placeholder="Name" required ng-disabled="userView">
+			      <span class="error" ng-show="userForm.name.$dirty && userForm.name.$error.required">Name is required. </span>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label for="inputBudget" class="col-sm-4 control-label">Budget*</label>
+			    <div class="col-sm-8">
+			      <input type="number" name="budget" ng-model="user.budget" class="form-control" id="inputBudget" placeholder="Budget" required budgetvalid  ng-disabled="userView">
+			      <span class="error" ng-show="userForm.budget.$dirty && userForm.budget.$error.required">Budget is required. </span>
+			      <span class="error" ng-show="userForm.budget.$error.budgetvalid">Budget should be greater than balance. </span>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label for="inputBalance" class="col-sm-4 control-label">Balance*</label>
+			    <div class="col-sm-8">
+			      <input type="number" name="balance" ng-model="user.balance" class="form-control" id="inputBalance" placeholder="Balance" required budgetvalid  ng-disabled="userView">
+			      <span class="error" ng-show="userForm.balance.$dirty && userForm.balance.$error.required">Balance is required. </span>
+			      <span class="error" ng-show="userForm.balance.$error.budgetvalid">Budget should be greater than balance. </span>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label for="inputBU" class="col-sm-4 control-label">BU*</label>
+			    <div class="col-sm-8">
+			      <input type="text" name="bu" ng-model="user.bu" class="form-control" id="inputBU" placeholder="BU" required ng-disabled="userView">
+			      <span class="error" ng-show="userForm.bu.$dirty && userForm.bu.$error.required">BU is required. </span>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label for="inputRole" class="col-sm-4 control-label">Role</label>
+			    <div class="col-sm-8"><!-- ng-init="user.roleID=''" <option value="">Please choose one role...</option>-->
+			    	<!--  ng-if="!user.roleID" -->
+			    	<select ng-model="user.roleID" class="form-control" 
+                                    ng-options="role.id as role.roleName for role in roles"  ng-disabled="userView">
+                        <option value="">Please choose one role...</option>
+                    </select>
+			    		
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label for="inputJobTitle" class="col-sm-4 control-label">Job Title</label>
+			    <div class="col-sm-8">
+			      <input type="text" ng-model="user.title" class="form-control" id="inputJobTitle" placeholder="Job Title"  ng-disabled="userView">
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label for="inputGrade" class="col-sm-4 control-label">Grade</label>
+			    <div class="col-sm-8">
+			      <input type="text" ng-model="user.grade" class="form-control" id="inputGrade" placeholder="Grade"  ng-disabled="userView">
+			    </div>
+			  </div>
+			</form>
+        </div>  
+        <div class="modal-footer">  
+            <button type="submit" class="btn btn-default" ng-click="submitUserData()" ng-if="!userView" ng-disabled="userForm.id.$invalid || userForm.name.$invalid ||userForm.budget.$invalid || userForm.balance.$invalid || userForm.bu.$invalid">Submit</button> <!--  -->
+			<button type="cancel" class="btn btn-default" ng-click="closeUserModal()">Cancel</button>
+        </div>  

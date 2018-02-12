@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      PostgreSQL 9.x                               */
-/* Created on:     2/9/2018 4:39:42 PM                          */
+/* Created on:     2/12/2018 9:15:54 AM                         */
 /*==============================================================*/
 
 
@@ -39,7 +39,8 @@ create table LA_COURSE (
 /*==============================================================*/
 create table LA_CRS_HISTORY (
    HSTR_USR_ID          varchar              not null,
-   HSTR_CRS_ID          int                  not null
+   HSTR_CRS_ID          int                  not null,
+   HSTR_UPDATE_TIME     TIMESTAMP 			 not null
 );
 
 /*==============================================================*/
@@ -89,8 +90,7 @@ create table LA_RECORD (
 /*==============================================================*/
 create table LA_RL_HISTORY (
    HSTR_USR_ID          varchar              not null,
-   HSTR_RL_NAME         varchar              not null,
-   HSTR_RL_HISTORY      varchar              not null,
+   HSTR_RL_ID           INT4                 not null,
    HSTR_UPDATE_TIME     TIMESTAMP            not null
 );
 

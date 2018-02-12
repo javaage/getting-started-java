@@ -22,6 +22,7 @@
     <table schema="public" tableName="LA_CRS_HISTORY" domainObjectName="CourseHistoryModel">
       <columnOverride column="HSTR_USR_ID" property="userID"  />
       <columnOverride column="HSTR_CRS_ID" property="CourseID"  />
+      <columnOverride column="HSTR_UPDATE_TIME" property="updateTime"  jdbcType="TIMESTAMP" />
     </table>
     <table schema="public" tableName="LA_GOLDEN_SAMPLE" domainObjectName="GoldenSampleModel">
       <generatedKey column="SMPL_ID" sqlStatement="SELECT nextval('la_golden_sample_smpl_id_seq')" identity="true"/>
@@ -30,14 +31,13 @@
       <columnOverride column="SMPL_RL_ID" property="roleID"  />
       <columnOverride column="SMPL_MANDATORY" property="mandatory"  />
       <columnOverride column="SMPL_OPTIONAL" property="optional"  />
-      <columnOverride column="SMPL_UPDATE_TIME" property="updateTime"  />
+      <columnOverride column="SMPL_UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
       <columnOverride column="SMPL_ACTIVE" property="active"  />
     </table>
     <table schema="public" tableName="LA_RL_HISTORY" domainObjectName="RoleHistoryModel">
       <columnOverride column="HSTR_USR_ID" property="userID"  />
-      <columnOverride column="HSTR_RL_NAME" property="roleName"  />
-      <columnOverride column="HSTR_RL_HISTORY" property="roleHistory"  />
-      <columnOverride column="HSTR_UPDATE_TIME" property="updateTime"  />
+      <columnOverride column="HSTR_RL_ID" property="roleID"  />
+      <columnOverride column="HSTR_UPDATE_TIME" property="updateTime"  jdbcType="TIMESTAMP" />
     </table>
     <table schema="public" tableName="LA_ROLE" domainObjectName="RoleModel">
       <generatedKey column="RL_ID" sqlStatement="SELECT nextval('la_role_rl_id_seq')" identity="true"/>
@@ -67,7 +67,7 @@
       <columnOverride column="CRD_ID" property="id"  />
       <columnOverride column="CRD_REQUEST" property="request"  />
       <columnOverride column="CRD_RESPONSE" property="response"  />
-      <columnOverride column="CRD_TIME" property="time"  />
+      <columnOverride column="CRD_TIME" property="time"  jdbcType="TIMESTAMP" />
     </table>
     
     <table schema="public" tableName="LA_MESSAGE" domainObjectName="MessageModel">
@@ -78,7 +78,7 @@
       <columnOverride column="MSG_SESSION" property="session"  />
       <columnOverride column="MSG_SERIAL" property="serial"  />
       <columnOverride column="MSG_LEVEL" property="level"  />
-      <columnOverride column="MSG_CREATE_DATE" property="createDate"  />
+      <columnOverride column="MSG_CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"  />
       <columnOverride column="MSG_ACTIVE" property="active"  />
       <columnOverride column="MSG_INTENT" property="intent"  />
       <columnOverride column="MSG_ACTION" property="action"  />

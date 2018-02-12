@@ -23,6 +23,8 @@
     <mapper resource="com/cisco/la/join/RoleMapper.xml" />
     <mapper resource="com/cisco/la/join/MessageJoinMapper.xml" />
     <mapper resource="com/cisco/la/join/CourseJoinMapper.xml" />
+    <mapper resource="com/cisco/la/join/RoleHistoryJoinMapper.xml" />
+  	<mapper resource="com/cisco/la/join/CourseHistoryJoinMapper.xml" />
   </mappers>
 </configuration>
 

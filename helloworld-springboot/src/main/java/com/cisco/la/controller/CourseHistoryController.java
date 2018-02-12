@@ -16,13 +16,41 @@
 
 package com.cisco.la.controller;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.cisco.la.entity.CourseHistoryJoin;
+import com.cisco.la.entity.RoleHistoryJoin;
+import com.cisco.la.model.CourseHistoryModel;
+import com.cisco.la.model.RoleModel;
+import com.cisco.la.service.CourseHistoryService;
 
 @Controller
 @RestController
 @RequestMapping(value="/api/coursehistory")
 public class CourseHistoryController {
-
+	@Autowired
+	private CourseHistoryService courseHistoryService;
+	
+	@RequestMapping(value = "{userID:.+}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Object getCourseHistoryListByUserID(HttpServletRequest request, @PathVariable("userID") String userID){
+		List<CourseHistoryJoin> listCourseHistoryJoin = courseHistoryService.getCourseHistoryByUserID(userID);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("code", 1);
+		map.put("message", "Successfully");
+		map.put("data", listCourseHistoryJoin);
+		return map;
+	}
 }
