@@ -55,6 +55,7 @@
                 deleteGoldenSample: '/api/goldenSample/{0}',
                 addGoldenSample: '/api/goldenSample',
                 updateGoldenSample: '/api/goldenSample',
+                getCourseHistoryListByUserID: '/api/coursehistory/{0}',
                 getRoleHistoryListByUserID: '/api/rolehistory/{0}'
             };
             function _joinUrl(domain, path) {

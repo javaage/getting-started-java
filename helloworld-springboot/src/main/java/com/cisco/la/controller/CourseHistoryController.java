@@ -31,9 +31,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cisco.la.entity.CourseHistoryJoin;
-import com.cisco.la.entity.RoleHistoryJoin;
-import com.cisco.la.model.CourseHistoryModel;
-import com.cisco.la.model.RoleModel;
 import com.cisco.la.service.CourseHistoryService;
 
 @Controller

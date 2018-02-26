@@ -22,7 +22,9 @@
 				                <td title="'Title'" sortable="'title'" class="text-center">{{item.title}}</td>
 				                <td title="'Grade'" sortable="'grade'" class="text-center">{{item.grade}}</td>  
 				                <td title="'Operation'" class="text-center">
-				                	<a ng-click="getHistoryModal(item)" style="width: 80px;margin-left: 10px; margin-right: 10px">Career Path</a>
+				                	<!--
+				                	<a ng-click="getHistoryModal(item)" style="width: 80px;margin-left: 10px; margin-right: 10px;">Career Path</a>
+				                	-->
 				                	<span ng-if="!item.active" style="width: 80px;margin-left: 10px; margin-right: 10px">Update</span>	
 				                	<a ng-click="updateUserModal(item)" ng-if="item.active" style="width: 80px;margin-left: 10px; margin-right: 10px">Update</a>
 				                	<a ng-click="inactiveUser(item)" ng-if="item.active" style="width: 80px">Inactive</a>
@@ -30,8 +32,8 @@
 				                </td>	
 			            </tr>
 			        </table>
-        		</div>
+        		<div>
 
 		<rd-widget>
-	</rd-widget></rd-widget></div>
-</div>
+	</rd-widget></div>
+</div></rd-widget></div></div>

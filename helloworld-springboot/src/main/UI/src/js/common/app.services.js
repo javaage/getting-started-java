@@ -374,5 +374,24 @@ angular
                 });
 
                 return deferred.promise;
-            }
+            };
+
+            this.getCourseHistoryListByUserID = function(userID){
+                var deferred = $q.defer();
+                var urlQuery = this.urlFormat(url.getCourseHistoryListByUserID,userID);
+                $http.get(urlQuery,{})
+                .success(function(data){
+                    console.log(data);
+                    if (data.code == 1) {
+                        deferred.resolve(data);
+                    } else {
+                        deferred.reject(data);
+                    }
+                })
+                .error(function(error){
+                    deferred.reject(error);
+                });
+
+                return deferred.promise;
+            };
         }]);

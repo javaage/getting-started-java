@@ -72,9 +72,30 @@ function EmployeeCtrl($rootScope, $scope, $log,$uibModal, services,NgTableParams
         });
     };
 
+    $scope.getCourseHistoryListByUserID = function(userID){
+        services.getCourseHistoryListByUserID(userID).then(function(result) {
+            if (result.code == 1) {
+                $scope.courses = result.data;
+                $scope.tableCoursesParams = new NgTableParams(
+                    {
+                        page: 1,            // show first page
+                        count: 10,           // count per page
+                        sorting: { updateTime: 'desc'}
+                    },
+                    {
+                        total: 0, // length of data
+                        dataset: result.data
+                    });
+            }
+        }, function (error) {
+            console.log(error);    
+        });
+    };
+
     $scope.getHistoryModal = function(user){
         $scope.user = user;
         $scope.getRoleHistoryListByUserID($scope.user.id);
+        
         var modalInstance = $uibModal.open({
             scope: $scope,
             animation: true,
@@ -109,6 +130,9 @@ function EmployeeCtrl($rootScope, $scope, $log,$uibModal, services,NgTableParams
         $scope.userView = true;
         $scope.user =user;
         $scope.isModify = true;
+        $scope.getRoleHistoryListByUserID($scope.user.id);
+        $scope.getCourseHistoryListByUserID($scope.user.id);
+        
         var modalInstance = $uibModal.open({
             scope: $scope,
             animation: true,
