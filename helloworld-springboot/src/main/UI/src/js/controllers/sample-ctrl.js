@@ -68,6 +68,7 @@ function GoldenSampleCtrl($rootScope, $scope, $log,$uibModal, services,NgTablePa
     $scope.addGoldenSampleModal = function(){
         //var scope = $rootScope.$new();
         $scope.goldenSample = {};
+        $scope.goldenSample.roleID = $scope.roles[0].id;
         $scope.isModify = false;
         var modalInstance = $uibModal.open({
             scope: $scope,
