@@ -130,6 +130,9 @@ public class HookController {
 			} else if (userModel != null && roleModel != null) {
 				userModel.setRoleID(roleModel.getId());
 				userService.updateUser(userModel);
+				
+				Application.logger.debug(userModel.getId() + " " + roleModel.getId() );
+				
 				String prefCourse = goldenSampleService.getGoldenSampleStringByRoleID(userModel.getId(), roleModel.getId());
 				
 				if(prefCourse.isEmpty()){

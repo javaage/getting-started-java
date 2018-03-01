@@ -74,11 +74,13 @@ public class GoldenSampleServiceImpl implements GoldenSampleService {
 	@Override
 	public String getGoldenSampleStringByRoleID(String userID, int roleID) {
 		StringBuilder result = new StringBuilder("");
+		Application.logger.debug("getGoldenSampleStringByRoleID enter" + roleID);
 		List<GoldenSampleModel> listSample = getGoldenSampleListByRoleID(roleID);
 		if(listSample!=null && listSample.size()>0){
 			String strMandatory = listSample.get(0).getMandatory();
 			String strOptional = listSample.get(0).getOptional();
-			
+			Application.logger.debug(strMandatory);
+			Application.logger.debug(strOptional);
 			List<CourseModel> listMandatory = courseService.getUserCourseListByList(userID, strMandatory);
 			List<CourseModel> listOptional = courseService.getUserCourseListByList(userID, strOptional);
 			
@@ -103,6 +105,7 @@ public class GoldenSampleServiceImpl implements GoldenSampleService {
 			}
 			
 		}
+		Application.logger.debug(result.toString());
 		return result.toString();
 	}
 
