@@ -27,6 +27,6 @@
 	  <foreach collection="ids" item="id"  index="index" open="(" close=")" separator=",">
 		 #{id}
 	  </foreach>
-	  and c.crs_id != h.hstr_crs_id 
+	  and (h.hstr_crs_id is null or c.crs_id != h.hstr_crs_id) 
 	</select>
 </mapper>
