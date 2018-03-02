@@ -73,19 +73,23 @@ public class CourseServiceImpl implements CourseService {
 	public List<CourseModel> getUserCourseListByList(String userID, String strList) {
 		String[] list = strList.split(",");
 		List<Integer> ids = new ArrayList<Integer>();
-		
-		for(int i = 0; i < list.length; i++){
-			ids.add(Integer.parseInt(list[i])); 
+		try{
+			for(int i = 0; i < list.length; i++){
+				ids.add(Integer.parseInt(list[i])); 
+			}
+			
+			CourseJoinMapper courseJoinMapper = sqlSession.getMapper(CourseJoinMapper.class);
+			
+			Map<String,Object> map = new HashMap<String,Object>();
+			map.put("userID", userID);
+			map.put("ids", ids);
+			
+			List<CourseModel> listCourseModel = courseJoinMapper.getUserCourseListByList(map);
+			return listCourseModel;
+		}catch(Exception exp){
+			exp.printStackTrace();
+			return new ArrayList<CourseModel>();
 		}
-		
-		CourseJoinMapper courseJoinMapper = sqlSession.getMapper(CourseJoinMapper.class);
-		
-		Map<String,Object> map = new HashMap<String,Object>();
-		map.put("userID", userID);
-		map.put("ids", ids);
-		
-		List<CourseModel> listCourseModel = courseJoinMapper.getUserCourseListByList(map);
-		return listCourseModel;
 	}
 
 }

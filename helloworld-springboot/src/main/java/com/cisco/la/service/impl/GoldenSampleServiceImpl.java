@@ -84,7 +84,7 @@ public class GoldenSampleServiceImpl implements GoldenSampleService {
 			List<CourseModel> listMandatory = courseService.getUserCourseListByList(userID, strMandatory);
 			List<CourseModel> listOptional = courseService.getUserCourseListByList(userID, strOptional);
 			
-			if(listMandatory.size()>0){
+			if(listMandatory!=null && listMandatory.size()>0){
 				result.append("<br>\r\n### Mandatory:");
 				for(CourseModel courseModel : listMandatory){
 					if(courseModel.getUrl()!=null && !courseModel.getUrl().isEmpty())
@@ -94,7 +94,7 @@ public class GoldenSampleServiceImpl implements GoldenSampleService {
 				}
 			}
 			
-			if(listOptional.size()>0){
+			if(listOptional!=null && listOptional.size()>0){
 				result.append("<br>\r\n### Optional:");
 				for(CourseModel courseModel : listOptional){
 					if(courseModel.getUrl()!=null && !courseModel.getUrl().isEmpty())
