@@ -394,4 +394,32 @@ angular
 
                 return deferred.promise;
             };
+
+            this.importUsers = function(file){
+                var deferred = $q.defer();
+
+                $http({
+                    url: url.importUsers,
+                    method: "POST",
+                    transformRequest: function(){
+                        var formData = new FormData();
+                        formData.append('file', file);
+                        return formData;
+                    },
+                    headers: {'Content-Type': undefined}
+                })
+                .success(function(data){
+                    console.log(data);
+                    if (data.code == 1) {
+                        deferred.resolve(data);
+                    } else {
+                        deferred.reject(data);
+                    }
+                })
+                .error(function(error){
+                    deferred.reject(error);
+                });
+
+                return deferred.promise;
+            };
         }]);

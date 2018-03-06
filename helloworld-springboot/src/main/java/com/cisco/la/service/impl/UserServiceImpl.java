@@ -8,12 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.cisco.la.Application;
 import com.cisco.la.entity.UserJoin;
 import com.cisco.la.join.UserJoinMapper;
 import com.cisco.la.mapper.CourseHistoryModelMapper;
 import com.cisco.la.mapper.CourseModelMapper;
 import com.cisco.la.mapper.UserModelMapper;
 import com.cisco.la.model.CourseHistoryModel;
+import com.cisco.la.model.CourseHistoryModelExample;
 import com.cisco.la.model.CourseModel;
 import com.cisco.la.model.CourseModelExample;
 import com.cisco.la.model.UserModel;
@@ -61,11 +63,16 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	@Transactional
+	@Transactional(rollbackFor=Exception.class)
 	public void addUserWithHistory(UserJoin userJoin) throws Exception {
 		UserModel userModel = (UserModel)userJoin;
 		UserModelMapper userModelMapper = sqlSession.getMapper(UserModelMapper.class);
-		userModelMapper.insert(userModel);
+		
+		if(userModelMapper.selectByPrimaryKey(userJoin.getId())==null){
+			userModelMapper.insert(userModel);
+		}else{
+			userModelMapper.updateByPrimaryKey(userModel);
+		}
 		
 		List<String> listHistory = userJoin.getListHistory();
 		for(String history : listHistory){
@@ -80,19 +87,22 @@ public class UserServiceImpl implements UserService {
 				courseHistoryModel.setUserID(userJoin.getId());
 				courseHistoryModel.setCourseID(listCourseModel.get(0).getId());
 				courseHistoryModel.setUpdateTime(new Date());
-				courseHistoryModelMapper.insert(courseHistoryModel);
+				
+				CourseHistoryModelExample example = new CourseHistoryModelExample();
+				com.cisco.la.model.CourseHistoryModelExample.Criteria criteriaCourseHistory = example.createCriteria();
+				criteriaCourseHistory.andCourseIDEqualTo(listCourseModel.get(0).getId());
+				criteriaCourseHistory.andUserIDEqualTo(userJoin.getId());
+				List<CourseHistoryModel> listCourseHistoryModel = courseHistoryModelMapper.selectByExample(example);
+				
+				if(listCourseHistoryModel.size() > 0){
+					courseHistoryModelMapper.updateByExample(courseHistoryModel, example);
+				}else{
+					courseHistoryModelMapper.insert(courseHistoryModel);
+				}
 			}else{
-				throw new Exception(history + "does not exsit.");
+				Application.logger.debug(history + "does not exsit.");
 			}
 		}
 		
-	}
-
-	@Override
-	@Transactional()
-	public void updateUserWithHistory(UserJoin userJoin) throws Exception{
-		UserModel userModel = (UserModel)userJoin;
-		UserModelMapper userModelMapper = sqlSession.getMapper(UserModelMapper.class);
-		userModelMapper.updateByPrimaryKey(userModel);
 	}
 }

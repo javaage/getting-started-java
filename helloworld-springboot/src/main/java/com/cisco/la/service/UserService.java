@@ -10,8 +10,6 @@ public interface UserService {
   public void addUserWithHistory(UserJoin userJoin) throws Exception;
 
   public void updateUser(UserModel userModel);
-  
-  public void updateUserWithHistory(UserJoin userJoin) throws Exception;
 
   public UserModel getUserByID(String id);
   

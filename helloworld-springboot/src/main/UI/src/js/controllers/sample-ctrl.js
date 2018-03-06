@@ -10,19 +10,6 @@ function GoldenSampleCtrl($rootScope, $scope, $log,$uibModal, services,NgTablePa
     
     $scope.goldenSamples = [];
 
-    $scope.people = [
-        { name: 'Adam',      email: 'adam@email.com',      age: 12, country: 'United States' },
-        { name: 'Amalie',    email: 'amalie@email.com',    age: 12, country: 'Argentina' },
-        { name: 'Estefanía', email: 'estefania@email.com', age: 21, country: 'Argentina' },
-        { name: 'Adrian',    email: 'adrian@email.com',    age: 21, country: 'Ecuador' },
-        { name: 'Wladimir',  email: 'wladimir@email.com',  age: 30, country: 'Ecuador' },
-        { name: 'Samantha',  email: 'samantha@email.com',  age: 30, country: 'United States' },
-        { name: 'Nicole',    email: 'nicole@email.com',    age: 43, country: 'Colombia' },
-        { name: 'Natasha',   email: 'natasha@email.com',   age: 54, country: 'Ecuador' },
-        { name: 'Michael',   email: 'michael@email.com',   age: 15, country: 'Colombia' },
-        { name: 'Nicolás',   email: 'nicolas@email.com',    age: 43, country: 'Colombia' }
-    ];
-
     $scope.getRoleList = function(){
         services.getRoleList().then(function(result) {
             if (result.code == 1) {
@@ -50,7 +37,7 @@ function GoldenSampleCtrl($rootScope, $scope, $log,$uibModal, services,NgTablePa
                 $scope.tableParams = new NgTableParams(
                 {
                     page: 1,            // show first page
-                    count: 10,           // count per page
+                    count: 4,           // count per page
                     sorting: { active:'desc', goldenSampleName: 'asc'}
                 },
                 {
@@ -73,6 +60,9 @@ function GoldenSampleCtrl($rootScope, $scope, $log,$uibModal, services,NgTablePa
         var modalInstance = $uibModal.open({
             scope: $scope,
             animation: true,
+            size: 'lg',
+            width:800,
+            height: 600,
             templateUrl: 'goldenSampleModal.html',
             controller: 'OperateGoldenSampleCtrl',
         });
@@ -134,6 +124,9 @@ function GoldenSampleCtrl($rootScope, $scope, $log,$uibModal, services,NgTablePa
         var modalInstance = $uibModal.open({
             scope: $scope,
             animation: true,
+            size: 'lg',
+            width:800,
+            height: 600,
             templateUrl: 'goldenSampleModal.html',
             controller: 'OperateGoldenSampleCtrl',
         });

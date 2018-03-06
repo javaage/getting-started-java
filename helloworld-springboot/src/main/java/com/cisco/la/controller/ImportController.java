@@ -21,6 +21,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,12 +45,21 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.cisco.la.entity.GoldenSampleJoin;
 import com.cisco.la.entity.UserJoin;
+import com.cisco.la.model.CourseModel;
+import com.cisco.la.model.GoldenSampleModel;
 import com.cisco.la.model.RoleModel;
 import com.cisco.la.model.UserModel;
+import com.cisco.la.service.CourseService;
+import com.cisco.la.service.GoldenSampleService;
 import com.cisco.la.service.RoleService;
+import com.cisco.la.service.UserService;
+
 
 @Controller
 @RestController
@@ -58,56 +68,202 @@ public class ImportController {
 	@Autowired
 	private RoleService roleService;
 	
-	@RequestMapping(value = "user", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public Object getRoleByName(HttpServletRequest request){
+	@Autowired
+	private UserService userService;
+	
+	@Autowired
+	private CourseService courseService;
+	
+	@Autowired
+	private GoldenSampleService goldenSampleService;
+	
+	@RequestMapping(value="/users",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Object addManyAccount(HttpServletRequest request, @RequestParam("file") MultipartFile[] files){
+		
+		try {
+			InputStream is = files[0].getInputStream();
+			Workbook wb = WorkbookFactory.create(is);
+			
+			importCourse(wb);
+			importTrainningHistory(wb);
+			importGoldenSample(wb);
+			
+			String message = "Successfully";
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("code", 1);
+			map.put("message", message);
+			return map;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("code", -1);
+			map.put("message", e.getMessage());
+			return map;
+		}
+	}
+	
+	private void importCourse(Workbook wb) throws Exception {
+		Sheet sheet = wb.getSheet("Training Sessions");
+		if(sheet==null){
+			throw new Exception("Training Sessions does not exist.");
+		}
+		
+		Row rowTitle = sheet.getRow(0);
+		Map<String,Integer> columns = new HashMap<String,Integer>();
+		for(int colNum=rowTitle.getFirstCellNum(); colNum<=rowTitle.getLastCellNum(); colNum++){
+			if(rowTitle.getCell(colNum)!=null)
+				columns.put(rowTitle.getCell(colNum).getStringCellValue(), colNum);
+		}
+		
+		Row row = null ;
+		for( int kk =1; kk < sheet.getPhysicalNumberOfRows() ;kk++){
+			row = sheet.getRow(kk);
+			if(row!=null){
+				String courseName = row.getCell(columns.get("Course name")).getStringCellValue();
+				Date startDate = row.getCell(columns.get("Start Date")).getDateCellValue();
+				Date endDate = row.getCell(columns.get("End Date")).getDateCellValue();
+				double price = row.getCell(columns.get("Price")).getNumericCellValue();
+				
+				CourseModel courseModel = courseService.getCourseByName(courseName);
+				
+				if(courseModel==null){
+					courseModel = new CourseModel();
+					courseModel.setCourseName(courseName);
+					courseModel.setActive(true);
+					courseModel.setStartDate(startDate);
+					courseModel.setEndDate(endDate);
+					courseModel.setPrice(price);
+					courseModel.setUrl("");
+					courseService.addCourse(courseModel);
+				}else{
+					courseModel.setStartDate(startDate);
+					courseModel.setEndDate(endDate);
+					courseModel.setPrice(price);
+					courseService.updateCourse(courseModel);
+				}
+			}
+		}
+	}
+
+	private void importTrainningHistory(Workbook wb) throws Exception {
+		Sheet sheet = wb.getSheet("Employee Profile");
+		
+		if(sheet==null){
+			throw new Exception("Employee Profile does not exist.");
+		}
+		
 		Map<String,Integer> columns = new HashMap<String,Integer>();
 		String[] cols = new String[]{"Training History","Employee ID","Name","Job Title","BU","Role","Budget","Balance"};
 		UserJoin userJoin = null;
-		try {
-			File file = ResourceUtils.getFile("classpath:data for Chatbot.xlsx");
-			InputStream is = new FileInputStream(file);
-			Workbook wb = WorkbookFactory.create(is) ;
-			Sheet sheet = wb.getSheetAt(0);
-			
-			Row rowTitle = sheet.getRow(0);
-			
-			for(int colNum=rowTitle.getFirstCellNum(); colNum<=rowTitle.getLastCellNum(); colNum++){
-				if(rowTitle.getCell(colNum)!=null)
-					columns.put(rowTitle.getCell(colNum).getStringCellValue(), colNum);
-			}
-			
-			Row row = null ;
-			for( int kk =1; kk < sheet.getPhysicalNumberOfRows() ;kk++){
-				row = sheet.getRow(kk);
-				if(row!=null){
-					String userID = row.getCell(columns.get("Employee ID")).getStringCellValue();
-					if(userJoin!=null && (userID.isEmpty() ||  userID.equals(userJoin.getId()))){
-						userJoin.getListHistory().add(row.getCell(columns.get("Training History")).getStringCellValue());
-					}else{
-						if(userJoin!=null){
-							
-						}
-						
-						userJoin = new UserJoin();
-						userJoin.getListHistory().add(row.getCell(columns.get("Training History")).getStringCellValue());
-						userJoin.setId(row.getCell(columns.get("Employee ID")).getStringCellValue());
-						userJoin.setName(row.getCell(columns.get("Name")).getStringCellValue());
-						userJoin.setTitle(row.getCell(columns.get("Job Title")).getStringCellValue());
-						userJoin.setBu(row.getCell(columns.get("BU")).getStringCellValue());
-						String roleName = row.getCell(columns.get("Role")).getStringCellValue();
-						RoleModel roleModel = roleService.getRoleByName(roleName);
-						if(roleModel!=null){
-							userJoin.setRoleID(roleModel.getId());
-						}
-						userJoin.setBudget(row.getCell(columns.get("Budget")).getNumericCellValue());
-						userJoin.setBalance(row.getCell(columns.get("Balance")).getNumericCellValue());
+		
+		Row rowTitle = sheet.getRow(0);
+		
+		for(int colNum=rowTitle.getFirstCellNum(); colNum<=rowTitle.getLastCellNum(); colNum++){
+			if(rowTitle.getCell(colNum)!=null)
+				columns.put(rowTitle.getCell(colNum).getStringCellValue(), colNum);
+		}
+		
+		Row row = null ;
+		for( int kk =1; kk < sheet.getPhysicalNumberOfRows() ;kk++){
+			row = sheet.getRow(kk);
+			if(row!=null){
+				String userID = row.getCell(columns.get("Employee ID")).getStringCellValue();
+				String courseName = row.getCell(columns.get("Training History")).getStringCellValue();
+				
+				if(courseName==null || courseName.isEmpty()){
+					if(userJoin!=null){
+						userService.addUserWithHistory(userJoin);
+						userJoin = null;
 					}
+				}else if(userJoin!=null && (userID.isEmpty() ||  userID.equals(userJoin.getId()))){
+					userJoin.getListHistory().add(courseName);
+				}else{
+					userJoin = new UserJoin();
+					userJoin.getListHistory().add(courseName);
+					userJoin.setId(row.getCell(columns.get("Employee ID")).getStringCellValue()+"@cisco.com");
+					userJoin.setName(row.getCell(columns.get("Name")).getStringCellValue());
+					userJoin.setTitle(row.getCell(columns.get("Job Title")).getStringCellValue());
+					userJoin.setBu(row.getCell(columns.get("BU")).getStringCellValue());
+					String roleName = row.getCell(columns.get("Role")).getStringCellValue();
+					RoleModel roleModel = roleService.getRoleByName(roleName);
+					if(roleModel!=null){
+						userJoin.setRoleID(roleModel.getId());
+					}
+					userJoin.setBudget(row.getCell(columns.get("Budget")).getNumericCellValue());
+					userJoin.setBalance(row.getCell(columns.get("Balance")).getNumericCellValue());
+					userJoin.setActive(true);
+					userJoin.setSession(new Date());
+				}
+			}else{
+				if(userJoin!=null){
+					userService.addUserWithHistory(userJoin);
+					userJoin = null;
 				}
 			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
-		return "hello";
+		if(userJoin!=null){
+			userService.addUserWithHistory(userJoin);
+		}
+	}
+	
+	private void importGoldenSample(Workbook wb) throws Exception {
+		Sheet sheet = wb.getSheet("Golden Sample");
+		if(sheet==null){
+			throw new Exception("Golden Sample does not exist.");
+		}
+		
+		Row rowTitle = sheet.getRow(0);
+		Map<String,Integer> columns = new HashMap<String,Integer>();
+		for(int colNum=rowTitle.getFirstCellNum(); colNum<=rowTitle.getLastCellNum(); colNum++){
+			if(rowTitle.getCell(colNum)!=null)
+				columns.put(rowTitle.getCell(colNum).getStringCellValue(), colNum);
+		}
+		
+		Row row = null ;
+		GoldenSampleJoin goldenSampleJoin = null;
+		for( int kk =1; kk < sheet.getPhysicalNumberOfRows() ;kk++){
+			row = sheet.getRow(kk);
+			if(row!=null){
+				String goldenSampleName = row.getCell(columns.get("Golden Sample Name")).getStringCellValue();
+				String roleName = row.getCell(columns.get("Role Name")).getStringCellValue();
+				String courseName = row.getCell(columns.get("Course Name")).getStringCellValue();
+				String mandatory = row.getCell(columns.get("mandatory/optional")).getStringCellValue();
+				
+				if(courseName==null || courseName.isEmpty()){
+					if(goldenSampleJoin!=null){
+						goldenSampleService.addGoldenSampleJoin(goldenSampleJoin);
+						goldenSampleJoin = null;
+					}
+				}else if(goldenSampleJoin!=null && (goldenSampleName==null || goldenSampleName.isEmpty())){
+					if("m".equalsIgnoreCase(mandatory))
+						goldenSampleJoin.getListMandatory().add(courseName);
+					if("o".equalsIgnoreCase(mandatory))
+						goldenSampleJoin.getListOptional().add(courseName);
+				}else{
+					RoleModel roleModel = roleService.getRoleByName(roleName);
+					if(roleModel == null)
+						continue;
+					
+					goldenSampleJoin = new GoldenSampleJoin();
+					goldenSampleJoin.setActive(true);
+					goldenSampleJoin.setGoldenSampleName(goldenSampleName);
+					if("m".equalsIgnoreCase(mandatory))
+						goldenSampleJoin.getListMandatory().add(courseName);
+					if("o".equalsIgnoreCase(mandatory))
+						goldenSampleJoin.getListOptional().add(courseName);
+					goldenSampleJoin.setRoleID(roleModel.getId());
+					goldenSampleJoin.setUpdateTime(new Date());
+				}
+			}else{
+				if(goldenSampleJoin!=null){
+					goldenSampleService.addGoldenSampleJoin(goldenSampleJoin);
+					goldenSampleJoin = null;
+				}
+			}
+		}
+		if(goldenSampleJoin!=null){
+			goldenSampleService.addGoldenSampleJoin(goldenSampleJoin);
+		}
 	}
 }

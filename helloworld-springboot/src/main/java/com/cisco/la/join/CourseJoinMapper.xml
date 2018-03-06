@@ -29,4 +29,10 @@
 	  </foreach>
 	  and (h.hstr_crs_id is null or c.crs_id != h.hstr_crs_id) 
 	</select>
+	<select id="getCourseByName" parameterType="String" resultMap="BaseResultMap">
+	  SELECT crs_id, crs_name, crs_price, crs_url, crs_startdate, crs_enddate, 
+      crs_active
+	  FROM la_course 
+	  where upper(crs_name) = upper(#{courseName})
+	</select>
 </mapper>

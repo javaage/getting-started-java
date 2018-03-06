@@ -92,4 +92,14 @@ public class CourseServiceImpl implements CourseService {
 		}
 	}
 
+	@Override
+	public CourseModel getCourseByName(String courseName) {
+		CourseJoinMapper courseJoinMapper = sqlSession.getMapper(CourseJoinMapper.class);
+		 List<CourseModel> listCourseModel = courseJoinMapper.getCourseByName(courseName);
+		 if(listCourseModel.size()>0)
+			 return listCourseModel.get(0);
+		 else
+			 return null;
+	}
+
 }

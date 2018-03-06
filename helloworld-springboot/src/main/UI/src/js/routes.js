@@ -36,6 +36,11 @@ angular.module('RDash').config(['$stateProvider', '$urlRouterProvider',
                 templateUrl: 'templates/record.html',
                 controller: 'RecordCtrl'
             })  
+            .state('setting', {
+                url: '/setting',
+                templateUrl: 'templates/setting.html',
+                controller: 'SettingCtrl'
+            })
             // .state('history', {
             //     url: '/history',
             //     templateUrl: 'templates/history.html',

@@ -58,7 +58,7 @@
 					    <div class="col-sm-8"><!-- ng-init="user.roleID=''" <option value="">Please choose one role...</option>-->
 					    	<!--  ng-if="!user.roleID" -->
 					    	<select ng-model="user.roleID" class="form-control" 
-		                                    ng-options="role.id as role.roleName for role in roles"  ng-disabled="userView">
+		                                    ng-options="role.id as role.roleName for role in roles | filter: {active:true}"  ng-disabled="userView">
 		                        <option value="">Please choose one role...</option>
 		                    </select>
 					    		

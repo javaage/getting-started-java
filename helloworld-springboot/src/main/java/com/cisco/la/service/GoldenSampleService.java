@@ -12,6 +12,8 @@ public interface GoldenSampleService {
 
 	  public GoldenSampleModel getGoldenSampleByID(int id);
 	  
+	  public GoldenSampleModel getGoldenSampleByName(String goldenSampleName);
+	  
 	  public List<GoldenSampleJoin> getGoldenSampleList();
 	  
 	  public List<GoldenSampleModel> getGoldenSampleListByRoleID(int roleID);
@@ -21,4 +23,6 @@ public interface GoldenSampleService {
 	  public CourseModel getRecentCourseModel(String userID, int roleID);
 	  
 	  public String getRecentCoursePref(String userID, int roleID);
+	  
+	  public void addGoldenSampleJoin(GoldenSampleJoin goldenSampleJoin);
 }

@@ -10,4 +10,6 @@ import org.apache.ibatis.annotations.Param;
 public interface CourseJoinMapper {
 
 	public List<CourseModel> getUserCourseListByList(Map map);
+	
+	public List<CourseModel> getCourseByName(String courseName);
 }

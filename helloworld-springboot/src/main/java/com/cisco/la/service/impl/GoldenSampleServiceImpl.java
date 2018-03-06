@@ -152,4 +152,48 @@ public class GoldenSampleServiceImpl implements GoldenSampleService {
 			return "";
 		}
 	}
+
+	@Override
+	public GoldenSampleModel getGoldenSampleByName(String goldenSampleName) {
+		GoldenSampleJoinMapper goldenSampleJoinMapper = sqlSession.getMapper(GoldenSampleJoinMapper.class);
+		return goldenSampleJoinMapper.getGoldenSampleByName(goldenSampleName);
+	}
+
+	@Override
+	public void addGoldenSampleJoin(GoldenSampleJoin goldenSampleJoin) {
+		if(goldenSampleJoin.getRoleID() > 0){
+
+			GoldenSampleJoinMapper goldenSampleJoinMapper = sqlSession.getMapper(GoldenSampleJoinMapper.class);
+			GoldenSampleModel goldenSampleModel =  goldenSampleJoinMapper.getGoldenSampleByName(goldenSampleJoin.getGoldenSampleName());
+			
+			List<String> listMandatoryID = new ArrayList<String>();
+			for(String courseName : goldenSampleJoin.getListMandatory()){
+				CourseModel courseModel = courseService.getCourseByName(courseName);
+				if(courseModel!=null){
+					listMandatoryID.add("" + courseModel.getId());
+				}
+			}
+			goldenSampleJoin.setMandatory(String.join(",", listMandatoryID));
+			
+			List<String> listOptionalID = new ArrayList<String>();
+			for(String courseName : goldenSampleJoin.getListOptional()){
+				CourseModel courseModel = courseService.getCourseByName(courseName);
+				if(courseModel!=null){
+					listOptionalID.add("" + courseModel.getId());
+				}
+			}
+			goldenSampleJoin.setOptional(String.join(",", listOptionalID));
+			
+			if(goldenSampleModel==null){
+				addGoldenSample(goldenSampleJoin);
+			}else{
+				goldenSampleModel.setRoleID(goldenSampleJoin.getRoleID());
+				goldenSampleModel.setMandatory(goldenSampleJoin.getMandatory());
+				goldenSampleModel.setOptional(goldenSampleJoin.getOptional());
+				updateGoldenSample(goldenSampleModel);
+			}
+			
+		}
+		
+	}
 }
