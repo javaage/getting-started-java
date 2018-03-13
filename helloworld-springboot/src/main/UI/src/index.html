@@ -5,10 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<title>Learning Assistant</title>
+  <base href="/">
   <!-- STYLES -->
   <!-- build:css lib/css/main.min.css -->
   <link rel="stylesheet" type="text/css" href="components/bootstrap/dist/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
+  <link rel="stylesheet" type="text/css" href="components/smalot-bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css">
   <link rel="stylesheet" type="text/css" href="components/font-awesome/css/font-awesome.min.css">
   <link rel="stylesheet" type="text/css" href="components/rdash-ui/dist/css/rdash.min.css">
   <link rel="stylesheet" type="text/css" href="components/angular-ui-grid/ui-grid.min.css">
@@ -19,12 +21,14 @@
   <!-- SCRIPTS -->
   <!-- build:js lib/js/main.min.js -->
   <script type="text/javascript" src="components/jquery/dist/jquery.min.js"></script>
+  <script type="text/javascript" src="/components/moment/min/moment.min.js"></script>
   <script type="text/javascript" src="components/bootstrap/dist/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="components/angular/angular.min.js"></script>
   <script type="text/javascript" src="components/angular-sanitize/angular-sanitize.min.js"></script>
   <script type="text/javascript" src="components/angular-bootstrap/ui-bootstrap.min.js"></script>
   <script type="text/javascript" src="components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
   <script type="text/javascript" src="components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+  <script type="text/javascript" src="components/smalot-bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
   <script type="text/javascript" src="components/angular-cookies/angular-cookies.min.js"></script>
   <script type="text/javascript" src="components/angular-ui-router/release/angular-ui-router.min.js"></script>
   <script type="text/javascript" src="components/ng-table/bundles/ng-table.min.js"></script>
@@ -32,6 +36,7 @@
   <!-- endbuild -->
   <!-- Custom Scripts -->
   <script type="text/javascript" src="js/dashboard.min.js"></script>
+  
 </head>
 <body ng-controller="MasterCtrl">
   <div id="page-wrapper" ng-class="{'open': toggle}" ng-cloak>
@@ -52,7 +57,7 @@
         </li>
         
         <li class="sidebar-list">
-          <a href="#/tables">Tables <span class="menu-icon fa fa-table"></span></a>
+          <a href="/tables">Tables <span class="menu-icon fa fa-table"></span></a>
         </li>
         -->
         <li class="sidebar-list">
@@ -67,9 +72,12 @@
         <li class="sidebar-list">
           <a href="#/sample">Golden Sample<span class="menu-icon fa fa-university"></span></a>
         </li>
+        <li class="sidebar-list">
+          <a href="#/quizList">Quiz<span class="menu-icon fa fa-university"></span></a>
+        </li>
         <!--
         <li class="sidebar-list">
-          <a href="#/history">Course History<span class="menu-icon fa fa-history"></span></a>
+          <a href="/history">Course History<span class="menu-icon fa fa-history"></span></a>
         </li>
         -->
       </ul>

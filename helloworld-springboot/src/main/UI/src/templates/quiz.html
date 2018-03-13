@@ -1,0 +1,135 @@
+<div class="row" data-ng-controller="QuizCtrl">
+  <div class="col-lg-12">
+		<rd-widget>
+			
+			<rd-widget-header icon="fa-certificate" title="{{isModify? 'Update Quiz':'Add Quiz'}}">	
+			</rd-widget-header>
+
+			<form class="form-horizontal" name="quizForm" novalidate="novalidate"  ng-submit="submitQuizData()">
+	              <div class="form-group">
+						<label for="selectCourseName" class="col-lg-2 control-label">Course Name*</label>
+						<div class="col-lg-8">
+						    <select id="selectCourseName" ng-model="quiz.course" class="form-control" ng-change="changeCourse()"
+			                                    ng-options="course as course.courseName for course in courses | filter: {active:true}" required>
+			                </select>
+			                <span ng-if="quiz.course!=null">Schedule:  {{quiz.course.startDate | date:'yyyy-MM-dd'}} ~ {{quiz.course.endDate | date:'yyyy-MM-dd'}}</span>
+						</div>
+				  </div>	
+				  <div class="form-group">
+				    <label for="datetimepicker" class="col-lg-2 control-label">Active Time*</label>
+				    <div class="col-lg-8">
+				      	<input type="text" class="form-control" ng-model="quiz.activeTime" id="datetimepicker" ng-click="openDatePicker()" required>
+				    </div>
+				  </div>
+
+				  <div class="form-group">
+				    <label for="accordion" class="col-lg-2 control-label">Questions*</label>
+				    <div class="col-lg-8">
+				      <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+						  <div class="panel panel-default" ng-repeat="question in quiz.questions track by ($index+1)">
+						    <div class="panel-heading" role="tab" id="{{'heading'+($index+1)}}" style="position:relative;">
+						      <h4 class="panel-title">
+						        <a role="button" data-toggle="collapse" data-parent="#accordion" ui-sref="quiz({'#': 'collapse'+($index+1)})" aria-expanded="true" aria-controls="{{'collapse'+($index+1)}}">
+						          Question #{{($index+1)}}<i class="fas fa-trash-alt"></i>
+						        </a>
+						      </h4>
+
+						      <button class="btn btn-default" type="button" ng-click="deleteQuestion(question)" style="position:absolute;top: 0;right: 0">
+						      <span class="menu-icon fa fa-close"></span></button>
+						    </div>
+						    <div id="{{'collapse'+($index+1)}}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="{{'heading'+($index+1)}}">
+						      <div class="panel-body">
+						      	<div class="form-group">
+								    <label for="inputQuestion1" class="col-lg-2 control-label">Question:</label>
+								    <div class="col-lg-10">
+								      	<input type="text" class="form-control" ng-model="question.subject" id="inputQuestion1" required>
+								    </div>
+								</div>
+								<div class="form-group">
+								    <div class="input-group">
+								      <span class="input-group-addon">
+								        <input type="radio" name="{{'group'+$index}}" value="1" ng-model="question.answer" ng-checked="question.answer==1" ng-disabled="question.cs[0]==''"><span>&nbsp;1.</span>
+								      </span>
+								      <input type="text" ng-trim="true" ng-model="question.cs[0]" class="form-control" aria-label="..." required>
+								    </div>
+								</div>
+						        <div class="form-group">
+								    <div class="input-group">
+								      <span class="input-group-addon">
+								        <input type="radio" name="{{'group'+$index}}" value="2" ng-model="question.answer" ng-checked="question.answer==2" ng-disabled="question.cs[1]==''"><span>&nbsp;2.</span>
+								      </span>
+								      <input type="text" ng-trim="true" ng-model="question.cs[1]" class="form-control" aria-label="...">
+								    </div>
+								</div>
+								<div class="form-group">
+								    <div class="input-group">
+								      <span class="input-group-addon">
+								        <input type="radio" name="{{'group'+$index}}" value="3" ng-model="question.answer" ng-checked="question.answer==3" ng-disabled="question.cs[2]==''"><span>&nbsp;3.</span>
+								      </span>
+								      <input type="text" ng-trim="true" ng-model="question.cs[2]" class="form-control" aria-label="...">
+								    </div>
+								</div>
+								<div class="form-group">
+								    <div class="input-group">
+								      <span class="input-group-addon">
+								        <input type="radio" name="{{'group'+$index}}" value="4" ng-model="question.answer" ng-checked="question.answer==4" ng-disabled="question.cs[3]==''"><span>&nbsp;4.</span>
+								      </span>
+								      <input type="text" ng-trim="true" ng-model="question.cs[3]" class="form-control" aria-label="...">
+								    </div>
+								</div>
+						      </div>
+						    </div>
+						  </div>
+						  <button class="btn btn-default" type="button" ng-click="addQuestion()"><span class="menu-icon fa fa-plus"></span></button>
+
+						</div>
+				    </div>
+				  </div>
+				  
+				  <div class="form-group">
+				    <label for="inputJobTitle" class="col-lg-2 control-label">Audience Type</label>
+				    <div class="col-lg-8">
+				      <input type="radio" name="audienceType" value="R" ng-model="quiz.audienceType" ng-checked="quiz.audienceType=='R'"><span>By Role</span> 
+				      <input type="radio" name="audienceType" value="U" ng-model="quiz.audienceType" ng-checked="quiz.audienceType=='U'"
+				      style="margin-left: 30px;"><span>By User</span> 
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <label for="inputGrade" class="col-lg-2 control-label">Audience List</label>
+				    <div class="col-lg-8" ng-if="quiz.audienceType=='R'">
+				      <ui-select multiple ng-model="quiz.roleList" theme="bootstrap" ng-disabled="disabled" sortable="true" close-on-select="false" style="width: 100%;">
+					    <ui-select-match placeholder="Select role...">{{$item.roleName}} </ui-select-match>
+					    <ui-select-choices repeat="role in roles | filter:{active:true}">
+					      <div ng-bind-html="role.roleName | highlight: $select.search"></div>
+					      <small>
+					        role: {{role.roleName}}
+					      </small>
+					    </ui-select-choices>
+					  </ui-select>
+				    </div>
+
+				    <div class="col-lg-8" ng-if="quiz.audienceType=='U'">
+				      <ui-select multiple ng-model="quiz.userList" theme="bootstrap" ng-disabled="disabled" sortable="true" close-on-select="false" style="width: 100%;">
+					    <ui-select-match placeholder="Select user...">{{$item.id}} </ui-select-match>
+					    <ui-select-choices repeat="user in users | filter:{active:true}">
+					      <div ng-bind-html="user.id | highlight: $select.search"></div>
+					      <small>
+					        name: {{user.name}}
+					      </small>
+					    </ui-select-choices>
+					  </ui-select>
+				    </div>
+
+				  </div>
+				  <div style="text-align: center;">  
+			            <button type="submit" class="btn btn-default">Submit</button>
+						<button type="cancel" class="btn btn-default" ng-click="closeQuizModal()">Cancel</button>
+			        </div>  
+				</form>
+
+	        
+
+		<rd-widget>
+	</div>
+  	
+</div>

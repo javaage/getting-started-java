@@ -3,9 +3,10 @@
 /**
  * Route configuration for the RDash module.
  */
-angular.module('RDash').config(['$stateProvider', '$urlRouterProvider',
-    function($stateProvider, $urlRouterProvider) {
+angular.module('RDash').config(['$stateProvider', '$urlRouterProvider', '$locationProvider',
+    function($stateProvider, $urlRouterProvider,$locationProvider) {
 
+        //$locationProvider.html5Mode(true).hashPrefix('!');
         // For unmatched routes
         $urlRouterProvider.otherwise('/employee');
 
@@ -20,6 +21,17 @@ angular.module('RDash').config(['$stateProvider', '$urlRouterProvider',
                 url: '/role',
                 templateUrl: 'templates/role.html',
                 controller: 'RoleCtrl'
+            }) 
+            .state('quiz', {
+                url: '/quiz',
+                params: {'quiz': null},
+                templateUrl: 'templates/quiz.html',
+                controller: 'QuizCtrl'
+            }) 
+            .state('quizList', {
+                url: '/quizList',
+                templateUrl: 'templates/quizList.html',
+                controller: 'QuizListCtrl'
             }) 
             .state('course', {
                 url: '/course',
@@ -40,20 +52,6 @@ angular.module('RDash').config(['$stateProvider', '$urlRouterProvider',
                 url: '/setting',
                 templateUrl: 'templates/setting.html',
                 controller: 'SettingCtrl'
-            })
-            // .state('history', {
-            //     url: '/history',
-            //     templateUrl: 'templates/history.html',
-            //     controller: 'HistoryCtrl'
-            // })       
-            // .state('index', {
-            //     url: '/',
-            //     templateUrl: 'templates/dashboard.html'
-            // })
-            // .state('tables', {
-            //     url: '/tables',
-            //     templateUrl: 'templates/tables.html'
-            // })
-            ;
+            });
     }
 ]);

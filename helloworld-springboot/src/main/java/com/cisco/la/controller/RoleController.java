@@ -66,7 +66,7 @@ public class RoleController {
 	}
 	
 	@RequestMapping(value = "list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public Object getUserList(HttpServletRequest request){
+	public Object getRoleList(HttpServletRequest request){
 		List<RoleModel> roleModelList = roleService.getRoleList();
 		
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -105,7 +105,7 @@ public class RoleController {
 	}
 	
 	@RequestMapping( method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-	public Object updateUser(HttpServletRequest request, @RequestBody String json){
+	public Object updateRole(HttpServletRequest request, @RequestBody String json){
 		try{
 			JSONObject jsonObject = new JSONObject(json);   
 	        RoleModel roleModel = new RoleModel();

@@ -13,7 +13,11 @@ public interface UserService {
 
   public UserModel getUserByID(String id);
   
+  public List<UserModel> getUserByIDs(String ids);
+  
   public List<UserModel> getUserList();
   
   public List<UserModel> getUserListByRoleID(int roleID);
+  
+  public List<UserModel> getUserListByRoleIDs(String roleIDs);
  }

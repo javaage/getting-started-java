@@ -1,0 +1,69 @@
+<div class="row" data-ng-controller="RoleCtrl">
+  <div class="col-lg-12">
+		<rd-widget>
+			
+			<rd-widget-header icon="fa-certificate" title="Role">	
+			</rd-widget-header>
+			<input class="btn btn-default" type="button" ng-click="addRoleModal()" value="Add Role">
+			
+				<div class="table-responsive" style="max-height: 600px">
+					<table ng-table="tableParams" class="table table-condensed table-bordered table-striped" show-filter="false">
+			            <tr ng-repeat="item in $data" ng-class="{'inactive':!item.active}">
+			            		<td title="'Role'" sortable="'roleName'" class="text-center">{{item.roleName}}</td>
+				                <td title="'BU'" sortable="'bu'" class="text-center">{{item.bu}}</td>
+				                <td title="'Title'" sortable="'title'" class="text-center">{{item.title}}</td>
+				                <td title="'Grade'" sortable="'grade'" class="text-center">{{item.grade}}</td>  
+				                <td title="'Operation'" class="text-center">
+				                	<span ng-if="!item.active" style="width: 80px;margin-left: 10px; margin-right: 10px">Update</span>	
+				                	<a ng-click="updateRoleModal(item)" ng-if="item.active" style="width: 80px;margin-left: 10px; margin-right: 10px">Update</a>
+				                	<a ng-click="inactiveRole(item)" ng-if="item.active" style="width: 80px">Inactive</a>
+				                	<a ng-click="activeRole(item)" ng-if="!item.active" style="width: 80px">&nbsp;Active&nbsp;</a>
+				                </td>	
+			            </tr>
+			        </table>
+        		</div>
+
+		<rd-widget>
+	</rd-widget></rd-widget></div>
+  	<script type="text/ng-template" id="roleModal.html">  
+        <div class="modal-header bg-info">   
+            <span ng-if="!isModify">Add Role</span> 
+            <span ng-if="isModify">Update Role</span> 
+        </div>  
+        <div class="modal-body">  
+            <form class="form-horizontal" name="roleForm" novalidate>
+
+			  <div class="form-group">
+			    <label for="inputRole" class="col-sm-4 control-label">Role*</label>
+			    <div class="col-sm-8">
+			      <input type="text" ng-model="role.roleName" class="form-control" id="inputRole" placeholder="Role" required>
+			    </div>
+			  </div>
+
+			  <div class="form-group">
+			    <label for="inputBU" class="col-sm-4 control-label">BU*</label>
+			    <div class="col-sm-8">
+			      <input type="text" ng-model="role.bu" class="form-control" id="inputBU" placeholder="BU" required>
+			    </div>
+			  </div>
+			  
+			  <div class="form-group">
+			    <label for="inputJobTitle" class="col-sm-4 control-label">Job Title</label>
+			    <div class="col-sm-8">
+			      <input type="text" ng-model="role.title" class="form-control" id="inputJobTitle" placeholder="Job Title">
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label for="inputGrade" class="col-sm-4 control-label">Grade</label>
+			    <div class="col-sm-8">
+			      <input type="text" ng-model="role.grade" class="form-control" id="inputGrade" placeholder="Grade">
+			    </div>
+			  </div>
+			</form>
+        </div>  
+        <div class="modal-footer">  
+            <button type="submit" class="btn btn-default" ng-click="submitRoleData()">Submit</button>
+			<button type="cancel" class="btn btn-default" ng-click="closeRoleModal()">Cancel</button>
+        </div>  
+     
+</div>

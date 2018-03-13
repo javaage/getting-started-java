@@ -31,7 +31,10 @@
     "jquery": "^3.3.1",
     "angular-ui-grid": "^4.2.2",
     "angular-sanitize": "~1.5.0",
-    "angular-ui-select": "^0.19.8"
+    "angular-ui-select": "^0.19.8",
+    "bootstrap-datetimepicker": "^0.0.11",
+    "eonasdan-bootstrap-datetimepicker": "^4.17.47",
+    "smalot-bootstrap-datetimepicker": "bootstrap-datetimepicker-master#^2.4.4"
   },
   "repository": {
     "type": "git",

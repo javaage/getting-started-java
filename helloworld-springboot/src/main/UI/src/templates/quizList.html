@@ -1,0 +1,78 @@
+<div class="row" data-ng-controller="QuizListCtrl">
+  <div class="col-lg-12">
+		<rd-widget>
+			
+			<rd-widget-header icon="fa-certificate" title="Quiz">	
+			</rd-widget-header>
+			<input class="btn btn-default" type="button" ng-click="addQuizModal()" value="Add Quiz">
+			
+				<div class="table-responsive" style="max-height: 600px;">
+					<table ng-table="tableParams" class="table table-condensed table-bordered table-striped" show-filter="false">
+			            <tr ng-repeat="item in $data" ng-class="{'inactive':!item.active}">
+			            		<td title="'Course Name'" sortable="'courseName'" class="text-center">{{item.courseName}}</td>
+				                <td title="'Audience Type'" sortable="'audienceType'" class="text-center">{{item.audienceTypeValue}}</td>
+				                <td title="'Active Time'" sortable="'activeTime'" class="text-center">{{item.activeTime | date: 'yyyy-MM-dd hh:mm'}}</td>
+				                <td title="'Operation'" class="text-center" >
+				                	<span  ng-if="!item.active" style="width: 80px;margin-left: 10px; margin-right: 10px;">Update</span>	
+				                	<a ng-click="updateQuizModal(item)" ng-if="item.active" style="width: 80px;margin-left: 10px; margin-right: 10px;">Update</a>
+				                	<a ng-click="inactiveQuiz(item)" ng-if="item.active" style="width: 80px;">Inactive</a>
+				                	<a ng-click="activeQuiz(item)" ng-if="!item.active" style="width: 80px;">&nbsp;Active&nbsp;</a>
+				                </td>	
+			            </tr>
+			        </table>
+        		</div>
+
+		<rd-widget>
+	</div>
+  	<script type="text/ng-template" id="quizModal.html" />  
+        <div class="modal-header bg-info">   
+            <span ng-if="!isModify">Add Quiz</span> 
+            <span ng-if="isModify">Update Quiz</span> 
+        </div>  
+        <div class="modal-body">  
+            <form class="form-horizontal" name="quizForm" novalidate>
+              <div class="form-group">
+					<label for="selectCourseName" class="col-sm-4 control-label">Course Name*</label>
+					<div class="col-sm-8">
+					    <select id="selectCourseName" ng-model="quiz.courseID" class="form-control" 
+		                                    ng-options="course.id as course.courseName for course in courses | filter: {active:true}">
+		                </select>
+					</div>
+			  </div>	
+			  <div class="form-group">
+			    <label for="inputQuiz" class="col-sm-4 control-label">Active Time*</label>
+			    <div class="col-sm-8">
+			      <select id="selectTimeType" ng-model="quiz.courseID" 
+		                                    ng-options="timeType.value as timeType.name for timeType in timeTypes">
+		          </select>
+			      <input type="text" ng-model="days" class="form-control" id="inputDays" placeholder="days" required> days
+			    </div>
+			  </div>
+
+			  <div class="form-group">
+			    <label for="inputBU" class="col-sm-4 control-label">BU*</label>
+			    <div class="col-sm-8">
+			      <input type="text" ng-model="quiz.bu" class="form-control" id="inputBU" placeholder="BU" required>
+			    </div>
+			  </div>
+			  
+			  <div class="form-group">
+			    <label for="inputJobTitle" class="col-sm-4 control-label">Job Title</label>
+			    <div class="col-sm-8">
+			      <input type="text" ng-model="quiz.title" class="form-control" id="inputJobTitle" placeholder="Job Title">
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label for="inputGrade" class="col-sm-4 control-label">Grade</label>
+			    <div class="col-sm-8">
+			      <input type="text" ng-model="quiz.grade" class="form-control" id="inputGrade" placeholder="Grade">
+			    </div>
+			  </div>
+			</form>
+        </div>  
+        <div class="modal-footer">  
+            <button type="submit" class="btn btn-default" ng-click="submitQuizData()">Submit</button>
+			<button type="cancel" class="btn btn-default" ng-click="closeQuizModal()">Cancel</button>
+        </div>  
+    </script> 
+</div>

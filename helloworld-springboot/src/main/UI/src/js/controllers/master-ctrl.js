@@ -3,9 +3,9 @@
  */
 
 angular.module('RDash')
-    .controller('MasterCtrl', ['$scope', '$cookieStore', MasterCtrl]);
+    .controller('MasterCtrl', ['$rootScope', '$scope', '$cookieStore', MasterCtrl]);
 
-function MasterCtrl($scope, $cookieStore) {
+function MasterCtrl($rootScope, $scope, $cookieStore) {
     /**
      * Sidebar Toggle & Cookie Control
      */
@@ -36,4 +36,21 @@ function MasterCtrl($scope, $cookieStore) {
     window.onresize = function() {
         $scope.$apply();
     };
+
+    // $rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {
+    //     console.log(event);
+    //     console.log(toState);
+    //     console.log(toParams);
+    //     console.log(fromState);
+    //     console.log(fromParams);
+    //     console.log(error);    
+    // });
+
+    // $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
+    //     console.log(event);
+    //     console.log(toState);
+    //     console.log(toParams);
+    //     console.log(fromState);
+    //     console.log(fromParams);   
+    // });
 }

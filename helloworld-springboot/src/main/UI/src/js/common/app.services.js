@@ -193,6 +193,116 @@ angular
                 return deferred.promise;
             };
 
+            this.getQuiz = function(quizID){
+                var deferred = $q.defer();
+                var urlGetQuiz = this.urlFormat(url.getQuiz,quizID);
+                $http.get(urlGetQuiz,{})
+                .success(function(data){
+                    console.log(data);
+                    if (data.code == 1) {
+                        deferred.resolve(data);
+                    } else {
+                        deferred.reject(data);
+                    }
+                })
+                .error(function(error){
+                    deferred.reject(error);
+                });
+
+                return deferred.promise;
+            };
+
+            this.getQuizList = function(){
+                var deferred = $q.defer();
+                $http.get(url.getQuizList,{})
+                .success(function(data){
+                    console.log(data);
+                    if (data.code == 1) {
+                        deferred.resolve(data);
+                    } else {
+                        deferred.reject(data);
+                    }
+                })
+                .error(function(error){
+                    deferred.reject(error);
+                });
+
+                return deferred.promise;
+            };
+
+            this.addQuiz = function(quiz){
+                var deferred = $q.defer();
+                $http.post(url.addQuiz,quiz)
+                .success(function(data){
+                    console.log(data);
+                    if (data.code == 1) {
+                        deferred.resolve(data);
+                    } else {
+                        deferred.reject(data);
+                    }
+                })
+                .error(function(error){
+                    deferred.reject(error);
+                });
+
+                return deferred.promise;
+            };
+
+            this.updateQuiz = function(quiz){
+                var deferred = $q.defer();
+                $http.put(url.updateQuiz,quiz)
+                .success(function(data){
+                    console.log(data);
+                    if (data.code == 1) {
+                        deferred.resolve(data);
+                    } else {
+                        deferred.reject(data);
+                    }
+                })
+                .error(function(error){
+                    deferred.reject(error);
+                });
+
+                return deferred.promise;
+            };
+
+            this.updateQuizOnly = function(quiz){
+                var deferred = $q.defer();
+                $http.put(url.updateQuizOnly,quiz)
+                .success(function(data){
+                    console.log(data);
+                    if (data.code == 1) {
+                        deferred.resolve(data);
+                    } else {
+                        deferred.reject(data);
+                    }
+                })
+                .error(function(error){
+                    deferred.reject(error);
+                });
+
+                return deferred.promise;
+            };
+
+            this.getQuestionList = function(quizID){
+                var deferred = $q.defer();
+                var urlQuery = this.urlFormat(url.getQuestionList,quizID);
+                $http.get(urlQuery,{})
+                .success(function(data){
+                    console.log(data);
+                    if (data.code == 1) {
+                        deferred.resolve(data);
+                    } else {
+                        deferred.reject(data);
+                    }
+                })
+                .error(function(error){
+                    deferred.reject(error);
+                });
+
+                return deferred.promise;
+            };
+
             this.getRecordList = function(){
                 var deferred = $q.defer();
                 $http.get(url.getRecordList,{})

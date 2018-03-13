@@ -58,7 +58,7 @@ public class CourseController {
 	}
 	
 	@RequestMapping(value = "list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public Object getUserList(HttpServletRequest request){
+	public Object getCourseList(HttpServletRequest request){
 		List<CourseModel> courseModelList = courseService.getCourseList();
 		
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -100,7 +100,7 @@ public class CourseController {
 	}
 	
 	@RequestMapping( method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-	public Object updateUser(HttpServletRequest request, @RequestBody String json){
+	public Object updateCourse(HttpServletRequest request, @RequestBody String json){
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		try{
 			JSONObject jsonObject = new JSONObject(json);   

@@ -57,4 +57,26 @@ public class RoleServiceImpl implements RoleService {
 		return roleMapper.getRoleByName(roleName);
 	}
 
+	@Override
+	public List<RoleModel> getRoleByIDs(String ids) {
+		RoleModelMapper roleModelMapper = sqlSession.getMapper(RoleModelMapper.class);
+		RoleModelExample roleModelExample = new RoleModelExample();
+		
+		Criteria criteria = roleModelExample.createCriteria();
+		List<Integer> idList = new ArrayList<Integer>();
+		String[] idArray = ids.split(",");
+		
+		for(int i = 0; i < idArray.length; i++){
+			if(!idArray[i].trim().isEmpty())
+				idList.add(Integer.parseInt(idArray[i].trim())); 
+		}
+		if(idList.size()>0){
+			criteria.andIdIn(idList);
+			criteria.andActiveEqualTo(true);
+			return roleModelMapper.selectByExample(roleModelExample);
+		}else{
+			return new ArrayList<RoleModel>();
+		}
+	}
+
 }

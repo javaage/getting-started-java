@@ -8,7 +8,8 @@ var gulp = require('gulp'),
     concat = require('gulp-concat'),
     less = require('gulp-less'),
     rename = require('gulp-rename'),
-    minifyHTML = require('gulp-htmlmin');
+    minifyHTML = require('gulp-htmlmin'),
+    history = require('connect-history-api-fallback');
 
 var paths = {
     scripts: 'src/js/**/*.*',
@@ -91,7 +92,12 @@ gulp.task('webserver', function() {
     connect.server({
         root: '../webapp',
         livereload: true,
-        port: 8888
+        port: 8888,
+        middleware: function(connect, opt) {
+            return [ history({
+                index: '/'
+            }) ];
+        }
     });
 });
 

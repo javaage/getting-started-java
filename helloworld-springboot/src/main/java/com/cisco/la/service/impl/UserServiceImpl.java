@@ -1,5 +1,6 @@
 package com.cisco.la.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -42,6 +43,28 @@ public class UserServiceImpl implements UserService {
 		UserModelMapper userModelMapper = sqlSession.getMapper(UserModelMapper.class);
 	    UserModel userModel = userModelMapper.selectByPrimaryKey(id);
 	    return userModel;
+	}
+	
+	public List<UserModel> getUserByIDs(String ids) {
+		UserModelMapper userModelMapper = sqlSession.getMapper(UserModelMapper.class);
+		UserModelExample example = new UserModelExample();
+		Criteria criteria = example.createCriteria();
+		
+		String[] idArray = ids.split(",");
+		
+		List<String> idList = new ArrayList<String>();
+		
+		for(int i = 0; i< idArray.length; i++){
+			if(!idArray[i].trim().isEmpty())
+				idList.add(idArray[i].trim());
+		}
+		if(idList.size()>0){
+			criteria.andIdIn(idList);
+			criteria.andActiveEqualTo(true);
+			return userModelMapper.selectByExample(example);
+		}else{
+			return new ArrayList<UserModel>();
+		}
 	}
 	
 	public List<UserModel> getUserList(){
@@ -104,5 +127,28 @@ public class UserServiceImpl implements UserService {
 			}
 		}
 		
+	}
+	
+	public List<UserModel> getUserListByRoleIDs(String roleIDs) {
+		UserModelMapper userModelMapper = sqlSession.getMapper(UserModelMapper.class);
+		UserModelExample example = new UserModelExample();
+		Criteria criteria = example.createCriteria();
+		
+		String[] idArray = roleIDs.split(",");
+		
+		List<Integer> idList = new ArrayList<Integer>();
+		
+		for(int i = 0; i< idArray.length; i++){
+			if(!idArray[i].trim().isEmpty()){
+				idList.add(Integer.parseInt(idArray[i].trim()));
+			}
+		}
+		if(idList.size()>0){
+			criteria.andRoleIDIn(idList);
+			criteria.andActiveEqualTo(true);
+			return userModelMapper.selectByExample(example);
+		}else{
+			return new ArrayList<UserModel>();
+		}
 	}
 }
