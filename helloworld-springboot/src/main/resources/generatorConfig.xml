@@ -83,5 +83,37 @@
       <columnOverride column="MSG_INTENT" property="intent"  />
       <columnOverride column="MSG_ACTION" property="action"  />
     </table>
+	<table schema="public" tableName="LA_QUESTION" domainObjectName="QuestionModel">
+      <columnOverride column="QUST_QUIZ_ID" property="quizID"  />
+      <columnOverride column="QUST_SUBJECT" property="subject"  />
+      <columnOverride column="QUST_CHOICES" property="choices" />
+      <columnOverride column="QUST_ANSWER" property="answer" />
+      <columnOverride column="QUST_NUMBER" property="number"  />
+    </table>
+    
+    <table schema="public" tableName="LA_QUIZ" domainObjectName="QuizModel">
+    <generatedKey column="QUZ_ID" sqlStatement="SELECT nextval('la_quiz_quz_id_seq')" identity="true"/>
+      <columnOverride column="QUZ_ID" property="id"  />
+      <columnOverride column="QUZ_CRS_ID" property="courseID"  />
+      <columnOverride column="QUZ_ACTIVE_TIME" property="activeTime" jdbcType="TIMESTAMP" />
+      <columnOverride column="QUZ_AUDIENCE_TYPE" property="audienceType"  />
+      <columnOverride column="QUZ_AUDIENCE_LIST" property="audienceList"  />
+      <columnOverride column="QUZ_ACTIVE" property="active"  />
+      <columnOverride column="QUZ_UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP"  />
+    </table>
+    
+    <table schema="public" tableName="LA_PAPER" domainObjectName="PaperModel">
+    <generatedKey column="PPR_ID" sqlStatement="SELECT nextval('la_quiz_quz_id_seq')" identity="true"/>
+      <columnOverride column="PPR_ID" property="id"  />
+      <columnOverride column="PPR_QUZ_ID" property="quizID"  />
+      <columnOverride column="PPR_USR_ID" property="userID" />
+      <columnOverride column="PPR_CONTENT" property="content"  />
+      <columnOverride column="PPR_STANDARD" property="standard"  />
+      <columnOverride column="PPR_ANSWER" property="awswer"  />
+      <columnOverride column="PPR_UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+      <columnOverride column="PPR_SCORE" property="score"  />
+      <columnOverride column="PPR_TOTAL" property="total"  />
+      <columnOverride column="PPR_INDEX" property="index"  />
+    </table>
   </context>
 </generatorConfiguration>

@@ -17,14 +17,18 @@
     <mapper resource="com/cisco/la/mapper/RoleModelMapper.xml" />
     <mapper resource="com/cisco/la/mapper/MessageModelMapper.xml" />
     <mapper resource="com/cisco/la/mapper/UserModelMapper.xml" />
-    <mapper resource="com/cisco/la/join/UserJoinMapper.xml" />
     <mapper resource="com/cisco/la/mapper/RecordModelMapper.xml" />
+    <mapper resource="com/cisco/la/mapper/QuizModelMapper.xml" />
+    <mapper resource="com/cisco/la/mapper/QuestionModelMapper.xml" />
+    <mapper resource="com/cisco/la/mapper/PaperModelMapper.xml" />
     <mapper resource="com/cisco/la/join/GoldenSampleJoinMapper.xml" />
     <mapper resource="com/cisco/la/join/RoleMapper.xml" />
     <mapper resource="com/cisco/la/join/MessageJoinMapper.xml" />
     <mapper resource="com/cisco/la/join/CourseJoinMapper.xml" />
     <mapper resource="com/cisco/la/join/RoleHistoryJoinMapper.xml" />
   	<mapper resource="com/cisco/la/join/CourseHistoryJoinMapper.xml" />
+  	<mapper resource="com/cisco/la/join/UserJoinMapper.xml" />
+  	<mapper resource="com/cisco/la/join/QuizJoinMapper.xml" />
   </mappers>
 </configuration>
 
