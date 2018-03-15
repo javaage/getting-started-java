@@ -35,11 +35,13 @@ import com.cisco.la.Application;
 import com.cisco.la.common.CustomMessage;
 import com.cisco.la.common.SparkService;
 import com.cisco.la.model.MessageModel;
+import com.cisco.la.model.PaperModel;
 import com.cisco.la.model.RecordModel;
 import com.cisco.la.model.RoleModel;
 import com.cisco.la.model.UserModel;
 import com.cisco.la.service.GoldenSampleService;
 import com.cisco.la.service.MessageService;
+import com.cisco.la.service.PaperService;
 import com.cisco.la.service.RecordService;
 import com.cisco.la.service.RoleService;
 import com.cisco.la.service.UserService;
@@ -71,6 +73,9 @@ public class HookController {
 	
 	@Autowired
 	private MessageService messageService;
+	
+	@Autowired
+	private PaperService paperService;
 
 	@RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Object postResponse(@RequestBody String json) {
@@ -182,8 +187,16 @@ public class HookController {
 				if(userModel!=null){
 					userModel.setSession(new Date(1));
 					userService.updateUser(userModel);
+					
+					beginQuiz(userModel.getId());
 				}
 			}
+			break;
+		case "choice":
+			if(userModel!=null){
+				continueQuiz(speech, userModel.getId());
+			}
+			
 			break;
 		default:
 			speech = CustomMessage.CHAT_BOLT_FALLBACK_MESSAGE;
@@ -252,5 +265,97 @@ public class HookController {
 		recordService.addRecord(recordModel);
 
 		return code;
+	}
+	
+	private void beginQuiz(String userID){
+		PaperModel paperModel = paperService.getActivePaperByUserID(userID);
+		if(paperModel!=null){
+			String standard = paperModel.getStandard();
+			String answer = paperModel.getAwswer();
+			String content = paperModel.getContent();
+			String[] ss = new String[0];
+			String[] aa = new String[0];
+			String[] cc = new String[0];
+			if(standard!=null && !standard.isEmpty())
+				ss = standard.split("&&&");
+			if(answer!=null && !answer.isEmpty())
+				aa = answer.split("&&&");
+			if(content!=null && !content.isEmpty())
+				cc = content.split("&&&");
+			
+			if(aa.length>=0 && aa.length<cc.length){
+				sparkService.sendMarkdownMessage(userID, cc[aa.length]);
+				paperModel.setSession(new Date());
+				paperService.updatePaper(paperModel);
+			}
+		}
+	}
+	
+	private void continueQuiz(String speech, String userID) {
+		PaperModel paperModel = paperService.getActivePaperByUserID(userID);
+		
+		if(paperModel!=null){
+			String standard = paperModel.getStandard();
+			String answer = paperModel.getAwswer();
+			String content = paperModel.getContent();
+			
+			String a = "";
+			if(speech.contains("1")){
+				a = "1";
+			}else if(speech.contains("2")){
+				a = "2";
+			}else if(speech.contains("3")){
+				a = "3";
+			}else if(speech.contains("4")){
+				a = "4";
+			}
+			if(answer==null || answer.isEmpty()){
+				answer = a;
+			}else{
+				answer += "&&&" + a;
+			}
+			paperModel.setAwswer(answer);
+			
+			String[] ss = new String[0];
+			String[] aa = new String[0];
+			String[] cc = new String[0];
+			
+			if(standard!=null && !standard.isEmpty())
+				ss = standard.split("&&&");
+			if(answer!=null && !answer.isEmpty())
+				aa = answer.split("&&&");
+			if(content!=null && !content.isEmpty())
+				cc = content.split("&&&");
+			
+			if(aa.length<=ss.length){
+				if(a.equalsIgnoreCase(ss[aa.length-1])){
+					sparkService.sendMarkdownMessage(userID, CustomMessage.CHAT_BOLT_ANSWER_CORRECT);
+				}else{
+					sparkService.sendMarkdownMessage(userID, CustomMessage.CHAT_BOLT_ANSWER_INCORRECT);
+				}
+			}
+			
+			if(aa.length>=0 && aa.length<cc.length){
+				sparkService.sendMarkdownMessage(userID, cc[aa.length]);
+			}else if(aa.length==cc.length){
+				int correct = 0;
+				int score = 0;
+				for(int k = 0; k < ss.length; k++){
+					if(ss[k].equalsIgnoreCase(aa[k])){
+						correct++;
+					}
+				}
+				
+				if(ss.length>0){
+					score = 100 * correct / ss.length;
+				}
+				paperModel.setScore(score);
+				
+				sparkService.sendMarkdownMessage(userID, String.format(CustomMessage.CHAT_BOLT_ANSWER_FINISHED, score));
+			}
+			
+			paperModel.setSession(new Date());
+			paperService.updatePaper(paperModel);
+		}
 	}
 }

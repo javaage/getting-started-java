@@ -148,7 +148,7 @@ function QuizCtrl($rootScope, $scope, $filter, $state, $stateParams, $log, $uibM
         
         for(var i = 0; i < $scope.quiz.questions.length; i++){
             var question = $scope.quiz.questions[i];
-            question.choices = question.cs.join('|||');
+            question.choices = question.cs.join('@@@');
         }
 
 
@@ -189,7 +189,7 @@ function QuizCtrl($rootScope, $scope, $filter, $state, $stateParams, $log, $uibM
                         $scope.quiz.questions = result.data.listQuestionModel;
 
                         angular.forEach($scope.quiz.questions,function(item,key){
-                            item.cs = item.choices.split('|||');
+                            item.cs = item.choices.split('@@@');
                         });
 
                         if($scope.quiz.audienceType == 'R'){

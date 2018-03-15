@@ -114,6 +114,8 @@
       <columnOverride column="PPR_SCORE" property="score"  />
       <columnOverride column="PPR_TOTAL" property="total"  />
       <columnOverride column="PPR_INDEX" property="index"  />
+      <columnOverride column="PPR_SESSION" property="session" jdbcType="TIMESTAMP" />
+      <columnOverride column="PPR_ACTIVE" property="active"  />
     </table>
   </context>
 </generatorConfiguration>

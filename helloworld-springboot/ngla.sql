@@ -85,8 +85,8 @@ create table LA_MESSAGE (
 /*==============================================================*/
 /* Table: LA_PAPER                                              */
 /*==============================================================*/
-create table LA_PAPER (
-   PPR_ID               SERIAL               not null,
+create table PUBLIC.LA_PAPER (
+   PPR_ID               SERIAL not null,
    PPR_QUZ_ID           INT4                 not null,
    PPR_USR_ID           VARCHAR              not null,
    PPR_CONTENT          VARCHAR              not null,
@@ -96,6 +96,8 @@ create table LA_PAPER (
    PPR_SCORE            INT4                 null,
    PPR_TOTAL            INT4                 not null,
    PPR_INDEX            INT4                 not null,
+   PPR_ACTIVE          BOOL                 not null,
+   PPR_SESSION          TIMESTAMP            not null default '0001-01-01 00:00:00',
    constraint PK_LA_PAPER primary key (PPR_ID)
 );
 

@@ -1,6 +1,7 @@
 package com.cisco.la.service.impl;
 import com.cisco.la.Application;
 import com.cisco.la.common.CustomMessage;
+import com.cisco.la.common.Util;
 import com.cisco.la.entity.GoldenSampleJoin;
 import com.cisco.la.join.GoldenSampleJoinMapper;
 import com.cisco.la.mapper.GoldenSampleModelMapper;
@@ -142,12 +143,11 @@ public class GoldenSampleServiceImpl implements GoldenSampleService {
 			Application.logger.debug(courseModel.getStartDate().toString());
 			Application.logger.debug(new Date().toString());
 			long delta = courseModel.getStartDate().getTime() - new Date().getTime();
-			long days = delta/(1000 * 60 * 60 * 24);
-			Application.logger.debug(days+"");
+
 			if(courseModel.getUrl()!=null && !courseModel.getUrl().isEmpty()) //[%s](%s)
-				return String.format(CustomMessage.CHAT_BOLT_PREFER_RECENT_COURSE, "[" + courseModel.getCourseName() + "](" + courseModel.getUrl() +")", days + " days");
+				return String.format(CustomMessage.CHAT_BOLT_PREFER_RECENT_COURSE, "[" + courseModel.getCourseName() + "](" + courseModel.getUrl() +")", Util.getDaysSentence(delta));
 			else
-				return String.format(CustomMessage.CHAT_BOLT_PREFER_RECENT_COURSE, courseModel.getCourseName(), days + " days");
+				return String.format(CustomMessage.CHAT_BOLT_PREFER_RECENT_COURSE, courseModel.getCourseName(), Util.getDaysSentence(delta));
 		}else{
 			return "";
 		}

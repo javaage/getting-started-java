@@ -34,4 +34,6 @@
   		where q.quz_id=#{quizID}
   		order by quz_id desc
    </select>
+   
+
 </mapper>

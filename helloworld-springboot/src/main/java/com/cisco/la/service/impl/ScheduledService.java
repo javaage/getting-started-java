@@ -13,13 +13,17 @@ import org.springframework.stereotype.Service;
 
 import com.cisco.la.Application;
 import com.cisco.la.Application.Env;
+import com.cisco.la.common.CustomMessage;
 import com.cisco.la.common.SparkService;
+import com.cisco.la.common.Util;
 import com.cisco.la.entity.QuizJoin;
+import com.cisco.la.model.CourseModel;
 import com.cisco.la.model.MessageModel;
 import com.cisco.la.model.PaperModel;
 import com.cisco.la.model.QuestionModel;
 import com.cisco.la.model.QuizModel;
 import com.cisco.la.model.UserModel;
+import com.cisco.la.service.CourseService;
 import com.cisco.la.service.MessageService;
 import com.cisco.la.service.PaperService;
 import com.cisco.la.service.QuizService;
@@ -47,11 +51,17 @@ public class ScheduledService {
 	@Autowired
 	private UserService userService;
 	
+	@Autowired
+	private CourseService courseService;
+	
 	@Scheduled(fixedRate = 1000*60)
 	public void fixedRate(){
 		System.out.println(new Date());
 		sendLostSessionMessage();
 		generatePaper();
+		startQuiz();
+//		beginQuiz("robot@ge.com");
+//		continueQuiz("3", "robot@ge.com");
 	}
 
 	private void sendLostSessionMessage() {
@@ -72,6 +82,8 @@ public class ScheduledService {
 		for(QuizModel quizModel : listQuizModel){
 			QuizJoin quizJoin = quizService.getQuizByID(quizModel.getId());
 			
+			paperService.inactivePaperByQuizID(quizJoin.getId());
+			
 			List<QuestionModel> listQuestionModel = quizJoin.getListQuestionModel();
 			
 			List<String> subjects = new ArrayList<String>();
@@ -82,9 +94,9 @@ public class ScheduledService {
 				String subject = String.format("Q1: %s:\r\n", questionModel.getSubject());
 				
 				String choices = questionModel.getChoices();
-				String[] cs = choices.split("|||");
+				String[] cs = choices.split("@@@");
 				for(int j = 0; j < cs.length; j++){
-					subject += String.format("1) %s\r\n", cs[j]);
+					subject += String.format("%d) %s\r\n", j+1, cs[j]);
 				}
 				
 				subjects.add(subject);
@@ -93,8 +105,9 @@ public class ScheduledService {
 			
 			
 			PaperModel paperModel = new PaperModel();
-			paperModel.setAwswer("[]");
+			paperModel.setAwswer("");
 			paperModel.setContent(String.join("&&&", subjects));
+			paperModel.setStandard(String.join("&&&", standards));
 			paperModel.setIndex(0);
 			paperModel.setQuizID(quizModel.getId());
 			paperModel.setTotal(listQuestionModel.size());
@@ -116,8 +129,29 @@ public class ScheduledService {
 				}
 			}
 			
-			quizModel.setUpdateTime(new Date(Long.MAX_VALUE));
+			quizModel.setUpdateTime(new Date(9999,1,1));
 			quizService.updateQuiz(quizModel);
+		}
+	}
+	
+	public void startQuiz(){
+//		if(Application.envCurrent == Env.local){
+//			return;
+//		}
+		List<PaperModel> listPaperModel = paperService.getWaitingPaper();
+		for(PaperModel paperModel : listPaperModel){
+			QuizModel quizModel = quizService.getQuizByID(paperModel.getQuizID());
+			
+			CourseModel courseModel = courseService.getCourseByID(quizModel.getCourseID());
+			
+			long delta = courseModel.getStartDate().getTime() - new Date().getTime();
+			
+			String message = String.format(CustomMessage.CHAT_BOLT_START_QUIZ_PAPER, courseModel.getCourseName(), Util.getDaysSentence(delta));
+			
+			sparkService.sendMarkdownMessage(paperModel.getUserID(), message);
+			
+			paperModel.setSession(new Date());
+			paperService.updatePaper(paperModel);
 		}
 	}
 }

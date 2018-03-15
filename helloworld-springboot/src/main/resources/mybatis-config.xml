@@ -29,6 +29,7 @@
   	<mapper resource="com/cisco/la/join/CourseHistoryJoinMapper.xml" />
   	<mapper resource="com/cisco/la/join/UserJoinMapper.xml" />
   	<mapper resource="com/cisco/la/join/QuizJoinMapper.xml" />
+  	<mapper resource="com/cisco/la/join/PaperJoinMapper.xml" />
   </mappers>
 </configuration>
 
