@@ -1,7 +1,9 @@
 package com.cisco.la.service.impl;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,8 +86,17 @@ public class QuizServiceImpl implements QuizService {
 		QuizModelExample quizModelExample = new QuizModelExample();
 		Criteria criteria = quizModelExample.createCriteria();
 		criteria.andActiveEqualTo(true);
+		
+		TimeZone tz = TimeZone.getDefault();
+		int offset = tz.getRawOffset()/3600000;
+		
+		Calendar cal = Calendar.getInstance();
+		
+		cal.add(Calendar.HOUR_OF_DAY, 8-offset);
+		
 		criteria.andUpdateTimeLessThan(new Date());
-		criteria.andActiveTimeLessThan(new Date());
+		criteria.andActiveTimeLessThan(cal.getTime());
+		
 		return quizModelMapper.selectByExample(quizModelExample);
 	}
 }
