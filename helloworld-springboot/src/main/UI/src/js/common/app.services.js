@@ -3,6 +3,10 @@ angular
         .service('app.services', ['$http','$q','app.environments',function ($http,$q,environments) {
         	var url = environments.services.customService.url;
 
+            this.getGMT = function(){
+                return environments.services.customService.GMT;
+            };
+
             this.isEmptyOrNull = function (obj) {
                 /// <summary>
                 /// Retrieve true when object is empty, undefined or null.

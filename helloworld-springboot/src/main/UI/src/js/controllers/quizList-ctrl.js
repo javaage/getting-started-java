@@ -8,6 +8,8 @@ angular
 function QuizListCtrl($rootScope, $scope, $log,$state,$uibModal, services,NgTableParams) {
     $scope.quizs = [];
 
+    $scope.GMT = services.getGMT();
+
     $scope.getQuizList = function(){
         services.getQuizList().then(function(result) {
             if (result.code == 1) {

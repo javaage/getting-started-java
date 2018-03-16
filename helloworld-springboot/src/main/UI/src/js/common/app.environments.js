@@ -6,8 +6,9 @@
                     environment: 'MOCK',
                     services: {
                         customService: {
+                            GMT: '+0800',
                             serviceName: 'customService',
-                            identifier: 'http://192.168.120.128:8080'
+                            identifier: '/'
                         }
                     }
                 };
@@ -17,6 +18,7 @@
                     environment: 'PRO',
                     services: {
                         customService: {
+                            GMT: '+0000',
                             serviceName: 'customService',
                             identifier: '/'
                         }
