@@ -112,8 +112,10 @@ public class ScheduledService {
 			paperModel.setQuizID(quizModel.getId());
 			paperModel.setTotal(listQuestionModel.size());
 			paperModel.setUpdateTime(new Date());
+			paperModel.setSession(new Date(1));
+			paperModel.setActive(true);
 			
-			if(quizJoin.getAudienceType()=="U"){
+			if("U".equalsIgnoreCase(quizJoin.getAudienceType())){
 				String[] audiences = quizJoin.getAudienceList().split(",");
 				for(String userID : audiences){
 					if(!userID.trim().isEmpty()){
