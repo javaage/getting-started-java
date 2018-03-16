@@ -16,7 +16,7 @@ public class CustomMessage {
 	public static final String CHAT_BOLT_CONGRATS_ROLE_MESSAGE = "Hi %s, congrats to your new promotion as a %s?";
 	public static final String CHAT_BOLT_PREFER_ROLE_MESSAGE = "Here are the trainings other successful %s are taking. %s";
 	public static final String CHAT_BOLT_PREFER_RECENT_COURSE = "The training %s %s , do you want to register?(Yes/No)";
-	public static final String CHAT_BOLT_REGISTER_URL = "Here is the registration link [https://www.cisco.com/](https://www.cisco.com/)";
+	public static final String CHAT_BOLT_REGISTER_URL = "Here is the registration [link](https://www.cisco.vovici.com/se/2C85931E127C92FC)";
 	
 	public static final String CHAT_BOLT_OTHER_HELP = "What else can I do for you?";
 	
