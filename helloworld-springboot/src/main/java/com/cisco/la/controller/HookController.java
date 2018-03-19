@@ -120,8 +120,8 @@ public class HookController {
 			}
 		}
 
-		code.put("speech", speech);
-		code.put("displayText", speech);
+//		code.put("speech", speech);
+//		code.put("displayText", speech);
 		switch (intentName) {
 		case "role":
 			if (userModel == null) {
@@ -181,22 +181,24 @@ public class HookController {
 					messageModel.setActive(false);
 					messageService.updateMessage(messageModel);
 				}
+				speech = " ";
 				code.put("speech", " ");
 				code.put("displayText", " ");
 			}else{
 				if(userModel!=null){
 					userModel.setSession(new Date(1));
 					userService.updateUser(userModel);
-					
 					beginQuiz(userModel.getId());
+					speech = " ";
+					code.put("speech", " ");
+					code.put("displayText", " ");
 				}
-				code.put("speech", " ");
-				code.put("displayText", " ");
 			}
 			break;
 		case "choice":
 			if(userModel!=null){
 				continueQuiz(speech, userModel.getId());
+				speech = " ";
 			}
 			code.put("speech", " ");
 			code.put("displayText", " ");
