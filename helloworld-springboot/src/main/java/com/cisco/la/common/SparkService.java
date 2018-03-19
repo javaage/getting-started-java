@@ -32,41 +32,34 @@ public class SparkService {
 	public void sendMessage(String email, String message){
 		String urlSendMessage = "https://api.ciscospark.com/v1/messages";
 		try {
-			String[] msgs = message.split("\r");
+			JSONObject request = new JSONObject();
+			request.put("toPersonEmail", email);
+			request.put("text", message);
 			
-			for(String msg : msgs){
-				JSONObject request = new JSONObject();
-				request.put("toPersonEmail", email);
-				request.put("text", msg);
-				
-				Map<String, String> headers = new HashMap<String, String>();
-				headers.put("content-type", "application/json; charset=utf-8");
-				headers.put("authorization", "Bearer " + Application.boltToken);
-				
-				httpsConnection(urlSendMessage,"POST",request.toString(), headers);
-			}
+			Map<String, String> headers = new HashMap<String, String>();
+			headers.put("content-type", "application/json; charset=utf-8");
+			headers.put("authorization", "Bearer " + Application.boltToken);
 			
+			httpsConnection(urlSendMessage,"POST",request.toString(), headers);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 	}
 	
 	public void sendMarkdownMessage(String email, String message){
+		Application.logger.debug(email);
+		Application.logger.debug(message);
 		String urlSendMessage = "https://api.ciscospark.com/v1/messages";
 		try {
-			String[] msgs = message.split("\r");
+			JSONObject request = new JSONObject();
+			request.put("toPersonEmail", email);
+			request.put("markdown", message);
 			
-			for(String msg : msgs){
-				JSONObject request = new JSONObject();
-				request.put("toPersonEmail", email);
-				request.put("markdown", msg);
-				
-				Map<String, String> headers = new HashMap<String, String>();
-				headers.put("content-type", "application/json; charset=utf-8");
-				headers.put("authorization", "Bearer " + Application.boltToken);
-				
-				httpsConnection(urlSendMessage,"POST",request.toString(), headers);
-			}
+			Map<String, String> headers = new HashMap<String, String>();
+			headers.put("content-type", "application/json; charset=utf-8");
+			headers.put("authorization", "Bearer " + Application.boltToken);
+			
+			httpsConnection(urlSendMessage,"POST",request.toString(), headers);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

@@ -188,6 +188,7 @@ public class HookController {
 				if(userModel!=null){
 					userModel.setSession(new Date(1));
 					userService.updateUser(userModel);
+					
 					beginQuiz(userModel.getId());
 					speech = " ";
 					code.put("speech", " ");
@@ -273,6 +274,8 @@ public class HookController {
 	}
 	
 	private void beginQuiz(String userID){
+		Application.logger.debug("beginQuiz");
+		Application.logger.debug(userID);
 		PaperModel paperModel = paperService.getActivePaperByUserID(userID);
 		if(paperModel!=null){
 			String standard = paperModel.getStandard();
@@ -298,6 +301,10 @@ public class HookController {
 	}
 	
 	private void continueQuiz(String speech, String userID) {
+		Application.logger.debug("continueQuiz");
+		Application.logger.debug(speech);
+		Application.logger.debug(userID);
+		
 		PaperModel paperModel = paperService.getLatestPaperByUserID(userID);
 		
 		if(paperModel!=null){
