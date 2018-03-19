@@ -29,39 +29,46 @@ import com.google.gson.Gson;
  */
 @Service
 public class SparkService {
-	public String sendMessage(String email, String message){
+	public void sendMessage(String email, String message){
 		String urlSendMessage = "https://api.ciscospark.com/v1/messages";
 		try {
-			JSONObject request = new JSONObject();
-			request.put("toPersonEmail", email);
-			request.put("text", message);
+			String[] msgs = message.split("\r");
 			
-			Map<String, String> headers = new HashMap<String, String>();
-			headers.put("content-type", "application/json; charset=utf-8");
-			headers.put("authorization", "Bearer " + Application.boltToken);
+			for(String msg : msgs){
+				JSONObject request = new JSONObject();
+				request.put("toPersonEmail", email);
+				request.put("text", msg);
+				
+				Map<String, String> headers = new HashMap<String, String>();
+				headers.put("content-type", "application/json; charset=utf-8");
+				headers.put("authorization", "Bearer " + Application.boltToken);
+				
+				httpsConnection(urlSendMessage,"POST",request.toString(), headers);
+			}
 			
-			JSONObject jSONObject = httpsConnection(urlSendMessage,"POST",request.toString(), headers);
-			return jSONObject.toString();
 		} catch (Exception ex) {
-			return ex.getMessage();
+			ex.printStackTrace();
 		}
 	}
 	
-	public String sendMarkdownMessage(String email, String message){
+	public void sendMarkdownMessage(String email, String message){
 		String urlSendMessage = "https://api.ciscospark.com/v1/messages";
 		try {
-			JSONObject request = new JSONObject();
-			request.put("toPersonEmail", email);
-			request.put("markdown", message);
+			String[] msgs = message.split("\r");
 			
-			Map<String, String> headers = new HashMap<String, String>();
-			headers.put("content-type", "application/json; charset=utf-8");
-			headers.put("authorization", "Bearer " + Application.boltToken);
-			
-			JSONObject jSONObject = httpsConnection(urlSendMessage,"POST",request.toString(), headers);
-			return jSONObject.toString();
+			for(String msg : msgs){
+				JSONObject request = new JSONObject();
+				request.put("toPersonEmail", email);
+				request.put("markdown", msg);
+				
+				Map<String, String> headers = new HashMap<String, String>();
+				headers.put("content-type", "application/json; charset=utf-8");
+				headers.put("authorization", "Bearer " + Application.boltToken);
+				
+				httpsConnection(urlSendMessage,"POST",request.toString(), headers);
+			}
 		} catch (Exception ex) {
-			return ex.getMessage();
+			ex.printStackTrace();
 		}
 	}
 	

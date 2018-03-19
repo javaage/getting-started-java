@@ -76,11 +76,11 @@ public class SparkController {
 	@RequestMapping( value = "message",  method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Object postResponse() {
 		try{
-			String response = httpService.sendMessage("subing.xiao@pactera.com", "Hello");
+			httpService.sendMessage("subing.xiao@pactera.com", "Hello");
 			
 			RecordModel recordModel = new RecordModel();
 			recordModel.setRequest("sendMessage" + "subing.xiao@pactera.com");
-			recordModel.setResponse(response);
+			recordModel.setResponse("");
 			recordModel.setTime(new Date());
 			recordService.addRecord(recordModel);
 			return recordModel;

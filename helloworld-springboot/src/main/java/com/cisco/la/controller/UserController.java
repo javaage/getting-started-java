@@ -214,13 +214,11 @@ public class UserController {
 			if(Application.envCurrent != Env.local){
 				if(userModel.getRoleID() == null || userModel.getRoleID()<=0){
 					Application.logger.debug(String.format(CustomMessage.CHAT_BOLT_QUERY_ROLE_MESSAGE, userModel.getName()));
-					String result = sparkService.sendMessage(userModel.getId(), String.format(CustomMessage.CHAT_BOLT_QUERY_ROLE_MESSAGE, userModel.getName()));
-					Application.logger.debug(result);
+					sparkService.sendMessage(userModel.getId(), String.format(CustomMessage.CHAT_BOLT_QUERY_ROLE_MESSAGE, userModel.getName()));
 				}else if(userModel.getRoleID() != oldUserModel.getRoleID()){
 					RoleModel roleModel = roleService.getRoleByID(userModel.getRoleID());
 					Application.logger.debug(String.format(CustomMessage.CHAT_BOLT_CONGRATS_ROLE_MESSAGE, userModel.getName(), roleModel.getRoleName()));
-					String result = sparkService.sendMessage(userModel.getId(), String.format(CustomMessage.CHAT_BOLT_CONGRATS_ROLE_MESSAGE, userModel.getName(), roleModel.getRoleName()));
-					Application.logger.debug(result);
+					sparkService.sendMessage(userModel.getId(), String.format(CustomMessage.CHAT_BOLT_CONGRATS_ROLE_MESSAGE, userModel.getName(), roleModel.getRoleName()));
 					
 					String action = "input.changeRole";
 					String prefCourse = goldenSampleService.getGoldenSampleStringByRoleID(userModel.getId(), roleModel.getId());

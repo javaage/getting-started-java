@@ -296,7 +296,7 @@ public class HookController {
 	}
 	
 	private void continueQuiz(String speech, String userID) {
-		PaperModel paperModel = paperService.getActivePaperByUserID(userID);
+		PaperModel paperModel = paperService.getLatestPaperByUserID(userID);
 		
 		if(paperModel!=null){
 			String standard = paperModel.getStandard();
