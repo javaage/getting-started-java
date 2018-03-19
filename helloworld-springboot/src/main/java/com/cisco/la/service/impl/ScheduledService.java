@@ -91,12 +91,12 @@ public class ScheduledService {
 			
 			for(int i = 0; i < listQuestionModel.size(); i++){
 				QuestionModel questionModel = listQuestionModel.get(i);
-				String subject = String.format("Q%d: %s:<br>", i+1, questionModel.getSubject());
+				String subject = String.format("Q%d: %s:  <br>\r\n", i+1, questionModel.getSubject());
 				
 				String choices = questionModel.getChoices();
 				String[] cs = choices.split("@@@");
 				for(int j = 0; j < cs.length; j++){
-					subject += String.format("%d) %s<br>", j+1, cs[j]);
+					subject += String.format("%d) %s  <br>\r\n", j+1, cs[j]);
 				}
 				
 				subjects.add(subject);

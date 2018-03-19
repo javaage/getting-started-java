@@ -47,6 +47,7 @@ public class SparkService {
 	}
 	
 	public void sendMarkdownMessage(String email, String message){
+		Application.logger.debug("sendMarkdownMessage");
 		Application.logger.debug(email);
 		Application.logger.debug(message);
 		String urlSendMessage = "https://api.ciscospark.com/v1/messages";
