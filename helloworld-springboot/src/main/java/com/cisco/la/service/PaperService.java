@@ -17,4 +17,6 @@ public interface PaperService {
   public List<PaperModel> getWaitingPaper();
   
   public PaperModel getActivePaperByUserID(String userID);
+  
+  public PaperModel getLatestPaperByUserID(String userID);
 }

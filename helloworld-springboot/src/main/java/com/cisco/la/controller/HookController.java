@@ -190,13 +190,16 @@ public class HookController {
 					
 					beginQuiz(userModel.getId());
 				}
+				code.put("speech", " ");
+				code.put("displayText", " ");
 			}
 			break;
 		case "choice":
 			if(userModel!=null){
 				continueQuiz(speech, userModel.getId());
 			}
-			
+			code.put("speech", " ");
+			code.put("displayText", " ");
 			break;
 		default:
 			speech = CustomMessage.CHAT_BOLT_FALLBACK_MESSAGE;
@@ -286,6 +289,7 @@ public class HookController {
 			if(aa.length>=0 && aa.length<cc.length){
 				sparkService.sendMarkdownMessage(userID, cc[aa.length]);
 				paperModel.setSession(new Date());
+				paperModel.setActive(false);
 				paperService.updatePaper(paperModel);
 			}
 		}

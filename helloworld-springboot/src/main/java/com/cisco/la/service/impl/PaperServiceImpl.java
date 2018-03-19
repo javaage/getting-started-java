@@ -60,4 +60,8 @@ public class PaperServiceImpl implements PaperService {
 		return paperJoinMapper.getActivePaperByUserID(userID);
 	}
 
+	public PaperModel getLatestPaperByUserID(String userID){
+		PaperJoinMapper paperJoinMapper = sqlSession.getMapper(PaperJoinMapper.class);
+		return paperJoinMapper.getLatestPaperByUserID(userID);
+	}
 }

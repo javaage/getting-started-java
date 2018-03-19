@@ -12,4 +12,6 @@ public interface PaperJoinMapper {
 	void inactivePaperByQuizID(int quizID);
 	
 	PaperModel getActivePaperByUserID(String userID);
+	
+	PaperModel getLatestPaperByUserID(String userID);
 }

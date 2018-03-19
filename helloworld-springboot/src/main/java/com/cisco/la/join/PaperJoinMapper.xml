@@ -25,7 +25,7 @@
        p.ppr_update_time, p.ppr_score, p.ppr_total, p.ppr_index, p.ppr_session, 
        p.ppr_active from la_paper p
 		inner join
-		(select ppr_usr_id, max(ppr_session) as ppr_session, min(ppr_id) as ppr_id from la_paper where ppr_active=true and ppr_session &lt; now() - interval '5 minute'
+		(select ppr_usr_id, max(ppr_session) as ppr_session, min(ppr_id) as ppr_id from la_paper where ppr_active=true and ppr_session &lt; now() - interval '1 day'
 		 group by ppr_usr_id) a
 		on p.ppr_usr_id = a.ppr_usr_id and p.ppr_session = a.ppr_session and p.ppr_id = a.ppr_id
    </select>
@@ -35,7 +35,13 @@
    <select id="getActivePaperByUserID" parameterType="String" resultMap="BaseResultMap">
 		select p.ppr_id, p.ppr_quz_id, p.ppr_usr_id, p.ppr_content, p.ppr_standard, p.ppr_answer, 
        p.ppr_update_time, p.ppr_score, p.ppr_total, p.ppr_index, p.ppr_session, 
-       p.ppr_active from la_paper p where p.ppr_usr_id = #{userID} and ppr_score is null
+       p.ppr_active from la_paper p where p.ppr_usr_id = #{userID} and p.ppr_score is null and p.ppr_active = true
+       order by p.ppr_session desc limit 1
+   </select>
+   <select id="getLatestPaperByUserID" parameterType="String" resultMap="BaseResultMap">
+		select p.ppr_id, p.ppr_quz_id, p.ppr_usr_id, p.ppr_content, p.ppr_standard, p.ppr_answer, 
+       p.ppr_update_time, p.ppr_score, p.ppr_total, p.ppr_index, p.ppr_session, 
+       p.ppr_active from la_paper p where p.ppr_usr_id = #{userID} and p.ppr_score is null
        order by p.ppr_session desc limit 1
    </select>
 </mapper>
