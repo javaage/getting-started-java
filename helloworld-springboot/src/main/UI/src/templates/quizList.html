@@ -11,7 +11,7 @@
 			            <tr ng-repeat="item in $data" ng-class="{'inactive':!item.active}">
 			            		<td title="'Course Name'" sortable="'courseName'" class="text-center">{{item.courseName}}</td>
 				                <td title="'Audience Type'" sortable="'audienceType'" class="text-center">{{item.audienceTypeValue}}</td>
-				                <td title="'Active Time'" sortable="'activeTime'" class="text-center">{{item.activeTime | date: 'yyyy-MM-dd hh:mm' : GMT}}</td><!--GMT+0800-->
+				                <td title="'Active Time'" sortable="'activeTime'" class="text-center">{{item.activeTime | date: 'yyyy-MM-dd HH:mm' : GMT}}</td><!--GMT+0800-->
 				                <td title="'Operation'" class="text-center" >
 				                	<span  ng-if="!item.active" style="width: 80px;margin-left: 10px; margin-right: 10px;">Update</span>	
 				                	<a ng-click="updateQuizModal(item)" ng-if="item.active" style="width: 80px;margin-left: 10px; margin-right: 10px;">Update</a>

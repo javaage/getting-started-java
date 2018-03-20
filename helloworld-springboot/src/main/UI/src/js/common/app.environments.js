@@ -107,6 +107,7 @@
             };
             this.$get = function () {
                 this.setEnvironment(constants.environments.PRO);
+                // this.setEnvironment(constants.environments.MOCK);
                 return config;
             };
 

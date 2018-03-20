@@ -8,8 +8,8 @@
 			<form class="form-horizontal" name="quizForm" novalidate="novalidate" ng-submit="submitQuizData()">
 	              <div class="form-group">
 						<label for="selectCourseName" class="col-lg-2 control-label">Course Name*</label>
-						<div class="col-lg-8"><!--ng-change="changeCourse()"-->
-						    <select id="selectCourseName" ng-model="quiz.course" class="form-control" ng-options="course as course.courseName for course in courses | filter: {active:true}" required>
+						<div class="col-lg-8">
+						    <select id="selectCourseName" ng-model="quiz.course" class="form-control" ng-change="changeCourse()" ng-options="course as course.courseName for course in courses | filter: {active:true}" required>
 			                </select>
 			                <span ng-if="quiz.course!=null">Schedule:  {{quiz.course.startDate | date:'yyyy-MM-dd'}} ~ {{quiz.course.endDate | date:'yyyy-MM-dd'}}</span>
 						</div>

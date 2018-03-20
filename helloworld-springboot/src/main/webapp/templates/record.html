@@ -11,7 +11,7 @@
 			            <tr ng-repeat="item in $data" ng-class="{'inactive':!item.active}">
 			            		<td title="'Request'" sortable="'request'" class="text-center" style="width:45%">{{item.request}}</td>
 				                <td title="'Response'" sortable="'response'" class="text-center" style="width:45%">{{item.response}}</td>
-				                <td title="'Time'" sortable="'time'" class="text-center" style="width:10%">{{item.time | date:'MM-dd hh:mm:ss'}}</td>
+				                <td title="'Time'" sortable="'time'" class="text-center" style="width:10%">{{item.time | date:'MM-dd HH:mm:ss'}}</td>
 				                
 			            </tr>
 			        </table>

@@ -99,7 +99,7 @@ function QuizCtrl($rootScope, $scope, $filter, $state, $stateParams, $log, $uibM
                         var course = $scope.courses[index];
                         if(course.id == $scope.quiz.courseID){
                             $scope.quiz.course = $scope.courses[index];
-                            $scope.quiz.activeTime = $filter('date')( $scope.quiz.course.startDate ,'yyyy-MM-dd') + ' 09:00';
+                            //$scope.quiz.activeTime = $filter('date')( $scope.quiz.course.startDate ,'yyyy-MM-dd') + ' 09:00';
                             break;
                         }
                     }
@@ -180,12 +180,13 @@ function QuizCtrl($rootScope, $scope, $filter, $state, $stateParams, $log, $uibM
         $scope.getRoleList();
         $scope.getUserList();
 
-        $scope.quiz.activeTime = $filter('date')(new Date(),'yyyy-MM-dd hh:mm');
-
         if($scope.isModify){
 
             services.getQuiz($scope.quiz.id).then(function(result) {
                     if (result.code == 1) {
+
+                        $scope.quiz.activeTime =  $filter('date')( result.data.activeTime ,'yyyy-MM-dd HH:mm', $scope.GMT);
+
                         $scope.quiz.questions = result.data.listQuestionModel;
 
                         angular.forEach($scope.quiz.questions,function(item,key){
@@ -204,7 +205,7 @@ function QuizCtrl($rootScope, $scope, $filter, $state, $stateParams, $log, $uibM
                 });    
 
         }else{
-            
+            $scope.quiz.activeTime = $filter('date')(new Date(),'yyyy-MM-dd HH:mm', $scope.GMT);
             $scope.quiz.audienceType = 'R';
             $scope.quiz.questions.push(questionEmpty);
         }
