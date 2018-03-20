@@ -10,7 +10,8 @@ function QuizCtrl($rootScope, $scope, $filter, $state, $stateParams, $log, $uibM
     
     $scope.roles = [];
     $scope.users = [];
-
+    $scope.GMT = services.getGMT();
+    
     if($stateParams.quiz){
         $scope.quiz = $stateParams.quiz;
         $scope.quiz.questions = [];
