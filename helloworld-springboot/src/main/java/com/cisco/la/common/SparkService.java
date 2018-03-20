@@ -52,7 +52,7 @@ public class SparkService {
 		Application.logger.debug(message);
 		String urlSendMessage = "https://api.ciscospark.com/v1/messages";
 		try {
-			message = message.replace("\r", "<br>");
+			//message = message.replace("\r", "<br>");
 			JSONObject request = new JSONObject();
 			request.put("toPersonEmail", email);
 			request.put("markdown", message);
