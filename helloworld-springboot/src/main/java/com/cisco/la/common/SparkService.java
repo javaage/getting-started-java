@@ -10,6 +10,8 @@ import java.net.URL;
 import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -32,6 +34,10 @@ public class SparkService {
 	public void sendMessage(String email, String message){
 		String urlSendMessage = "https://api.ciscospark.com/v1/messages";
 		try {
+			Pattern r = Pattern.compile("\\s");
+			Matcher m = r.matcher(message);
+			message = m.replaceAll(" ");
+			
 			JSONObject request = new JSONObject();
 			request.put("toPersonEmail", email);
 			request.put("text", message);
@@ -52,7 +58,10 @@ public class SparkService {
 		Application.logger.debug(message);
 		String urlSendMessage = "https://api.ciscospark.com/v1/messages";
 		try {
-			//message = message.replace("\r", "<br>");
+			Pattern r = Pattern.compile("\\s");
+			Matcher m = r.matcher(message);
+			message = m.replaceAll(" ");
+			
 			JSONObject request = new JSONObject();
 			request.put("toPersonEmail", email);
 			request.put("markdown", message);

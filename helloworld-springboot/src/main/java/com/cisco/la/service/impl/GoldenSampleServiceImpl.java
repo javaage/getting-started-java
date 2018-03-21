@@ -86,22 +86,22 @@ public class GoldenSampleServiceImpl implements GoldenSampleService {
 			List<CourseModel> listOptional = courseService.getUserCourseListByList(userID, strOptional);
 			
 			if(listMandatory!=null && listMandatory.size()>0){
-				result.append("<br>\r\n### Mandatory:");
+				result.append("<br>### Mandatory:");
 				for(CourseModel courseModel : listMandatory){
 					if(courseModel.getUrl()!=null && !courseModel.getUrl().isEmpty())
-						result.append(String.format("<br>\r\n[%s](%s)",courseModel.getCourseName(), courseModel.getUrl()));
+						result.append(String.format("<br>[%s](%s)",courseModel.getCourseName(), courseModel.getUrl()));
 					else
-						result.append("<br>\r\n" + courseModel.getCourseName());
+						result.append("<br>" + courseModel.getCourseName());
 				}
 			}
 			
 			if(listOptional!=null && listOptional.size()>0){
-				result.append("<br>\r\n### Optional:");
+				result.append("<br>### Optional:");
 				for(CourseModel courseModel : listOptional){
 					if(courseModel.getUrl()!=null && !courseModel.getUrl().isEmpty())
-						result.append(String.format("<br>\r\n[%s](%s)",courseModel.getCourseName(), courseModel.getUrl()));
+						result.append(String.format("<br>[%s](%s)",courseModel.getCourseName(), courseModel.getUrl()));
 					else
-						result.append("<br>\r\n" + courseModel.getCourseName());
+						result.append("<br>" + courseModel.getCourseName());
 				}
 			}
 			
