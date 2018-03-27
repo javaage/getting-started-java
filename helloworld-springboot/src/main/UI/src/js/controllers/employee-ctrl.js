@@ -2,6 +2,7 @@ angular
     .module('RDash')
     .controller('EmployeeCtrl', ['$rootScope', '$scope','$log','$uibModal','app.services','NgTableParams', EmployeeCtrl])
     .controller('OperateUserCtrl', ['$scope','$log','$uibModalInstance','app.services', OperateUserCtrl])
+    .controller('ImportUserCtrl', ['$scope','$log','$uibModalInstance','app.services', ImportUserCtrl])
     .controller('RoleHistoryCtrl', ['$scope','$log','$uibModalInstance','app.services', RoleHistoryCtrl]);
 function EmployeeCtrl($rootScope, $scope, $log,$uibModal, services,NgTableParams) {
     
@@ -49,6 +50,15 @@ function EmployeeCtrl($rootScope, $scope, $log,$uibModal, services,NgTableParams
             animation: true,
             templateUrl: 'templates/userModal.html',
             controller: 'OperateUserCtrl',
+        });
+    };
+
+    $scope.importUserModal = function(){
+        var modalInstance = $uibModal.open({
+            scope: $scope,
+            animation: true,
+            templateUrl: 'templates/userImport.html',
+            controller: 'ImportUserCtrl',
         });
     };
 
@@ -166,8 +176,47 @@ function EmployeeCtrl($rootScope, $scope, $log,$uibModal, services,NgTableParams
             console.log(error);    
         });
     };
+
     $scope.getRoleList();
     $scope.getUserList();
+}
+
+function ImportUserCtrl($scope, $log,$uibModalInstance, services) { 
+    $scope.fileChanged = function(ele){
+        $scope.files = ele.files;
+
+        if(ele.files.length > 0){
+            $scope.fileInfo = ele.files[0].name;
+        }else{
+            $scope.fileInfo = "Please select an excel file.";
+        }
+        $scope.$apply();
+    };
+
+    $scope.uploadFile = function(){
+        if($scope.files == undefined){
+            alert("Please select an excel file.")
+            return ;
+        }
+
+        services.importUsers($scope.files[0])
+        .then(function (result) {
+            if(result.code == '1'){
+                alert("Upload User Excel Success");
+                $scope.getUserList();
+                $uibModalInstance.dismiss();
+            }else{
+                alert(result.message) ;
+            }
+        },function(error){
+            if(error.message)
+                alert(error.message) ;
+        });
+    };
+
+    $scope.closeImportModal = function(){
+        $uibModalInstance.dismiss();
+    };
 }
 
 function OperateUserCtrl($scope, $log,$uibModalInstance, services) { 

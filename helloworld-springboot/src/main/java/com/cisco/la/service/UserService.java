@@ -20,4 +20,6 @@ public interface UserService {
   public List<UserModel> getUserListByRoleID(int roleID);
   
   public List<UserModel> getUserListByRoleIDs(String roleIDs);
+  
+  public void sendUpdateMessage(UserModel oldUserModel, UserModel userModel);
  }

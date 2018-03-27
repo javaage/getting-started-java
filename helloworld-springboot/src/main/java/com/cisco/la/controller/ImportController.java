@@ -53,10 +53,12 @@ import com.cisco.la.entity.GoldenSampleJoin;
 import com.cisco.la.entity.UserJoin;
 import com.cisco.la.model.CourseModel;
 import com.cisco.la.model.GoldenSampleModel;
+import com.cisco.la.model.RoleHistoryModel;
 import com.cisco.la.model.RoleModel;
 import com.cisco.la.model.UserModel;
 import com.cisco.la.service.CourseService;
 import com.cisco.la.service.GoldenSampleService;
+import com.cisco.la.service.RoleHistoryService;
 import com.cisco.la.service.RoleService;
 import com.cisco.la.service.UserService;
 
@@ -77,8 +79,35 @@ public class ImportController {
 	@Autowired
 	private GoldenSampleService goldenSampleService;
 	
+	@Autowired
+	private RoleHistoryService roleHistoryService;
+	
 	@RequestMapping(value="/users",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Object addManyAccount(HttpServletRequest request, @RequestParam("file") MultipartFile[] files){
+		
+		try {
+			InputStream is = files[0].getInputStream();
+			Workbook wb = WorkbookFactory.create(is);
+			
+			importUser(wb);
+			
+			String message = "Successfully";
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("code", 1);
+			map.put("message", message);
+			return map;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("code", -1);
+			map.put("message", e.getMessage());
+			return map;
+		}
+	}
+	
+	@RequestMapping(value="/all",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Object addAllInformation(HttpServletRequest request, @RequestParam("file") MultipartFile[] files){
 		
 		try {
 			InputStream is = files[0].getInputStream();
@@ -100,6 +129,119 @@ public class ImportController {
 			map.put("code", -1);
 			map.put("message", e.getMessage());
 			return map;
+		}
+	}
+	
+	
+	private void importUser(Workbook wb) throws Exception {
+		Sheet sheet = wb.getSheetAt(0);
+		
+		Row rowTitle = sheet.getRow(0);
+		Map<String,Integer> columns = new HashMap<String,Integer>();
+		for(int colNum=rowTitle.getFirstCellNum(); colNum<=rowTitle.getLastCellNum(); colNum++){
+			if(rowTitle.getCell(colNum)!=null)
+				columns.put(rowTitle.getCell(colNum).getStringCellValue(), colNum);
+		}
+		
+		Row row = null ;
+		for( int kk =1; kk < sheet.getPhysicalNumberOfRows() ;kk++){
+			row = sheet.getRow(kk);
+			if(row!=null){
+				String employeeID = row.getCell(columns.get("Employee ID")).getStringCellValue();
+				
+				if(!employeeID.contains("@"))
+					employeeID += "@cisco.com";
+				
+				String name = row.getCell(columns.get("Name")).getStringCellValue();
+				String jobTitle = row.getCell(columns.get("Job Title")).getStringCellValue();
+				String BU = row.getCell(columns.get("BU")).getStringCellValue();
+				String role = row.getCell(columns.get("Role")).getStringCellValue();
+				double budget = row.getCell(columns.get("Budget")).getNumericCellValue();
+				double balance = row.getCell(columns.get("Balance")).getNumericCellValue();
+				
+				String grade = "";
+				if(columns.containsKey("Grade")){
+					grade = row.getCell(columns.get("Grade")).getStringCellValue();
+				}
+				
+				UserModel userModel = userService.getUserByID(employeeID);
+				if(userModel==null){
+					userModel = new UserModel();
+					
+					userModel.setActive(true);
+					userModel.setBalance(balance);
+					userModel.setBu(BU);
+					userModel.setTitle(jobTitle);
+					userModel.setGrade(grade);
+					userModel.setBudget(budget);
+					userModel.setId(employeeID);
+					userModel.setName(name);
+					userModel.setSession(new Date());
+					
+					RoleModel roleModel = roleService.getRoleByName(role);
+					if(roleModel!=null){
+						userModel.setRoleID(roleModel.getId());
+						RoleHistoryModel roleHistoryModel = new RoleHistoryModel();
+						roleHistoryModel.setUserID(userModel.getId());
+						roleHistoryModel.setRoleID(userModel.getRoleID());
+						roleHistoryModel.setUpdateTime(new Date());
+						roleHistoryService.addRoleHistory(roleHistoryModel);
+					} else{
+						roleModel = new RoleModel();
+						
+						roleModel.setActive(true);
+						roleModel.setBu(BU);
+						roleModel.setRoleName(role);
+						
+						roleService.addRole(roleModel);
+						roleModel = roleService.getRoleByName(role);
+						
+						userModel.setRoleID(roleModel.getId());
+					}
+					
+					userService.addUser(userModel);
+				}else{
+					UserModel oldUserModel = userService.getUserByID(employeeID); 
+					
+					userModel.setActive(true);
+					userModel.setBalance(balance);
+					userModel.setBu(BU);
+					userModel.setTitle(jobTitle);
+					userModel.setGrade(grade);
+					userModel.setBudget(budget);
+					userModel.setId(employeeID);
+					userModel.setName(name);
+					userModel.setSession(new Date());
+					
+					RoleModel roleModel = roleService.getRoleByName(role);
+					if(roleModel!=null){
+						if(oldUserModel.getRoleID() != roleModel.getId()){
+							userModel.setRoleID(roleModel.getId());
+							RoleHistoryModel roleHistoryModel = new RoleHistoryModel();
+							roleHistoryModel.setUserID(userModel.getId());
+							roleHistoryModel.setRoleID(userModel.getRoleID());
+							roleHistoryModel.setUpdateTime(new Date());
+							roleHistoryService.addRoleHistory(roleHistoryModel);
+						}
+					} else{
+						roleModel = new RoleModel();
+						
+						roleModel.setActive(true);
+						roleModel.setBu(BU);
+						roleModel.setRoleName(role);
+						
+						roleService.addRole(roleModel);
+						roleModel = roleService.getRoleByName(role);
+						
+						userModel.setRoleID(roleModel.getId());
+					}
+					
+					userService.updateUser(userModel); 
+					
+					userService.sendUpdateMessage(oldUserModel, userModel);
+				}
+				
+			}
 		}
 	}
 	

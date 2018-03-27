@@ -1,0 +1,19 @@
+<div class="modal-header bg-info">  
+    <span>Synchronize user data</span>
+</div>  
+<div class="modal-body"> 
+	<div class="importUserInfo">
+	    <a href="javascript:;" class="file"><input name="" type="file" onchange="angular.element(this).scope().fileChanged(this)"></a>
+	</div>
+	
+
+	<div style="display: none">
+	    <button type="button" href="#" class="btn_importTemp" ng-click="exportTemplate()">Download Template</button>
+	</div>
+
+	
+</div>
+<div class="modal-footer">  
+    <button class="btn btn-default" ng-click="uploadFile()">Upload</button>
+	<button type="cancel" class="btn btn-default" ng-click="closeImportModal()">Cancel</button>
+</div>  

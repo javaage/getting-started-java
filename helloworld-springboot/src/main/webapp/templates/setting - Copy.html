@@ -1,0 +1,25 @@
+<div class="row" data-ng-controller="SettingCtrl">
+  <div class="col-lg-12">
+		<rd-widget>
+			
+			<rd-widget-header icon="fa-certificate" title="Setting">	
+			</rd-widget-header>
+			
+				<div class="table-responsive" style="max-height: 600px">
+					<div class="modal-body" style="height: 180px">
+
+	                    <div class="importUserInfo">
+	                        <a href="javascript:;" class="file"><input name="" type="file" onchange="angular.element(this).scope().fileChanged(this)"></a>
+	                    </div>
+	                    <button class="btn_uploadfile" ng-click="uploadFile()">上&nbsp;传</button>
+
+	                    <div style="display: none">
+	                        <button type="button" href="#" class="btn_importTemp" ng-click="exportTemplate()">导入模板下载</button>
+	                    </div>
+	                </div>
+        		</div>
+
+		<rd-widget>
+	</rd-widget></rd-widget></div>
+
+</div>

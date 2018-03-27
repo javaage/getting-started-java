@@ -54,7 +54,7 @@ public class ScheduledService {
 	@Autowired
 	private CourseService courseService;
 	
-	@Scheduled(fixedRate = 1000*60)
+	@Scheduled(fixedRate = 1000*30)
 	public void fixedRate(){
 		System.out.println(new Date());
 		sendLostSessionMessage();
