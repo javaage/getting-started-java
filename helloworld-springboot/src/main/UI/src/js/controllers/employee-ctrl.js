@@ -203,6 +203,7 @@ function ImportUserCtrl($scope, $log,$uibModalInstance, services) {
         .then(function (result) {
             if(result.code == '1'){
                 alert("Upload User Excel Success");
+                $scope.getRoleList();
                 $scope.getUserList();
                 $uibModalInstance.dismiss();
             }else{

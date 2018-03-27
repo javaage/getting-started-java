@@ -120,8 +120,8 @@ public class HookController {
 			}
 		}
 
-//		code.put("speech", speech);
-//		code.put("displayText", speech);
+		code.put("speech", speech);
+		code.put("displayText", speech);
 		switch (intentName) {
 		case "role":
 			if (userModel == null) {
@@ -189,10 +189,12 @@ public class HookController {
 					userModel.setSession(new Date(1));
 					userService.updateUser(userModel);
 					
-					beginQuiz(userModel.getId());
-					speech = " ";
-					code.put("speech", " ");
-					code.put("displayText", " ");
+					if(beginQuiz(userModel.getId())){
+						speech = " ";
+						code.put("speech", " ");
+						code.put("displayText", " ");
+					}
+					
 				}
 			}
 			break;
@@ -273,7 +275,7 @@ public class HookController {
 		return code;
 	}
 	
-	private void beginQuiz(String userID){
+	private boolean beginQuiz(String userID){
 		Application.logger.debug("beginQuiz");
 		Application.logger.debug(userID);
 		PaperModel paperModel = paperService.getActivePaperByUserID(userID);
@@ -297,6 +299,9 @@ public class HookController {
 				paperModel.setActive(false);
 				paperService.updatePaper(paperModel);
 			}
+			return true;
+		}else{
+			return false;
 		}
 	}
 	
