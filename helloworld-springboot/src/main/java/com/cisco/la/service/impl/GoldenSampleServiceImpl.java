@@ -196,4 +196,10 @@ public class GoldenSampleServiceImpl implements GoldenSampleService {
 		}
 		
 	}
+
+	@Override
+	public void deleteGoldenSample(int id) {
+		GoldenSampleModelMapper goldenSampleModelMapper = sqlSession.getMapper(GoldenSampleModelMapper.class);
+		goldenSampleModelMapper.deleteByPrimaryKey(id);
+	}
 }

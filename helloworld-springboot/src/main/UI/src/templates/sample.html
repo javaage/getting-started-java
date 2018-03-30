@@ -31,10 +31,11 @@
 									</ol>
 				                </td>  
 				                <td title="'Operation'" class="text-center" >
-				                	<span  ng-if="!item.active" style="width: 80px;margin-left: 10px; margin-right: 10px;">Update</span>	
+				                	<span  ng-if="!item.active" style="width: 80px;margin-left: 10px; margin-right: 10px;">Update</span><br>	
 				                	<a ng-click="updateGoldenSampleModal(item)" ng-if="item.active" style="width: 80px;margin-left: 10px; margin-right: 10px;">Update</a>
 				                	<a ng-click="inactiveGoldenSample(item)" ng-if="item.active" style="width: 80px;">Inactive</a>
-				                	<a ng-click="activeGoldenSample(item)" ng-if="!item.active" style="width: 80px;">&nbsp;Active&nbsp;</a>
+				                	<a ng-click="activeGoldenSample(item)" ng-if="!item.active" style="width: 80px;">&nbsp;Active&nbsp;</a><br>
+				                	<a ng-click="deleteGoldenSampleByID(item.id)" style="width: 80px;">&nbsp;Delete&nbsp;</a>
 				                </td>	
 			            </tr>
 			        </table>

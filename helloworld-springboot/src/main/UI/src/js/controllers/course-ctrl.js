@@ -92,7 +92,7 @@ function CourseCtrl($rootScope, $scope, $log,$uibModal, services,NgTableParams) 
     $scope.updateCourse = function(course){
         services.updateCourse(course).then(function(result) {
             if (result.code == 1) {
-                alert("success");
+                //alert("success");
             }
         }, function (error) {
             console.log(error);    

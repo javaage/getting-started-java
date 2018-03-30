@@ -60,6 +60,7 @@
                 addCourse: '/api/course',
                 updateCourse: '/api/course',
                 getGoldenSample: '/api/goldenSample/{0}',
+                deleteGoldenSampleByID: '/api/goldenSample/{0}',
                 getGoldenSampleList: '/api/goldenSample/list',
                 deleteGoldenSample: '/api/goldenSample/{0}',
                 addGoldenSample: '/api/goldenSample',

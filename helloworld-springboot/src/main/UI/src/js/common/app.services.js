@@ -433,6 +433,24 @@ angular
 
                 return deferred.promise;
             };
+            this.deleteGoldenSampleByID = function(id){
+                var deferred = $q.defer();
+                var urlQuery = this.urlFormat(url.deleteGoldenSampleByID,id);
+                $http.delete(urlQuery,{})
+                .success(function(data){
+                    console.log(data);
+                    if (data.code == 1) {
+                        deferred.resolve(data);
+                    } else {
+                        deferred.reject(data);
+                    }
+                })
+                .error(function(error){
+                    deferred.reject(error);
+                });
+
+                return deferred.promise;
+            };
 
             this.addGoldenSample = function(course){
                 var deferred = $q.defer();

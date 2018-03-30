@@ -77,6 +77,16 @@ public class GoldenSampleController {
 		return map;
 	}
 	
+	@RequestMapping(value = "{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Object deleteGoldenSample(HttpServletRequest request, @PathVariable("id") int id){
+		goldenSampleService.deleteGoldenSample(id);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("code", 1);
+		map.put("message", "Successfully");
+		return map;
+	}
+	
 	@RequestMapping(value = "list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Object getGoldenSampleList(HttpServletRequest request){
 		List<GoldenSampleJoin> goldenSampleModelList = goldenSampleService.getGoldenSampleList();

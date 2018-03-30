@@ -145,6 +145,20 @@ function GoldenSampleCtrl($rootScope, $scope, $log,$uibModal, services,NgTablePa
             console.log(error);    
         });
     };
+
+    $scope.deleteGoldenSampleByID = function(id){
+        if(confirm('Are you sure you want to delete?')){
+            services.deleteGoldenSampleByID(id).then(function(result) {
+                if (result.code == 1) {
+                    $scope.getGoldenSampleList();
+                }
+            }, function (error) {
+                console.log(error);    
+            });
+        }
+        
+    };
+
     $scope.getRoleList();
     $scope.getCourseList();
     $scope.getGoldenSampleList();

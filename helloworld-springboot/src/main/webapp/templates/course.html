@@ -11,7 +11,7 @@
 			            <tr ng-repeat="item in $data" ng-class="{'inactive':!item.active}">
 			            		<td title="'Course'" sortable="'courseName'" class="text-center" width="40%">{{item.courseName}}</td>
 				                <td title="'Points'" sortable="'price'" class="text-center">{{item.price}}</td>
-				                <td title="'URL'" sortable="'url'" class="text-center"><a href="{{item.url}}">{{item.url}}</a> </td>
+				                <td title="'URL'" sortable="'url'" class="text-center"><a ng-if="item.url" href="{{item.url}}">link</a> </td>
 				                <td title="'Start Date'" sortable="'startDate'" class="text-center">{{item.startDate | date:'yyyy-MM-dd'}}</td>
 				                <td title="'End Date'" sortable="'endDate'" class="text-center">{{item.endDate | date:'yyyy-MM-dd'}}</td>
 				                <td title="'Operation'" class="text-center">

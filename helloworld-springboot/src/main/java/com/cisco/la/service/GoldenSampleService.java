@@ -9,6 +9,8 @@ public interface GoldenSampleService {
 	  public void addGoldenSample(GoldenSampleModel goldenSampleModel);
 
 	  public void updateGoldenSample(GoldenSampleModel goldenSampleModel);
+	  
+	  public void deleteGoldenSample(int id);
 
 	  public GoldenSampleModel getGoldenSampleByID(int id);
 	  
