@@ -156,8 +156,8 @@ public class ImportController {
 				String jobTitle = row.getCell(columns.get("Job Title")).getStringCellValue();
 				String BU = row.getCell(columns.get("BU")).getStringCellValue();
 				String role = row.getCell(columns.get("Role")).getStringCellValue();
-				double budget = row.getCell(columns.get("Budget")).getNumericCellValue();
-				double balance = row.getCell(columns.get("Balance")).getNumericCellValue();
+				double budget = row.getCell(columns.get("Targeted Points")).getNumericCellValue();
+				double balance = row.getCell(columns.get("Points Earned")).getNumericCellValue();
 				
 				String grade = "";
 				if(columns.containsKey("Grade")){
