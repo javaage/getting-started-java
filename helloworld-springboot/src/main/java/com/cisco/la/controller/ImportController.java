@@ -153,20 +153,20 @@ public class ImportController {
 					employeeID += "@cisco.com";
 				
 				String name = row.getCell(columns.get("Name")).getStringCellValue();
-				String jobTitle = row.getCell(columns.get("Job Title")).getStringCellValue();
+				String jobTitle = row.getCell(columns.get("Job Title"))==null? "" : row.getCell(columns.get("Job Title")).getStringCellValue();
 				String BU = row.getCell(columns.get("BU")).getStringCellValue();
-				String role = row.getCell(columns.get("Role")).getStringCellValue();
+				String role = row.getCell(columns.get("Role")) == null? "" : row.getCell(columns.get("Role")).getStringCellValue();
 				double budget = row.getCell(columns.get("Targeted Points")).getNumericCellValue();
 				double balance = row.getCell(columns.get("Points Earned")).getNumericCellValue();
 				
 				String grade = "";
 				if(columns.containsKey("Grade")){
-					grade = row.getCell(columns.get("Grade")).getStringCellValue();
+					grade = row.getCell(columns.get("Grade"))==null? "" : row.getCell(columns.get("Grade")).getStringCellValue();
 				}
 				
-				UserModel userModel = userService.getUserByID(employeeID);
-				if(userModel==null){
-					userModel = new UserModel();
+				UserModel oldUserModel = userService.getUserByID(employeeID); 
+				if(oldUserModel==null){
+					UserModel userModel = new UserModel();
 					
 					userModel.setActive(true);
 					userModel.setBalance(balance);
@@ -186,7 +186,7 @@ public class ImportController {
 						roleHistoryModel.setRoleID(userModel.getRoleID());
 						roleHistoryModel.setUpdateTime(new Date());
 						roleHistoryService.addRoleHistory(roleHistoryModel);
-					} else{
+					} else if(!role.isEmpty()){
 						roleModel = new RoleModel();
 						
 						roleModel.setActive(true);
@@ -197,11 +197,11 @@ public class ImportController {
 						roleModel = roleService.getRoleByName(role);
 						
 						userModel.setRoleID(roleModel.getId());
-					}
+					} 
 					
 					userService.addUser(userModel);
 				}else{
-					UserModel oldUserModel = userService.getUserByID(employeeID); 
+					UserModel userModel = new UserModel();
 					
 					userModel.setActive(true);
 					userModel.setBalance(balance);
@@ -215,15 +215,16 @@ public class ImportController {
 					
 					RoleModel roleModel = roleService.getRoleByName(role);
 					if(roleModel!=null){
-						if(oldUserModel.getRoleID() != roleModel.getId()){
-							userModel.setRoleID(roleModel.getId());
+						userModel.setRoleID(roleModel.getId());
+						
+						if( oldUserModel.getRoleID()==null || roleModel.getId() != oldUserModel.getRoleID()){
 							RoleHistoryModel roleHistoryModel = new RoleHistoryModel();
 							roleHistoryModel.setUserID(userModel.getId());
 							roleHistoryModel.setRoleID(userModel.getRoleID());
 							roleHistoryModel.setUpdateTime(new Date());
 							roleHistoryService.addRoleHistory(roleHistoryModel);
 						}
-					} else{
+					} else if(!role.isEmpty()){
 						roleModel = new RoleModel();
 						
 						roleModel.setActive(true);
