@@ -117,5 +117,16 @@
       <columnOverride column="PPR_SESSION" property="session" jdbcType="TIMESTAMP" />
       <columnOverride column="PPR_ACTIVE" property="active"  />
     </table>
+    
+    <table schema="public" tableName="LA_FLYER" domainObjectName="FlyerModel">
+    <generatedKey column="FLR_ID" sqlStatement="SELECT nextval('la_flyer_flr_id_seq')" identity="true"/>
+      <columnOverride column="FLR_ID" property="id"  />
+      <columnOverride column="FLR_CONTENT" property="content"  />
+      <columnOverride column="FLR_ACTIVE_TIME" property="activeTime" jdbcType="TIMESTAMP" />
+      <columnOverride column="FLR_AUDIENCE_TYPE" property="audienceType"  />
+      <columnOverride column="FLR_AUDIENCE_LIST" property="audienceList"  />
+      <columnOverride column="FLR_ACTIVE" property="active"  />
+      <columnOverride column="FLR_UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP"  />
+    </table>
   </context>
 </generatorConfiguration>

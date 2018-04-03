@@ -197,6 +197,61 @@ angular
                 return deferred.promise;
             };
 
+            this.getFlyerList = function(){
+                var deferred = $q.defer();
+                $http.get(url.getFlyerList,{})
+                .success(function(data){
+                    console.log(data);
+                    if (data.code == 1) {
+                        deferred.resolve(data);
+                    } else {
+                        deferred.reject(data);
+                    }
+                })
+                .error(function(error){
+                    deferred.reject(error);
+                });
+
+                return deferred.promise;
+            };
+
+            this.addFlyer = function(flyer){
+                var deferred = $q.defer();
+                $http.post(url.addFlyer,flyer)
+                .success(function(data){
+                    console.log(data);
+                    if (data.code == 1) {
+                        deferred.resolve(data);
+                    } else {
+                        deferred.reject(data);
+                    }
+                })
+                .error(function(error){
+                    deferred.reject(error);
+                });
+
+                return deferred.promise;
+            };
+
+            this.updateFlyer = function(flyer){
+                var deferred = $q.defer();
+                var urlQuery = this.urlFormat(url.updateFlyer,flyer.name);
+                $http.put(urlQuery,flyer)
+                .success(function(data){
+                    console.log(data);
+                    if (data.code == 1) {
+                        deferred.resolve(data);
+                    } else {
+                        deferred.reject(data);
+                    }
+                })
+                .error(function(error){
+                    deferred.reject(error);
+                });
+
+                return deferred.promise;
+            };
+
             this.getQuiz = function(quizID){
                 var deferred = $q.defer();
                 var urlGetQuiz = this.urlFormat(url.getQuiz,quizID);

@@ -37,6 +37,10 @@ function MasterCtrl($rootScope, $scope, $cookieStore) {
         $scope.$apply();
     };
 
+    $scope.isLogin = function(){
+        return window.location.href.toLowerCase().split('/#/')[1].substr(0,5)=='login';
+    }
+
     // $rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {
     //     console.log(event);
     //     console.log(toState);

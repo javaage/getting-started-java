@@ -21,6 +21,7 @@
     <mapper resource="com/cisco/la/mapper/QuizModelMapper.xml" />
     <mapper resource="com/cisco/la/mapper/QuestionModelMapper.xml" />
     <mapper resource="com/cisco/la/mapper/PaperModelMapper.xml" />
+    <mapper resource="com/cisco/la/mapper/FlyerModelMapper.xml" />
     <mapper resource="com/cisco/la/join/GoldenSampleJoinMapper.xml" />
     <mapper resource="com/cisco/la/join/RoleMapper.xml" />
     <mapper resource="com/cisco/la/join/MessageJoinMapper.xml" />

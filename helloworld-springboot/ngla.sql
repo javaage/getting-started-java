@@ -1,12 +1,14 @@
 /*==============================================================*/
 /* DBMS name:      PostgreSQL 9.x                               */
-/* Created on:     3/13/2018 3:57:14 PM                         */
+/* Created on:     4/3/2018 1:54:44 PM                          */
 /*==============================================================*/
 
 
 drop table LA_COURSE;
 
 drop table LA_CRS_HISTORY;
+
+drop table LA_FLYER;
 
 drop table LA_GOLDEN_SAMPLE;
 
@@ -52,10 +54,24 @@ create table LA_CRS_HISTORY (
 );
 
 /*==============================================================*/
+/* Table: LA_FLYER                                              */
+/*==============================================================*/
+create table LA_FLYER (
+   FLR_ID               SERIAL not null,
+   FLR_CONTENT          VARCHAR              not null,
+   FLR_ACTIVE_TIME      TIMESTAMP            not null,
+   FLR_AUDIENCE_TYPE    VARCHAR(1)           not null,
+   FLR_AUDIENCE_LIST    VARCHAR              not null,
+   FLR_ACTIVE           BOOL                 not null,
+   FLR_UPDATE_TIME      TIMESTAMP            not null,
+   constraint PK_LA_FLYER primary key (FLR_ID)
+);
+
+/*==============================================================*/
 /* Table: LA_GOLDEN_SAMPLE                                      */
 /*==============================================================*/
 create table LA_GOLDEN_SAMPLE (
-   SMPL_ID              SERIAL               not null,
+   SMPL_ID              SERIAL not null,
    SMPL_NAME            varchar              not null,
    SMPL_RL_ID           int                  not null,
    SMPL_MANDATORY       varchar              not null,
@@ -69,7 +85,7 @@ create table LA_GOLDEN_SAMPLE (
 /* Table: LA_MESSAGE                                            */
 /*==============================================================*/
 create table LA_MESSAGE (
-   MSG_ID               SERIAL               not null,
+   MSG_ID               SERIAL not null,
    MSG_USER_ID          VARCHAR              not null,
    MSG_CONTENT          VARCHAR              not null,
    MSG_SESSION          INT4                 not null,
@@ -85,7 +101,7 @@ create table LA_MESSAGE (
 /*==============================================================*/
 /* Table: LA_PAPER                                              */
 /*==============================================================*/
-create table PUBLIC.LA_PAPER (
+create table LA_PAPER (
    PPR_ID               SERIAL not null,
    PPR_QUZ_ID           INT4                 not null,
    PPR_USR_ID           VARCHAR              not null,
@@ -96,8 +112,8 @@ create table PUBLIC.LA_PAPER (
    PPR_SCORE            INT4                 null,
    PPR_TOTAL            INT4                 not null,
    PPR_INDEX            INT4                 not null,
-   PPR_ACTIVE          BOOL                 not null,
-   PPR_SESSION          TIMESTAMP            not null default '0001-01-01 00:00:00',
+   PPR_SESSION          TIMESTAMP            not null,
+   PPR_ACTIVE           BOOL                 not null,
    constraint PK_LA_PAPER primary key (PPR_ID)
 );
 
@@ -116,7 +132,7 @@ create table LA_QUESTION (
 /* Table: LA_QUIZ                                               */
 /*==============================================================*/
 create table LA_QUIZ (
-   QUZ_ID               SERIAL               not null,
+   QUZ_ID               SERIAL not null,
    QUZ_CRS_ID           int4                 not null,
    QUZ_ACTIVE_TIME      TIMESTAMP            not null,
    QUZ_AUDIENCE_TYPE    VARCHAR(1)           not null,
@@ -130,7 +146,7 @@ create table LA_QUIZ (
 /* Table: LA_QUIZ_RECORD                                        */
 /*==============================================================*/
 create table LA_QUIZ_RECORD (
-   RCRD_ID              SERIAL               not null,
+   RCRD_ID              SERIAL not null,
    RCRD_QUZ_ID          int                  not null,
    RCRD_USR_ID          VARCHAR              not null,
    RCRD_ACTIVE          BOOL                 not null,
@@ -143,7 +159,7 @@ create table LA_QUIZ_RECORD (
 /* Table: LA_RECORD                                             */
 /*==============================================================*/
 create table LA_RECORD (
-   CRD_ID               SERIAL               not null,
+   CRD_ID               SERIAL not null,
    CRD_REQUEST          varchar              null,
    CRD_RESPONSE         varchar              null,
    CRD_TIME             TIMESTAMP            null,
@@ -163,7 +179,7 @@ create table LA_RL_HISTORY (
 /* Table: LA_ROLE                                               */
 /*==============================================================*/
 create table LA_ROLE (
-   RL_ID                SERIAL               not null,
+   RL_ID                SERIAL not null,
    RL_NAME              varchar              not null,
    RL_BU                varchar              not null,
    RL_TITLE             varchar              null,

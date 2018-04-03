@@ -15,10 +15,10 @@
   
 </head>
 <body ng-controller="MasterCtrl">
-  <div id="page-wrapper" ng-class="{'open': toggle}" ng-cloak>
+  <div id="page-wrapper" ng-class="{'open': toggle && !isLogin()}" ng-cloak >
 
     <!-- Sidebar -->
-    <div id="sidebar-wrapper">
+    <div id="sidebar-wrapper" ng-if="!isLogin()">
       <ul class="sidebar">
         <li class="sidebar-main">
           <a ng-click="toggleSidebar()">
@@ -53,6 +53,9 @@
         </li>
         <li class="sidebar-list">
           <a href="#/quizList">Quiz<span class="menu-icon fa fa-question"></span></a>
+        </li>
+        <li class="sidebar-list" style="display: none;">
+          <a href="#/flyer">Flyer  <span class="menu-icon fa fa-comments"></span></a>
         </li>
         <!--
         <li class="sidebar-list">

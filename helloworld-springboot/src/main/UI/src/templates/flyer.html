@@ -1,0 +1,88 @@
+<div class="row" data-ng-controller="FlyerCtrl">
+  <div class="col-lg-12">
+		<rd-widget>
+			
+			<rd-widget-header icon="fa-comments" title="Flyer">	
+			</rd-widget-header>
+			<input class="btn btn-default" type="button" ng-click="addFlyerModal()" value="Add Flyer">
+			
+				<div class="table-responsive" style="max-height: 600px;">
+					<table ng-table="tableParams" class="table table-condensed table-bordered table-striped" show-filter="false">
+			            <tr ng-repeat="item in $data" ng-class="{'inactive':!item.active}">
+			            		<td title="'ID'" sortable="'id'" class="text-center">{{item.id}}</td>
+				                <td title="'Audience Type'" sortable="'audienceType'" class="text-center">{{item.audienceTypeValue}}</td>
+				                <td title="'Active Time'" sortable="'activeTime'" class="text-center">{{item.activeTime | date: 'yyyy-MM-dd HH:mm' : GMT}}</td><!--GMT+0800-->
+				                <td title="'Operation'" class="text-center" >
+				                	<span  ng-if="!item.active" style="width: 80px;margin-left: 10px; margin-right: 10px;">Update</span>	
+				                	<a ng-click="updateFlyerModal(item)" ng-if="item.active" style="width: 80px;margin-left: 10px; margin-right: 10px;">Update</a>
+				                	<a ng-click="inactiveFlyer(item)" ng-if="item.active" style="width: 80px;">Inactive</a>
+				                	<a ng-click="activeFlyer(item)" ng-if="!item.active" style="width: 80px;">&nbsp;Active&nbsp;</a>
+				                </td>	
+			            </tr>
+			        </table>
+        		</div>
+
+		<rd-widget>
+	</div>
+  	<script type="text/ng-template" id="flyerModal.html" />  
+        <div class="modal-header bg-info">   
+            <span ng-if="!isModify">Add Flyer</span> 
+            <span ng-if="isModify">Update Flyer</span> 
+        </div>  
+        <div class="modal-body">  
+            <form class="form-horizontal" name="flyerForm" novalidate="novalidate"  ng-submit="submitFlyerData()">
+	              <div class="form-group">
+						<label for="selectCourseName" class="col-lg-2 control-label">Course Name*</label>
+						<div class="col-lg-8">
+						    <input type="textarea" class="form-control" ng-model="flyer.activeTime" id="datetimepicker" ng-click="openDatePicker()" required>
+						</div>
+				  </div>	
+				  <div class="form-group">
+				    <label for="datetimepicker" class="col-lg-2 control-label">Active Time*</label>
+				    <div class="col-lg-8">
+				      	<input type="text" class="form-control" ng-model="flyer.activeTime" id="datetimepicker" ng-click="openDatePicker()" required>
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <label for="inputJobTitle" class="col-lg-2 control-label">Audience Type</label>
+				    <div class="col-lg-8">
+				      <input type="radio" name="audienceType" value="R" ng-model="flyer.audienceType" ng-checked="flyer.audienceType=='R'"><span>By Role</span> 
+				      <input type="radio" name="audienceType" value="U" ng-model="flyer.audienceType" ng-checked="flyer.audienceType=='U'"
+				      style="margin-left: 30px;"><span>By User</span> 
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <label for="inputGrade" class="col-lg-2 control-label">Audience List</label>
+				    <div class="col-lg-8" ng-if="flyer.audienceType=='R'">
+				      <ui-select multiple ng-model="flyer.roleList" theme="bootstrap" ng-disabled="disabled" sortable="true" close-on-select="false" style="width: 100%;">
+					    <ui-select-match placeholder="Select role...">{{$item.roleName}} </ui-select-match>
+					    <ui-select-choices repeat="role in roles | filter:{active:true}">
+					      <div ng-bind-html="role.roleName | highlight: $select.search"></div>
+					      <small>
+					        role: {{role.roleName}}
+					      </small>
+					    </ui-select-choices>
+					  </ui-select>
+				    </div>
+
+				    <div class="col-lg-8" ng-if="flyer.audienceType=='U'">
+				      <ui-select multiple ng-model="flyer.userList" theme="bootstrap" ng-disabled="disabled" sortable="true" close-on-select="false" style="width: 100%;">
+					    <ui-select-match placeholder="Select user...">{{$item.id}} </ui-select-match>
+					    <ui-select-choices repeat="user in users | filter:{active:true}">
+					      <div ng-bind-html="user.id | highlight: $select.search"></div>
+					      <small>
+					        name: {{user.name}}
+					      </small>
+					    </ui-select-choices>
+					  </ui-select>
+				    </div>
+
+				  </div>
+				  <div style="text-align: center;">  
+			            <button type="submit" class="btn btn-default">Submit</button>
+						<button type="cancel" class="btn btn-default" ng-click="closeFlyerModal()">Cancel</button>
+			        </div>  
+				</form>
+        </div> 
+    </script> 
+</div>

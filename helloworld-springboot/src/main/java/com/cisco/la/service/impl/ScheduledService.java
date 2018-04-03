@@ -137,9 +137,9 @@ public class ScheduledService {
 	}
 	
 	public void startQuiz(){
-//		if(Application.envCurrent == Env.local){
-//			return;
-//		}
+		if(Application.envCurrent == Env.local){
+			return;
+		}
 		List<PaperModel> listPaperModel = paperService.getWaitingPaper();
 		for(PaperModel paperModel : listPaperModel){
 			QuizModel quizModel = quizService.getQuizByID(paperModel.getQuizID());
