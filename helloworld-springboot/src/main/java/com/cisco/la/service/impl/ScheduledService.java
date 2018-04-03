@@ -24,6 +24,7 @@ import com.cisco.la.model.QuestionModel;
 import com.cisco.la.model.QuizModel;
 import com.cisco.la.model.UserModel;
 import com.cisco.la.service.CourseService;
+import com.cisco.la.service.FlyerService;
 import com.cisco.la.service.MessageService;
 import com.cisco.la.service.PaperService;
 import com.cisco.la.service.QuizService;
@@ -53,6 +54,9 @@ public class ScheduledService {
 	
 	@Autowired
 	private CourseService courseService;
+	
+	@Autowired
+	private FlyerService flyerService;
 	
 	@Scheduled(fixedRate = 1000*30)
 	public void fixedRate(){
@@ -155,5 +159,9 @@ public class ScheduledService {
 			paperModel.setSession(new Date());
 			paperService.updatePaper(paperModel);
 		}
+	}
+	
+	public void sendFlyer(){
+		
 	}
 }

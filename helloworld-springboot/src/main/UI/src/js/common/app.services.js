@@ -252,6 +252,25 @@ angular
                 return deferred.promise;
             };
 
+            this.getFlyer = function(flyerID){
+                var deferred = $q.defer();
+                var urlGetFlyer = this.urlFormat(url.getFlyer,flyerID);
+                $http.get(urlGetFlyer,{})
+                .success(function(data){
+                    console.log(data);
+                    if (data.code == 1) {
+                        deferred.resolve(data);
+                    } else {
+                        deferred.reject(data);
+                    }
+                })
+                .error(function(error){
+                    deferred.reject(error);
+                });
+
+                return deferred.promise;
+            };
+
             this.getQuiz = function(quizID){
                 var deferred = $q.defer();
                 var urlGetQuiz = this.urlFormat(url.getQuiz,quizID);

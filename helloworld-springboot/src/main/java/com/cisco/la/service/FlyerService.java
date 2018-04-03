@@ -1,6 +1,7 @@
 package com.cisco.la.service;
 import java.util.List;
 
+import com.cisco.la.entity.FlyerJoin;
 import com.cisco.la.model.FlyerModel;
 
 public interface FlyerService {
@@ -8,7 +9,9 @@ public interface FlyerService {
 
   public void updateFlyer(FlyerModel flyerModel);
   
-  public FlyerModel getFlyerByID(int id);
+  public FlyerJoin getFlyerByID(int id);
   
   public List<FlyerModel> getFlyerList();
+  
+  public List<FlyerModel> getWaitingFlyerList();
 }

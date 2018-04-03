@@ -4,20 +4,33 @@
 
 angular
     .module('RDash')
-    .controller('FlyerCtrl', ['$rootScope', '$scope','$log','$uibModal','app.services','NgTableParams', FlyerCtrl])
+    .controller('FlyerCtrl', ['$rootScope', '$scope','$log','$uibModal','app.services','NgTableParams', '$filter', FlyerCtrl])
     .controller('OperateFlyerCtrl', ['$scope','$log','$uibModalInstance','app.services', OperateFlyerCtrl]);
-function FlyerCtrl($rootScope, $scope, $log,$uibModal, services,NgTableParams) {
+function FlyerCtrl($rootScope, $scope, $log,$uibModal, services,NgTableParams, $filter) {    
+    $scope.roles = [];
+    $scope.users = [];
+    $scope.GMT = services.getGMT();
+
     $scope.flyers = [];
 
     $scope.getFlyerList = function(){
         services.getFlyerList().then(function(result) {
             if (result.code == 1) {
                 $scope.flyers = result.data;
+
+                angular.forEach($scope.flyers, function (item, index) {
+                    if(item.audienceType == 'R'){
+                        item.audienceTypeValue = 'By Role';
+                    }else if(item.audienceType == 'U'){
+                        item.audienceTypeValue = 'By User';
+                    }
+                });
+
                 $scope.tableParams = new NgTableParams(
                 {
                     page: 1,            // show first page
                     count: 10,           // count per page
-                    sorting: { active:'desc', flyerName: 'asc'}
+                    sorting: { active:'desc', id: 'asc'}
                 },
                 {
                     total: 0, // length of data
@@ -30,12 +43,16 @@ function FlyerCtrl($rootScope, $scope, $log,$uibModal, services,NgTableParams) {
     }
 
     $scope.addFlyerModal = function(){
-        //var scope = $rootScope.$new();
         $scope.flyer = {};
         $scope.isModify = false;
+
+        $scope.flyer.activeTime = $filter('date')(new Date(),'yyyy-MM-dd HH:mm', $scope.GMT);
+        $scope.flyer.audienceType = 'R';
+
         var modalInstance = $uibModal.open({
             scope: $scope,
             animation: true,
+            size: 'lg',
             templateUrl: 'flyerModal.html',
             controller: 'OperateFlyerCtrl',
         });
@@ -64,14 +81,29 @@ function FlyerCtrl($rootScope, $scope, $log,$uibModal, services,NgTableParams) {
     };
 
     $scope.updateFlyerModal = function(flyer){
-        //var scope = $rootScope.$new();
-        $scope.flyer =flyer;
         $scope.isModify = true;
-        var modalInstance = $uibModal.open({
-            scope: $scope,
-            animation: true,
-            templateUrl: 'flyerModal.html',
-            controller: 'OperateFlyerCtrl',
+        services.getFlyer(flyer.id).then(function(result) {
+            if (result.code == 1) {
+                $scope.flyer = result.data;
+
+                $scope.flyer.activeTime =  $filter('date')( $scope.flyer.activeTime ,'yyyy-MM-dd HH:mm', $scope.GMT);
+
+                if($scope.flyer.audienceType == 'R'){
+                    $scope.flyer.roleList=$scope.flyer.listRoleModel;
+                }else{
+                    $scope.flyer.userList=$scope.flyer.listUserModel;
+                }
+
+                var modalInstance = $uibModal.open({
+                    scope: $scope,
+                    animation: true,
+                    size: 'lg',
+                    templateUrl: 'flyerModal.html',
+                    controller: 'OperateFlyerCtrl',
+                });
+            }
+        }, function (error) {
+            console.log(error);    
         });
     };
 
@@ -85,7 +117,35 @@ function FlyerCtrl($rootScope, $scope, $log,$uibModal, services,NgTableParams) {
         });
     };
 
-    $scope.getFlyerList();
+    $scope.getRoleList = function(){
+        services.getRoleList().then(function(result) {
+            if (result.code == 1) {
+                $scope.roles = result.data;
+            }
+        }, function (error) {
+            console.log(error);    
+        });       
+    };
+
+    $scope.getUserList = function(){
+        services.getUserList().then(function(result) {
+            if (result.code == 1) {
+                $scope.users = result.data;
+            }
+        }, function (error) {
+            console.log(error);    
+        });       
+    };
+
+    $scope.init = function(){
+        $scope.getFlyerList();
+
+        $scope.getRoleList();
+        $scope.getUserList();
+        
+    };
+
+    $scope.init();
 }
 
 function OperateFlyerCtrl($scope, $log,$uibModalInstance, services) { 
@@ -98,6 +158,20 @@ function OperateFlyerCtrl($scope, $log,$uibModalInstance, services) {
 
 
     $scope.submitFlyerData = function(){
+        var list = [];
+
+        if($scope.flyer.audienceType=='R'){
+            for(var i = 0; i < $scope.flyer.roleList.length; i++){
+                list.push($scope.flyer.roleList[i].id);
+            }
+        }else{
+            for(var i = 0; i < $scope.flyer.userList.length; i++){
+                list.push($scope.flyer.userList[i].id);
+            }
+        }
+
+        $scope.flyer.audienceList = list.join(',');
+
         	if($scope.isModify){
                 services.updateFlyer($scope.flyer).then(function(result) {
                     if (result.code == 1) {
