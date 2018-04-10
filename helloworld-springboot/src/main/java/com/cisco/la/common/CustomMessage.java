@@ -13,7 +13,7 @@ public class CustomMessage {
 	
 	public static final String CHAT_BOLT_COURSE_NEED_MESSAGE = "Here is the training you need to take as %s.%s";
 	
-	public static final String CHAT_BOLT_CONGRATS_ROLE_MESSAGE = "Hi %s, congrats to your new promotion as a %s?";
+	public static final String CHAT_BOLT_CONGRATS_ROLE_MESSAGE = "Hi %s, congrats to your new promotion as a %s.";
 	public static final String CHAT_BOLT_PREFER_ROLE_MESSAGE = "Here are the trainings other successful %s are taking. %s";
 	public static final String CHAT_BOLT_PREFER_RECENT_COURSE = "The training %s %s , do you want to register?(Yes/No)";
 	public static final String CHAT_BOLT_REGISTER_URL = "Here is the registration [link](https://www.cisco.vovici.com/se/2C85931E127C92FC)";
@@ -33,4 +33,6 @@ public class CustomMessage {
 	public static final String CHAT_BOLT_ANSWER_CORRECT = "Correct";
 	public static final String CHAT_BOLT_ANSWER_INCORRECT = "Incorrect";
 	public static final String CHAT_BOLT_ANSWER_FINISHED = "You have finished this quiz. Your score is %d.";
+	
+	public static final String CHAT_BOLT_NO_WEEKLY_COURSE = "There is no training in this week.";
 }

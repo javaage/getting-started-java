@@ -1,5 +1,6 @@
 package com.cisco.la.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
@@ -11,6 +12,8 @@ import com.cisco.la.entity.QuizJoin;
 import com.cisco.la.join.QuizJoinMapper;
 import com.cisco.la.mapper.FlyerModelMapper;
 import com.cisco.la.model.FlyerModel;
+import com.cisco.la.model.FlyerModelExample;
+import com.cisco.la.model.FlyerModelExample.Criteria;
 import com.cisco.la.service.FlyerService;
 import com.cisco.la.service.RoleService;
 import com.cisco.la.service.UserService;
@@ -68,8 +71,11 @@ public class FlyerServiceImpl implements FlyerService {
 	@Override
 	public List<FlyerModel> getWaitingFlyerList() {
 		FlyerModelMapper flyerModelMapper = sqlSession.getMapper(FlyerModelMapper.class);
-		
-		return null;
+		FlyerModelExample example = new FlyerModelExample();
+		Criteria criteria = example.createCriteria();
+		criteria.andActiveEqualTo(true);
+		criteria.andActiveTimeLessThan(new Date());
+		return flyerModelMapper.selectByExample(example);
 	}
 
 }

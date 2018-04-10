@@ -1,6 +1,8 @@
 package com.cisco.la.service;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Date;
+
 import com.cisco.la.model.CourseModel;
 
 public interface CourseService {
@@ -17,4 +19,6 @@ public interface CourseService {
   public List<CourseModel> getUserCourseListByList(String userID, String strList);
   
   public List<CourseModel> getCourseListByList(String strList);
+  
+  public List<CourseModel> getCourseListRecent(Date startDate, Date endDate);
 }

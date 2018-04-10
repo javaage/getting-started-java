@@ -4,6 +4,7 @@
 package com.cisco.la.service.impl;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -18,6 +19,7 @@ import com.cisco.la.common.SparkService;
 import com.cisco.la.common.Util;
 import com.cisco.la.entity.QuizJoin;
 import com.cisco.la.model.CourseModel;
+import com.cisco.la.model.FlyerModel;
 import com.cisco.la.model.MessageModel;
 import com.cisco.la.model.PaperModel;
 import com.cisco.la.model.QuestionModel;
@@ -64,19 +66,18 @@ public class ScheduledService {
 		sendLostSessionMessage();
 		generatePaper();
 		startQuiz();
-//		beginQuiz("robot@ge.com");
-//		continueQuiz("3", "robot@ge.com");
+		sendFlyer();
+		if(Application.envCurrent.equals(Env.local))
+			test();
 	}
 
 	private void sendLostSessionMessage() {
 		List<MessageModel> listMessageModel = messageService.getLostSessionMessage();
 		
-		if(Application.envCurrent != Env.local){
-			for(MessageModel messageModel : listMessageModel){
-				sparkService.sendMarkdownMessage(messageModel.getUserID(), messageModel.getContent());
-				messageModel.setActive(false);
-				messageService.updateMessage(messageModel);
-			}
+		for(MessageModel messageModel : listMessageModel){
+			sparkService.sendMarkdownMessage(messageModel.getUserID(), messageModel.getContent());
+			messageModel.setActive(false);
+			messageService.updateMessage(messageModel);
 		}
 	}
 	
@@ -141,9 +142,7 @@ public class ScheduledService {
 	}
 	
 	public void startQuiz(){
-		if(Application.envCurrent == Env.local){
-			return;
-		}
+		
 		List<PaperModel> listPaperModel = paperService.getWaitingPaper();
 		for(PaperModel paperModel : listPaperModel){
 			QuizModel quizModel = quizService.getQuizByID(paperModel.getQuizID());
@@ -162,6 +161,49 @@ public class ScheduledService {
 	}
 	
 	public void sendFlyer(){
+		List<FlyerModel> listFlyerModel = flyerService.getWaitingFlyerList();
 		
+		for(FlyerModel flyerModel : listFlyerModel){
+			List<UserModel> listUserModel = new ArrayList<UserModel>();
+			if("U".equalsIgnoreCase(flyerModel.getAudienceType()))
+				listUserModel = userService.getUserByIDs(flyerModel.getAudienceList());
+			else{
+				listUserModel = userService.getUserListByRoleIDs(flyerModel.getAudienceList());
+			}
+				
+			for(UserModel userModel : listUserModel){
+				sparkService.sendMarkdownMessage(userModel.getId(), flyerModel.getContent());
+			}
+			flyerModel.setActive(false);
+			flyerService.updateFlyer(flyerModel);
+		}
+		
+	}
+	
+	public void test(){
+		String personEmail = "";
+		String speech = "Hi, below is this week's new trainings:";
+		Calendar cal = Calendar.getInstance();
+		int dayofweek = cal.get(Calendar.DAY_OF_WEEK);
+		cal.add(Calendar.DATE, cal.getFirstDayOfWeek() - dayofweek);
+		Date startDate = cal.getTime();
+		cal.add(Calendar.DATE, 7);
+		Date endDate = cal.getTime();
+		
+		List<CourseModel> listCourseModel = courseService.getCourseListRecent(startDate, endDate);
+		
+		if(listCourseModel.size()>0){
+			StringBuilder stringBuilder = new StringBuilder(speech + " ");
+			for(CourseModel courseModel : listCourseModel){
+				if(courseModel.getUrl()!=null && !courseModel.getUrl().isEmpty())
+					stringBuilder.append(String.format("<br>[%s](%s)",courseModel.getCourseName(), courseModel.getUrl()));
+				else
+					stringBuilder.append("<br>" + courseModel.getCourseName());
+			}
+			sparkService.sendMarkdownMessage(personEmail, stringBuilder.toString());
+		}else{
+			speech = CustomMessage.CHAT_BOLT_NO_WEEKLY_COURSE;
+			
+		}
 	}
 }

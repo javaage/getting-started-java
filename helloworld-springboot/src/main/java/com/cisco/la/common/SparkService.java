@@ -23,6 +23,7 @@ import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import com.cisco.la.Application;
+import com.cisco.la.Application.Env;
 import com.google.gson.Gson;
 
 /**
@@ -32,6 +33,9 @@ import com.google.gson.Gson;
 @Service
 public class SparkService {
 	public void sendMessage(String email, String message){
+		if(Application.envCurrent == Env.local){
+			return;
+		}
 		String urlSendMessage = "https://api.ciscospark.com/v1/messages";
 		try {
 			Pattern r = Pattern.compile("\\s");
@@ -56,6 +60,9 @@ public class SparkService {
 		Application.logger.debug("sendMarkdownMessage");
 		Application.logger.debug(email);
 		Application.logger.debug(message);
+		if(Application.envCurrent == Env.local){
+			return;
+		}
 		String urlSendMessage = "https://api.ciscospark.com/v1/messages";
 		try {
 			Pattern r = Pattern.compile("\\s");

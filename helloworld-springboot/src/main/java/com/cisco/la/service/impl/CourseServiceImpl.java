@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 import com.cisco.la.join.CourseJoinMapper;
@@ -100,6 +101,16 @@ public class CourseServiceImpl implements CourseService {
 			 return listCourseModel.get(0);
 		 else
 			 return null;
+	}
+
+	@Override
+	public List<CourseModel> getCourseListRecent(Date startDate, Date endDate) {
+		CourseModelMapper courseModelMapper = sqlSession.getMapper(CourseModelMapper.class);
+		CourseModelExample example = new CourseModelExample();
+		Criteria criteria = example.createCriteria();
+		criteria.andActiveEqualTo(true);
+		criteria.andStartDateBetween(startDate, endDate);
+		return courseModelMapper.selectByExample(example);
 	}
 
 }

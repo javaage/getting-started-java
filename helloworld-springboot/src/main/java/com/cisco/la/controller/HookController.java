@@ -16,6 +16,7 @@
 
 package com.cisco.la.controller;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -34,11 +35,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cisco.la.Application;
 import com.cisco.la.common.CustomMessage;
 import com.cisco.la.common.SparkService;
+import com.cisco.la.model.CourseModel;
 import com.cisco.la.model.MessageModel;
 import com.cisco.la.model.PaperModel;
 import com.cisco.la.model.RecordModel;
 import com.cisco.la.model.RoleModel;
 import com.cisco.la.model.UserModel;
+import com.cisco.la.service.CourseService;
 import com.cisco.la.service.GoldenSampleService;
 import com.cisco.la.service.MessageService;
 import com.cisco.la.service.PaperService;
@@ -76,6 +79,9 @@ public class HookController {
 	
 	@Autowired
 	private PaperService paperService;
+	
+	@Autowired
+	private CourseService courseService;
 
 	@RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Object postResponse(@RequestBody String json) {
@@ -205,6 +211,34 @@ public class HookController {
 			}
 			code.put("speech", " ");
 			code.put("displayText", " ");
+			break;
+		case "flyer:weeklyTraining":
+			Calendar cal = Calendar.getInstance();
+			int dayofweek = cal.get(Calendar.DAY_OF_WEEK);
+			cal.add(Calendar.DATE, cal.getFirstDayOfWeek() - dayofweek);
+			Date startDate = cal.getTime();
+			cal.add(Calendar.DATE, 7);
+			Date endDate = cal.getTime();
+			
+			List<CourseModel> listCourseModel = courseService.getCourseListRecent(startDate, endDate);
+			
+			if(listCourseModel.size()>0){
+				StringBuilder stringBuilder = new StringBuilder(speech + " ");
+				for(CourseModel courseModel : listCourseModel){
+					if(courseModel.getUrl()!=null && !courseModel.getUrl().isEmpty())
+						stringBuilder.append(String.format("<br>[%s](%s)",courseModel.getCourseName(), courseModel.getUrl()));
+					else
+						stringBuilder.append("<br>" + courseModel.getCourseName());
+				}
+				sparkService.sendMarkdownMessage(personEmail, stringBuilder.toString());
+				code.put("speech", " ");
+				code.put("displayText", " ");
+			}else{
+				speech = CustomMessage.CHAT_BOLT_NO_WEEKLY_COURSE;
+				code.put("speech", speech);
+				code.put("displayText", speech);
+			}
+			
 			break;
 		default:
 			speech = CustomMessage.CHAT_BOLT_FALLBACK_MESSAGE;
