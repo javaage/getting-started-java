@@ -202,7 +202,7 @@ public class ScheduledService {
 			}
 			sparkService.sendMarkdownMessage(personEmail, stringBuilder.toString());
 		}else{
-			speech = CustomMessage.CHAT_BOLT_NO_WEEKLY_COURSE;
+			speech = CustomMessage.CHAT_BOLT_NO_WEEKLY_FLYER;
 			
 		}
 	}

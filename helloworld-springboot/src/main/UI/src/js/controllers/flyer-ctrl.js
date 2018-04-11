@@ -42,6 +42,15 @@ function FlyerCtrl($rootScope, $scope, $log,$uibModal, services,NgTableParams, $
         });       
     }
 
+    $scope.openDatePicker = function(){
+        $('#datetimepicker').datetimepicker({
+            autoclose: true,
+            format: 'yyyy-mm-dd hh:ii'
+        });
+
+        $('#datetimepicker').datetimepicker('show');
+    };
+    
     $scope.addFlyerModal = function(){
         $scope.flyer = {};
         $scope.isModify = false;

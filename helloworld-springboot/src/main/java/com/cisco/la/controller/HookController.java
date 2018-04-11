@@ -16,6 +16,7 @@
 
 package com.cisco.la.controller;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -36,12 +37,14 @@ import com.cisco.la.Application;
 import com.cisco.la.common.CustomMessage;
 import com.cisco.la.common.SparkService;
 import com.cisco.la.model.CourseModel;
+import com.cisco.la.model.FlyerModel;
 import com.cisco.la.model.MessageModel;
 import com.cisco.la.model.PaperModel;
 import com.cisco.la.model.RecordModel;
 import com.cisco.la.model.RoleModel;
 import com.cisco.la.model.UserModel;
 import com.cisco.la.service.CourseService;
+import com.cisco.la.service.FlyerService;
 import com.cisco.la.service.GoldenSampleService;
 import com.cisco.la.service.MessageService;
 import com.cisco.la.service.PaperService;
@@ -82,6 +85,9 @@ public class HookController {
 	
 	@Autowired
 	private CourseService courseService;
+	
+	@Autowired
+	private FlyerService flyerService;
 
 	@RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Object postResponse(@RequestBody String json) {
@@ -125,16 +131,19 @@ public class HookController {
 				}
 			}
 		}
-
+		
+		if (userModel == null) {
+			speech = CustomMessage.CHAT_BOLT_INVALID_USER_MESSAGE;
+			code.put("speech", speech);
+			code.put("displayText", speech);
+			return code;
+		}
+		
 		code.put("speech", speech);
 		code.put("displayText", speech);
 		switch (intentName) {
 		case "role":
-			if (userModel == null) {
-				speech = CustomMessage.CHAT_BOLT_INVALID_USER_MESSAGE;
-				code.put("speech", speech);
-				code.put("displayText", speech);
-			} else if (userModel != null && roleModel == null) {
+			if (userModel != null && roleModel == null) {
 				speech = CustomMessage.CHAT_BOLT_INVALID_ROLE_MESSAGE.replace("@Role", role);
 				code.put("speech", speech);
 				code.put("displayText", speech);
@@ -160,11 +169,7 @@ public class HookController {
 
 			break;
 		case "role:suggestions":
-			if (userModel == null) {
-				speech = CustomMessage.CHAT_BOLT_INVALID_USER_MESSAGE;
-				code.put("speech", speech);
-				code.put("displayText", speech);
-			} else if (userModel != null && userModel.getRoleID() != null && userModel.getRoleID() > 0) {
+			if (userModel != null && userModel.getRoleID() != null && userModel.getRoleID() > 0) {
 				String prefCourse = goldenSampleService.getGoldenSampleStringByRoleID(userModel.getId(), userModel.getRoleID());
 				roleModel = roleService.getRoleByID(userModel.getRoleID());
 				speech = speech.replace("@Role", roleModel.getRoleName());
@@ -200,44 +205,55 @@ public class HookController {
 						code.put("speech", " ");
 						code.put("displayText", " ");
 					}
-					
 				}
 			}
 			break;
 		case "choice":
-			if(userModel!=null){
-				continueQuiz(speech, userModel.getId());
-				speech = " ";
-			}
+			continueQuiz(speech, userModel.getId());
+			speech = " ";
 			code.put("speech", " ");
 			code.put("displayText", " ");
 			break;
 		case "flyer:weeklyTraining":
-			Calendar cal = Calendar.getInstance();
-			int dayofweek = cal.get(Calendar.DAY_OF_WEEK);
-			cal.add(Calendar.DATE, cal.getFirstDayOfWeek() - dayofweek);
-			Date startDate = cal.getTime();
-			cal.add(Calendar.DATE, 7);
-			Date endDate = cal.getTime();
+			List<FlyerModel> listFlyerModel = flyerService.getWaitingFlyerListByID(userModel.getId());
 			
-			List<CourseModel> listCourseModel = courseService.getCourseListRecent(startDate, endDate);
-			
-			if(listCourseModel.size()>0){
-				StringBuilder stringBuilder = new StringBuilder(speech + " ");
-				for(CourseModel courseModel : listCourseModel){
-					if(courseModel.getUrl()!=null && !courseModel.getUrl().isEmpty())
-						stringBuilder.append(String.format("<br>[%s](%s)",courseModel.getCourseName(), courseModel.getUrl()));
-					else
-						stringBuilder.append("<br>" + courseModel.getCourseName());
+			if(listFlyerModel.size()>0){
+				for(FlyerModel flyerModel : listFlyerModel){
+					sparkService.sendMarkdownMessage(userModel.getId(), flyerModel.getContent());
 				}
-				sparkService.sendMarkdownMessage(personEmail, stringBuilder.toString());
 				code.put("speech", " ");
 				code.put("displayText", " ");
 			}else{
-				speech = CustomMessage.CHAT_BOLT_NO_WEEKLY_COURSE;
+				speech = CustomMessage.CHAT_BOLT_NO_WEEKLY_FLYER;
 				code.put("speech", speech);
 				code.put("displayText", speech);
 			}
+			
+//			Calendar cal = Calendar.getInstance();
+//			int dayofweek = cal.get(Calendar.DAY_OF_WEEK);
+//			cal.add(Calendar.DATE, cal.getFirstDayOfWeek() - dayofweek);
+//			Date startDate = cal.getTime();
+//			cal.add(Calendar.DATE, 7);
+//			Date endDate = cal.getTime();
+//			
+//			List<CourseModel> listCourseModel = courseService.getCourseListRecent(startDate, endDate);
+//			
+//			if(listCourseModel.size()>0){
+//				StringBuilder stringBuilder = new StringBuilder(speech + " ");
+//				for(CourseModel courseModel : listCourseModel){
+//					if(courseModel.getUrl()!=null && !courseModel.getUrl().isEmpty())
+//						stringBuilder.append(String.format("<br>[%s](%s)",courseModel.getCourseName(), courseModel.getUrl()));
+//					else
+//						stringBuilder.append("<br>" + courseModel.getCourseName());
+//				}
+//				sparkService.sendMarkdownMessage(personEmail, stringBuilder.toString());
+//				code.put("speech", " ");
+//				code.put("displayText", " ");
+//			}else{
+//				speech = CustomMessage.CHAT_BOLT_NO_WEEKLY_COURSE;
+//				code.put("speech", speech);
+//				code.put("displayText", speech);
+//			}
 			
 			break;
 		default:
