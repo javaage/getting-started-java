@@ -196,24 +196,23 @@ public class HookController {
 				code.put("speech", " ");
 				code.put("displayText", " ");
 			}else{
-				if(userModel!=null){
-					userModel.setSession(new Date(1));
-					userService.updateUser(userModel);
-					
-					if(beginQuiz(userModel.getId())){
-						speech = " ";
-						code.put("speech", " ");
-						code.put("displayText", " ");
-					}
+				userModel.setSession(new Date(1));
+				userService.updateUser(userModel);
+				
+				if(beginQuiz(userModel.getId())){
+					speech = " ";
+					code.put("speech", " ");
+					code.put("displayText", " ");
 				}
 			}
 			break;
 		case "choice":
-			continueQuiz(speech, userModel.getId());
-			speech = " ";
-			code.put("speech", " ");
-			code.put("displayText", " ");
-			break;
+			if(continueQuiz(speech, userModel.getId())){
+				speech = " ";
+				code.put("speech", " ");
+				code.put("displayText", " ");
+				break;
+			} 
 		case "flyer:weeklyTraining":
 			List<FlyerModel> listFlyerModel = flyerService.getWaitingFlyerListByID(userModel.getId());
 			
@@ -355,7 +354,7 @@ public class HookController {
 		}
 	}
 	
-	private void continueQuiz(String speech, String userID) {
+	private boolean continueQuiz(String speech, String userID) {
 		Application.logger.debug("continueQuiz");
 		Application.logger.debug(speech);
 		Application.logger.debug(userID);
@@ -424,6 +423,9 @@ public class HookController {
 			
 			paperModel.setSession(new Date());
 			paperService.updatePaper(paperModel);
+			return true;
+		}else{
+			return false;
 		}
 	}
 }

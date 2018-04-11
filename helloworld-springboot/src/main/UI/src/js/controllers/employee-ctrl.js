@@ -247,22 +247,27 @@ function OperateUserCtrl($scope, $log,$uibModalInstance, services) {
     }
     
     $scope.submitUserData = function(){
+        $scope.dataLoading = true;
         if($scope.isModify){
             services.updateUser($scope.user).then(function(result) {
+                $scope.dataLoading = false;
                     if (result.code == 1) {
                         $scope.getUserList();
                         $scope.closeUserModal();
                     }
                 }, function (error) {
+                    $scope.dataLoading = false;
                     console.log(error);    
                 });
             }else{
                 services.addUser($scope.user).then(function(result) {
+                    $scope.dataLoading = false;
                     if (result.code == 1) {
                         $scope.getUserList();
                         $scope.closeUserModal();
                     }
                 }, function (error) {
+                    $scope.dataLoading = false;
                     console.log(error);    
             });
         }

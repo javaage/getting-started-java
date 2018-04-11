@@ -125,7 +125,7 @@ public class FlyerServiceImpl implements FlyerService {
 			else{
 				UserModel userModel = userService.getUserByID(userID);
 				if(userModel!=null){
-					if((""+flyerModel.getAudienceList()+"").contains(","+ userModel.getRoleID() +",")){
+					if((","+flyerModel.getAudienceList()+",").contains(","+ userModel.getRoleID() +",")){
 						results.add(flyerModel);
 					}
 				}

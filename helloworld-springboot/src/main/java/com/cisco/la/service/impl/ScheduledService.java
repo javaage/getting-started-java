@@ -67,8 +67,8 @@ public class ScheduledService {
 		generatePaper();
 		startQuiz();
 		sendFlyer();
-//		if(Application.envCurrent.equals(Env.local))
-//			test();
+		if(Application.envCurrent.equals(Env.local))
+			test();
 	}
 
 	private void sendLostSessionMessage() {
@@ -181,29 +181,13 @@ public class ScheduledService {
 	}
 	
 	public void test(){
-		String personEmail = "";
-		String speech = "Hi, below is this week's new trainings:";
-		Calendar cal = Calendar.getInstance();
-		int dayofweek = cal.get(Calendar.DAY_OF_WEEK);
-		cal.add(Calendar.DATE, cal.getFirstDayOfWeek() - dayofweek);
-		Date startDate = cal.getTime();
-		cal.add(Calendar.DATE, 7);
-		Date endDate = cal.getTime();
 		
-		List<CourseModel> listCourseModel = courseService.getCourseListRecent(startDate, endDate);
+		List<FlyerModel> listFlyerModel = flyerService.getWaitingFlyerListByID("hb_java@sina.com");
 		
-		if(listCourseModel.size()>0){
-			StringBuilder stringBuilder = new StringBuilder(speech + " ");
-			for(CourseModel courseModel : listCourseModel){
-				if(courseModel.getUrl()!=null && !courseModel.getUrl().isEmpty())
-					stringBuilder.append(String.format("<br>[%s](%s)",courseModel.getCourseName(), courseModel.getUrl()));
-				else
-					stringBuilder.append("<br>" + courseModel.getCourseName());
+		if(listFlyerModel.size()>0){
+			for(FlyerModel flyerModel : listFlyerModel){
+				//sparkService.sendMarkdownMessage("hb_java@sina.com", flyerModel.getContent());
 			}
-			sparkService.sendMarkdownMessage(personEmail, stringBuilder.toString());
-		}else{
-			speech = CustomMessage.CHAT_BOLT_NO_WEEKLY_FLYER;
-			
 		}
 	}
 }
