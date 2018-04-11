@@ -14,4 +14,6 @@ public interface FlyerService {
   public List<FlyerModel> getFlyerList();
   
   public List<FlyerModel> getWaitingFlyerList();
+  
+  public void updateFlyerStatus(FlyerModel flyerModel);
 }

@@ -1,5 +1,6 @@
 package com.cisco.la.service.impl;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -74,8 +75,25 @@ public class FlyerServiceImpl implements FlyerService {
 		FlyerModelExample example = new FlyerModelExample();
 		Criteria criteria = example.createCriteria();
 		criteria.andActiveEqualTo(true);
-		criteria.andActiveTimeLessThan(new Date());
+		
+		Calendar cal = Calendar.getInstance();
+		int dayofweek = cal.get(Calendar.DAY_OF_WEEK);
+		cal.add(Calendar.DATE, cal.getFirstDayOfWeek() - dayofweek);
+		Date startDate = cal.getTime();
+		cal.add(Calendar.DATE, 7);
+		Date endDate = cal.getTime();
+		
+		criteria.andActiveTimeBetween(startDate, endDate);
 		return flyerModelMapper.selectByExample(example);
+	}
+
+	@Override
+	public void updateFlyerStatus(FlyerModel flyerModel) {
+		FlyerModelMapper flyerModelMapper = sqlSession.getMapper(FlyerModelMapper.class);
+		FlyerModel oldFlyerModel = flyerModelMapper.selectByPrimaryKey(flyerModel.getId());
+		oldFlyerModel.setActive(flyerModel.getActive());
+		flyerModel.setUpdateTime(new Date());
+		flyerModelMapper.updateByPrimaryKey(oldFlyerModel);
 	}
 
 }

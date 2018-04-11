@@ -98,22 +98,27 @@ function OperateRecordCtrl($scope, $log,$uibModalInstance, services) {
 
 
     $scope.submitRecordData = function(){
+        $scope.dataLoading = true;
         	if($scope.isModify){
                 services.updateRecord($scope.record).then(function(result) {
+                    $scope.dataLoading = false;
                     if (result.code == 1) {
                         $scope.getRecordList();
                         $scope.closeRecordModal();
                     }
                 }, function (error) {
+                    $scope.dataLoading = false;
                     console.log(error);    
                 });
             }else{
                 services.addRecord($scope.record).then(function(result) {
+                    $scope.dataLoading = false;
                     if (result.code == 1) {
                         $scope.getRecordList();
                         $scope.closeRecordModal();
                     }
                 }, function (error) {
+                    $scope.dataLoading = false;
                     console.log(error);    
                 });
             }

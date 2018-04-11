@@ -124,26 +124,32 @@ function OperateCourseCtrl($scope,$filter,$log,$uibModalInstance,services) {
     };
 
     $scope.submitCourseData = function(){
+        $scope.dataLoading = true;
+
         $scope.course.startDate = $filter('date')($scope.course.startDate,'yyyy-MM-dd');
         $scope.course.endDate = $filter('date')($scope.course.endDate,'yyyy-MM-dd');
 
         	if($scope.isModify){
                 services.updateCourse($scope.course).then(function(result) {
+                    $scope.dataLoading = false;
                     if (result.code == 1) {
                         $scope.getCourseList();
                         $scope.closeCourseModal();
                     }
                 }, function (error) {
-                    console.log(error);    
+                    console.log(error); 
+                    $scope.dataLoading = false;   
                 });
             }else{
                 services.addCourse($scope.course).then(function(result) {
+                    $scope.dataLoading = false;
                     if (result.code == 1) {
                         $scope.getCourseList();
                         $scope.closeCourseModal();
                     }
                 }, function (error) {
-                    console.log(error);    
+                    console.log(error); 
+                    $scope.dataLoading = false;   
                 });
             }
     };

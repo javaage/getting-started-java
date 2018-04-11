@@ -198,18 +198,21 @@ function ImportUserCtrl($scope, $log,$uibModalInstance, services) {
             alert("Please select an excel file.")
             return ;
         }
-
+        $scope.dataLoading = true;
         services.importUsers($scope.files[0])
         .then(function (result) {
+            $scope.dataLoading = false;
             if(result.code == '1'){
                 alert("Upload User Excel Success");
                 $scope.getRoleList();
                 $scope.getUserList();
                 $uibModalInstance.dismiss();
+
             }else{
                 alert(result.message) ;
             }
         },function(error){
+            $scope.dataLoading = false;
             if(error.message)
                 alert(error.message) ;
         });

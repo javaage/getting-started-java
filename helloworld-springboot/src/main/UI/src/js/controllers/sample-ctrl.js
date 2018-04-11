@@ -186,23 +186,28 @@ function OperateGoldenSampleCtrl($scope, $log,$uibModalInstance, services) {
     };
 
     $scope.submitGoldenSampleData = function(){
+        $scope.dataLoading = true;
             getCourseCode();
         	if($scope.isModify){
                 services.updateGoldenSample($scope.goldenSample).then(function(result) {
+                    $scope.dataLoading = false;
                     if (result.code == 1) {
                         $scope.getGoldenSampleList();
                         $scope.closeGoldenSampleModal();
                     }
                 }, function (error) {
+                    $scope.dataLoading = false;
                     console.log(error);    
                 });
             }else{
                 services.addGoldenSample($scope.goldenSample).then(function(result) {
+                    $scope.dataLoading = false;
                     if (result.code == 1) {
                         $scope.getGoldenSampleList();
                         $scope.closeGoldenSampleModal();
                     }
                 }, function (error) {
+                    $scope.dataLoading = false;
                     console.log(error);    
                 });
             }

@@ -235,8 +235,25 @@ angular
 
             this.updateFlyer = function(flyer){
                 var deferred = $q.defer();
-                var urlQuery = this.urlFormat(url.updateFlyer,flyer.name);
-                $http.put(urlQuery,flyer)
+                $http.put(url.updateFlyer,flyer)
+                .success(function(data){
+                    console.log(data);
+                    if (data.code == 1) {
+                        deferred.resolve(data);
+                    } else {
+                        deferred.reject(data);
+                    }
+                })
+                .error(function(error){
+                    deferred.reject(error);
+                });
+
+                return deferred.promise;
+            };
+
+            this.updateFlyerOnly = function(flyer){
+                var deferred = $q.defer();
+                $http.put(url.updateFlyerOnly,flyer)
                 .success(function(data){
                     console.log(data);
                     if (data.code == 1) {

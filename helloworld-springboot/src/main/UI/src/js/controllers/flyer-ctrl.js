@@ -60,7 +60,7 @@ function FlyerCtrl($rootScope, $scope, $log,$uibModal, services,NgTableParams, $
 
     $scope.inactiveFlyer = function(flyer){
         flyer.active = false;
-        services.updateFlyer(flyer).then(function(result) {
+        services.updateFlyerOnly(flyer).then(function(result) {
             if (result.code == 1) {
                 //alert("success");
             }
@@ -71,7 +71,7 @@ function FlyerCtrl($rootScope, $scope, $log,$uibModal, services,NgTableParams, $
 
     $scope.activeFlyer = function(flyer){
         flyer.active = true;
-        services.updateFlyer(flyer).then(function(result) {
+        services.updateFlyerOnly(flyer).then(function(result) {
             if (result.code == 1) {
                 //alert("success");
             }
@@ -159,7 +159,7 @@ function OperateFlyerCtrl($scope, $log,$uibModalInstance, services) {
 
     $scope.submitFlyerData = function(){
         var list = [];
-
+        $scope.dataLoading = true;
         if($scope.flyer.audienceType=='R'){
             for(var i = 0; i < $scope.flyer.roleList.length; i++){
                 list.push($scope.flyer.roleList[i].id);
@@ -174,20 +174,24 @@ function OperateFlyerCtrl($scope, $log,$uibModalInstance, services) {
 
         	if($scope.isModify){
                 services.updateFlyer($scope.flyer).then(function(result) {
+                    $scope.dataLoading = false;
                     if (result.code == 1) {
                         $scope.getFlyerList();
                         $scope.closeFlyerModal();
                     }
                 }, function (error) {
+                    $scope.dataLoading = false;
                     console.log(error);    
                 });
             }else{
                 services.addFlyer($scope.flyer).then(function(result) {
+                    $scope.dataLoading = false;
                     if (result.code == 1) {
                         $scope.getFlyerList();
                         $scope.closeFlyerModal();
                     }
                 }, function (error) {
+                    $scope.dataLoading = false;
                     console.log(error);    
                 });
             }

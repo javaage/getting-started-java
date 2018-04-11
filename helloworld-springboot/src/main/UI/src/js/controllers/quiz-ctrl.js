@@ -131,6 +131,7 @@ function QuizCtrl($rootScope, $scope, $filter, $state, $stateParams, $log, $uibM
     };
 
     $scope.submitQuizData = function(){
+        $scope.dataLoading = true;
         $scope.quiz.courseID = $scope.quiz.course.id;
 
         var list = [];
@@ -155,18 +156,22 @@ function QuizCtrl($rootScope, $scope, $filter, $state, $stateParams, $log, $uibM
 
         if($scope.isModify){
                 services.updateQuiz($scope.quiz).then(function(result) {
+                    $scope.dataLoading = false;
                     if (result.code == 1) {
                         $state.go('quizList');
                     }
                 }, function (error) {
+                    $scope.dataLoading = false;
                     console.log(error);    
                 });
         }else{
                 services.addQuiz($scope.quiz).then(function(result) {
+                    $scope.dataLoading = false;
                     if (result.code == 1) {
                         $state.go('quizList');
                     }
                 }, function (error) {
+                    $scope.dataLoading = false;
                     console.log(error);    
                 });
         }

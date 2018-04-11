@@ -67,8 +67,8 @@ public class ScheduledService {
 		generatePaper();
 		startQuiz();
 		sendFlyer();
-		if(Application.envCurrent.equals(Env.local))
-			test();
+//		if(Application.envCurrent.equals(Env.local))
+//			test();
 	}
 
 	private void sendLostSessionMessage() {

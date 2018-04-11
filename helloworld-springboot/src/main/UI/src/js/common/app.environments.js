@@ -46,6 +46,7 @@
                 deleteFlyer: '/api/flyer/{0}',
                 addFlyer: '/api/flyer',
                 updateFlyer: '/api/flyer',
+                updateFlyerOnly: '/api/flyer/only',
                 updateRole: '/api/role',
                 getQuiz: '/api/quiz/{0}',
                 getQuizList: '/api/quiz/list',

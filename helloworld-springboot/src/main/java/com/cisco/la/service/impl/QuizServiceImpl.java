@@ -99,4 +99,13 @@ public class QuizServiceImpl implements QuizService {
 		
 		return quizModelMapper.selectByExample(quizModelExample);
 	}
+
+	@Override
+	public void updateQuizStatus(QuizModel quizModel) {
+		QuizModelMapper quizModelMapper = sqlSession.getMapper(QuizModelMapper.class);
+		QuizModel oldQuizModel = quizModelMapper.selectByPrimaryKey(quizModel.getId());
+		oldQuizModel.setActive(quizModel.getActive());
+		oldQuizModel.setUpdateTime(new Date());
+		quizModelMapper.updateByPrimaryKey(oldQuizModel);
+	}
 }

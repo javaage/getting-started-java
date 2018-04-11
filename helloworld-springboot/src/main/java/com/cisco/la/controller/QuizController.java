@@ -165,18 +165,12 @@ public class QuizController {
 	
 	@RequestMapping( value = "only", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Object updateQuizOnly(HttpServletRequest request, @RequestBody String json){
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm");
 		try {  
 	        JSONObject jsonObject = new JSONObject(json);   
 	        QuizModel quizModel = new QuizModel();
 	        quizModel.setId(jsonObject.getInt("id"));
-	        quizModel.setCourseID(jsonObject.getInt("courseID"));
-	        quizModel.setActiveTime(new Date(jsonObject.getLong("activeTime")));
-	        quizModel.setAudienceType(jsonObject.getString("audienceType"));
-	        quizModel.setAudienceList(jsonObject.getString("audienceList"));
 			quizModel.setActive(jsonObject.getBoolean("active"));
-			quizModel.setUpdateTime(new Date());
-			quizService.updateQuiz(quizModel);
+			quizService.updateQuizStatus(quizModel);
 			
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("code", 1);

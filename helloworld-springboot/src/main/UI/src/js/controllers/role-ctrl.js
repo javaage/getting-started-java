@@ -98,22 +98,27 @@ function OperateRoleCtrl($scope, $log,$uibModalInstance, services) {
 
 
     $scope.submitRoleData = function(){
+        $scope.dataLoading = true;
         	if($scope.isModify){
                 services.updateRole($scope.role).then(function(result) {
+                    $scope.dataLoading = false;
                     if (result.code == 1) {
                         $scope.getRoleList();
                         $scope.closeRoleModal();
                     }
                 }, function (error) {
+                    $scope.dataLoading = false;
                     console.log(error);    
                 });
             }else{
                 services.addRole($scope.role).then(function(result) {
+                    $scope.dataLoading = false;
                     if (result.code == 1) {
                         $scope.getRoleList();
                         $scope.closeRoleModal();
                     }
                 }, function (error) {
+                    $scope.dataLoading = false;
                     console.log(error);    
                 });
             }

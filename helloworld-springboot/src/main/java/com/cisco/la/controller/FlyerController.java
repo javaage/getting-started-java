@@ -37,6 +37,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cisco.la.model.QuestionModel;
+import com.cisco.la.model.QuizModel;
 import com.cisco.la.model.FlyerModel;
 import com.cisco.la.service.QuestionService;
 import com.cisco.la.service.FlyerService;
@@ -108,12 +109,35 @@ public class FlyerController {
 	        FlyerModel flyerModel = new FlyerModel();
 	        flyerModel.setId(jsonObject.getInt("id"));
 	        flyerModel.setContent(jsonObject.getString("content"));
+	        
 	        flyerModel.setActiveTime(formatter.parse(jsonObject.getString("activeTime")));
+	        
 	        flyerModel.setAudienceType(jsonObject.getString("audienceType"));
 	        flyerModel.setAudienceList(jsonObject.getString("audienceList"));
 			flyerModel.setActive(true);
 			flyerModel.setUpdateTime(new Date());
 			flyerService.updateFlyer(flyerModel);
+			
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("code", 1);
+			map.put("message", "Successfully");
+			return map; 
+		}catch (Exception e) {  
+	    	Map<String, Object> map = new HashMap<String, Object>();
+			map.put("code", -1);
+			map.put("message", e.getMessage());
+			return map; 
+	    }
+	}
+	
+	@RequestMapping( value = "only", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Object updateFlyerOnly(HttpServletRequest request, @RequestBody String json){
+		try {  
+	        JSONObject jsonObject = new JSONObject(json);   
+	        FlyerModel flyerModel = new FlyerModel();
+	        flyerModel.setId(jsonObject.getInt("id"));
+			flyerModel.setActive(jsonObject.getBoolean("active"));
+			flyerService.updateFlyerStatus(flyerModel);
 			
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("code", 1);
