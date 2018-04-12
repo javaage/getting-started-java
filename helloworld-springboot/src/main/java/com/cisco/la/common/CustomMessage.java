@@ -8,7 +8,6 @@ package com.cisco.la.common;
  *
  */
 public class CustomMessage {
-	public static final String CHAT_BOLT_WELCOME_MESSAGE = "Hi";
 	public static final String CHAT_BOLT_QUERY_ROLE_MESSAGE = "Hi %s, what is your role?";
 	
 	public static final String CHAT_BOLT_COURSE_NEED_MESSAGE = "Here is the training you need to take as %s.%s";
@@ -24,11 +23,11 @@ public class CustomMessage {
 	public static final String CHAT_BOLT_QUERY_ROLE_MESSAGE_ONLY = "What is your role?";
 	public static final String CHAT_BOLT_INVALID_USER_MESSAGE = "You are not in the system. Please contact your admin.";
 	public static final String CHAT_BOLT_INVALID_ROLE_MESSAGE = "I can't find the role of @Role. Can you try it again?";
-	public static final String CHAT_BOLT_FALLBACK_MESSAGE = "Hi, I am here to help you with your personal learning and development, you can ask me:<br>1. \"trainings for my role\" to get to know what trainings other sucessful people are taking<br>2. \"weekly training flyer\" to get to know latest training offerings";
+	public static final String CHAT_BOLT_FALLBACK_MESSAGE = "Hi, I am here to help you with your personal learning and development, you can ask me:<br>1. \"trainings for my role\" to get to know what trainings other sucessful people are taking<br>2. \"weekly training flyer\" to get to know latest training offerings<br>";
 	
-	public static final String CHAT_BOLT_CHANGE_SAMPLE_HELLO = "Hello %s, due to BU transformation, there are upgrades about your skillset.";
+	public static final String CHAT_BOLT_CHANGE_SAMPLE_HELLO = "Hi %s, due to BU transformation, there are upgrades about your skillset.";
 	public static final String CHAT_BOLT_CHANGE_SAMPLE_CHANGE = "Below are the changes for your role as a %s in %s defined by your BU leaders and HR training experts.";
-	public static final String CHAT_BOLT_START_QUIZ_PAPER = "Hi, the training %s %s .  <br> Here is a quick quiz to check your preparation for the training. Please answer by directly replying the choices.  <br>  <br> Are you ready?";
+	public static final String CHAT_BOLT_START_QUIZ_PAPER = "The training %s %s .  <br> Here is a quick quiz to check your preparation for the training. Please answer by directly replying the choices.  <br>  <br> Are you ready?";
 	
 	public static final String CHAT_BOLT_ANSWER_CORRECT = "Correct";
 	public static final String CHAT_BOLT_ANSWER_INCORRECT = "Incorrect";

@@ -70,26 +70,9 @@ public class UserServiceImpl implements UserService {
 	    return userModel;
 	}
 	
-	public List<UserModel> getUserByIDs(String ids) {
-		UserModelMapper userModelMapper = sqlSession.getMapper(UserModelMapper.class);
-		UserModelExample example = new UserModelExample();
-		Criteria criteria = example.createCriteria();
-		
-		String[] idArray = ids.split(",");
-		
-		List<String> idList = new ArrayList<String>();
-		
-		for(int i = 0; i< idArray.length; i++){
-			if(!idArray[i].trim().isEmpty())
-				idList.add(idArray[i].trim());
-		}
-		if(idList.size()>0){
-			criteria.andIdIn(idList);
-			criteria.andActiveEqualTo(true);
-			return userModelMapper.selectByExample(example);
-		}else{
-			return new ArrayList<UserModel>();
-		}
+	public List<UserModel> getUserByIDs(String IDs) {
+		UserJoinMapper userJoinMapper = sqlSession.getMapper(UserJoinMapper.class);
+		return userJoinMapper.getUserByIDs(IDs);
 	}
 	
 	public List<UserModel> getUserList(){
@@ -191,12 +174,16 @@ public class UserServiceImpl implements UserService {
 		Application.logger.debug("begin send");
 		if(Application.envCurrent != Env.local){
 			if(userModel.getRoleID() == null || userModel.getRoleID()<=0){
+				sparkService.sendMarkdownMessage(userModel.getId(), String.format(CustomMessage.CHAT_BOLT_FALLBACK_MESSAGE, userModel.getName()));
+				
 				Application.logger.debug(String.format(CustomMessage.CHAT_BOLT_QUERY_ROLE_MESSAGE, userModel.getName()));
-				sparkService.sendMessage(userModel.getId(), String.format(CustomMessage.CHAT_BOLT_QUERY_ROLE_MESSAGE, userModel.getName()));
+				sparkService.sendMarkdownMessage(userModel.getId(), String.format(CustomMessage.CHAT_BOLT_QUERY_ROLE_MESSAGE, userModel.getName()));
 			}else if(userModel.getRoleID() != oldUserModel.getRoleID()){
+				sparkService.sendMarkdownMessage(userModel.getId(), String.format(CustomMessage.CHAT_BOLT_FALLBACK_MESSAGE, userModel.getName()));
+				
 				RoleModel roleModel = roleService.getRoleByID(userModel.getRoleID());
 				Application.logger.debug(String.format(CustomMessage.CHAT_BOLT_CONGRATS_ROLE_MESSAGE, userModel.getName(), roleModel.getRoleName()));
-				sparkService.sendMessage(userModel.getId(), String.format(CustomMessage.CHAT_BOLT_CONGRATS_ROLE_MESSAGE, userModel.getName(), roleModel.getRoleName()));
+				sparkService.sendMarkdownMessage(userModel.getId(), String.format(CustomMessage.CHAT_BOLT_CONGRATS_ROLE_MESSAGE, userModel.getName(), roleModel.getRoleName()));
 				
 				String action = "input.changeRole";
 				String prefCourse = goldenSampleService.getGoldenSampleStringByRoleID(userModel.getId(), roleModel.getId());

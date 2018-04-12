@@ -6,4 +6,6 @@ import com.cisco.la.model.UserModel;
 
 public interface UserJoinMapper {
 	List<UserModel> getUserJoin();
+	
+	List<UserModel> getUserByIDs(String IDs);
 }

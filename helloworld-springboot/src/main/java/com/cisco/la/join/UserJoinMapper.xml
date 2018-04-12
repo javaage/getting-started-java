@@ -26,4 +26,14 @@
 	  ON u.usr_rl_id = r.rl_id
 	  ORDER BY u.usr_active desc
 	</select>
+	
+	<select id="getUserByIDs" parameterType="string" resultMap="UserResultMap">
+		SELECT u.usr_id, u.usr_name, u.usr_budget, u.usr_balance, u.usr_bu, u.usr_title, 
+       u.usr_grade, u.usr_rl_id, u.usr_active, r.rl_name
+	  FROM public.la_user u
+	  LEFT JOIN public.la_role r
+	  ON u.usr_rl_id = r.rl_id
+	  where u.usr_active=true and position(u.usr_id in #{IDs}) > 0
+	  ORDER BY u.usr_active desc
+	</select>
 </mapper>

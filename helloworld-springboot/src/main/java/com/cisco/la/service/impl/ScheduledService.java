@@ -145,6 +145,8 @@ public class ScheduledService {
 		
 		List<PaperModel> listPaperModel = paperService.getWaitingPaper();
 		for(PaperModel paperModel : listPaperModel){
+			sparkService.sendMarkdownMessage(paperModel.getUserID(), CustomMessage.CHAT_BOLT_FALLBACK_MESSAGE);
+			
 			QuizModel quizModel = quizService.getQuizByID(paperModel.getQuizID());
 			
 			CourseModel courseModel = courseService.getCourseByID(quizModel.getCourseID());
@@ -172,6 +174,8 @@ public class ScheduledService {
 			}
 				
 			for(UserModel userModel : listUserModel){
+				sparkService.sendMarkdownMessage(userModel.getId(), CustomMessage.CHAT_BOLT_FALLBACK_MESSAGE);
+				
 				sparkService.sendMarkdownMessage(userModel.getId(), flyerModel.getContent());
 			}
 			flyerModel.setActive(false);

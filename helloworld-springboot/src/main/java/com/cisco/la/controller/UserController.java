@@ -157,9 +157,6 @@ public class UserController {
 			userService.addUser(userModel);
 			
 			String message = "Successfully";
-//			if(Application.envCurrent != Env.local){
-//				message = messageService.sendMessage(userModel.getId(), CHAT_BOLT_WELCOME_MESSAGE);
-//			}
 			
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("code", 1);
@@ -200,10 +197,6 @@ public class UserController {
 			userService.updateUser(userModel); 
 			
 			userService.sendUpdateMessage(oldUserModel, userModel);
-			/**
-			 {"toPersonEmail":"subing.xiao@pactera.com","created":"2018-01-29T06:53:35.339Z","personEmail":"LnDBot@sparkbot.io","personId":"Y2lzY29zcGFyazovL3VzL1BFT1BMRS9kYzBiMjJlMy00MGI1LTRhOWEtYTVhNS0xNzQ2YWQ1NTMxMzA","id":"Y2lzY29zcGFyazovL3VzL01FU1NBR0UvMjA2MzdiYjAtMDRjMS0xMWU4LWEzZGItYzdmMzc0NWViYTQw","text":"Hello Spring, what is your role?","roomId":"Y2lzY29zcGFyazovL3VzL1JPT00vOWVmYTZlYjYtOWQyZS0zOGQwLTkwZTMtN2QwYzljZDhhOWYw","roomType":"direct"}
-			 */
-			
 			
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("code", 1);
@@ -214,9 +207,6 @@ public class UserController {
 			map.put("code", -1);
 			map.put("message", e.getMessage());
 			return map; 
-	    } 
-		
+	    }
 	}
-
-	
 }
