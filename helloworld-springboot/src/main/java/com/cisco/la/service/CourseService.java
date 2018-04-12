@@ -21,4 +21,6 @@ public interface CourseService {
   public List<CourseModel> getCourseListByList(String strList);
   
   public List<CourseModel> getCourseListRecent(Date startDate, Date endDate);
+  
+  public void deleteCourse(int id);
 }

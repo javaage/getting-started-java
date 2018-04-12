@@ -18,4 +18,6 @@ public interface QuizService {
   public List<QuizModel> getWaitingQuizList();
   
   public void updateQuizStatus(QuizModel quizModel);
+  
+  public void deleteQuiz(int id);
 }

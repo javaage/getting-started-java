@@ -108,4 +108,10 @@ public class QuizServiceImpl implements QuizService {
 		oldQuizModel.setUpdateTime(new Date());
 		quizModelMapper.updateByPrimaryKey(oldQuizModel);
 	}
+
+	@Override
+	public void deleteQuiz(int id) {
+		QuizModelMapper quizModelMapper = sqlSession.getMapper(QuizModelMapper.class);
+		quizModelMapper.deleteByPrimaryKey(id);
+	}
 }

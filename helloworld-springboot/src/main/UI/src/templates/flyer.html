@@ -13,10 +13,14 @@
 				                <td title="'Audience Type'" sortable="'audienceType'" class="text-center">{{item.audienceTypeValue}}</td>
 				                <td title="'Active Time'" sortable="'activeTime'" class="text-center">{{item.activeTime | date: 'yyyy-MM-dd HH:mm' : GMT}}</td><!--GMT+0800-->
 				                <td title="'Operation'" class="text-center" >
-				                	<span  ng-if="!item.active" style="width: 80px;margin-left: 10px; margin-right: 10px;">Update</span>	
-				                	<a ng-click="updateFlyerModal(item)" ng-if="item.active" style="width: 80px;margin-left: 10px; margin-right: 10px;">Update</a>
+				                	<a ng-click="updateFlyerModal(item)"  style="width: 80px;margin-left: 10px; margin-right: 10px;">Update</a>
+				                	<a ng-click="deleteFlyer(item.id)"  style="width: 80px;margin-left: 10px; margin-right: 10px;">Delete</a>
+				                	<!--
+				                	<span  style="width: 80px;margin-left: 10px; margin-right: 10px;">Update</span>	
+				                	
 				                	<a ng-click="inactiveFlyer(item)" ng-if="item.active" style="width: 80px;">Inactive</a>
 				                	<a ng-click="activeFlyer(item)" ng-if="!item.active" style="width: 80px;">&nbsp;Active&nbsp;</a>
+				                	-->
 				                </td>	
 			            </tr>
 			        </table>

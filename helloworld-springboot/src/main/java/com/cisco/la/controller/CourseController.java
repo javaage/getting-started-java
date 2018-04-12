@@ -45,6 +45,15 @@ import com.cisco.la.service.CourseService;
 public class CourseController {
 	@Autowired
 	private CourseService courseService;
+	@RequestMapping(value = "{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Object deleteCourse(HttpServletRequest request, @PathVariable("id") int id){
+		courseService.deleteCourse(id);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("code", 1);
+		map.put("message", "Successfully");
+		return map;
+	}
 	
 	@RequestMapping(value = "{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Object getCourse(HttpServletRequest request, @PathVariable("id") int id){

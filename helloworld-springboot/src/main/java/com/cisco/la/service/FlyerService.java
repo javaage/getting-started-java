@@ -18,4 +18,6 @@ public interface FlyerService {
   public List<FlyerModel> getWaitingFlyerListByID(String userID);
   
   public void updateFlyerStatus(FlyerModel flyerModel);
+  
+  public void deleteFlyer(int id);
 }

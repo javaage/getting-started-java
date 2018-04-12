@@ -15,4 +15,6 @@ public interface RoleService {
   public RoleModel getRoleByName(String roleName);
   
   public List<RoleModel> getRoleList();
+  
+  public void deleteRole(int id);
 }

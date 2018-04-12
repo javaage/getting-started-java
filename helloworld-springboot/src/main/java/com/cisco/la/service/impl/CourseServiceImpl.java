@@ -113,4 +113,10 @@ public class CourseServiceImpl implements CourseService {
 		return courseModelMapper.selectByExample(example);
 	}
 
+	@Override
+	public void deleteCourse(int id) {
+		CourseModelMapper courseModelMapper = sqlSession.getMapper(CourseModelMapper.class);
+		courseModelMapper.deleteByPrimaryKey(id);
+	}
+
 }

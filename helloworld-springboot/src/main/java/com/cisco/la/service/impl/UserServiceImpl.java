@@ -246,4 +246,10 @@ public class UserServiceImpl implements UserService {
 			}
 		}
 	}
+
+	@Override
+	public void deleteUser(String id) {
+		UserModelMapper userModelMapper = sqlSession.getMapper(UserModelMapper.class);
+		userModelMapper.deleteByPrimaryKey(id);
+	}
 }

@@ -645,4 +645,99 @@ angular
 
                 return deferred.promise;
             };
+
+            this.deleteUserByID = function(id){
+                var deferred = $q.defer();
+                var urlQuery = this.urlFormat(url.deleteUserByID,id);
+                $http.delete(urlQuery,{})
+                .success(function(data){
+                    console.log(data);
+                    if (data.code == 1) {
+                        deferred.resolve(data);
+                    } else {
+                        deferred.reject(data);
+                    }
+                })
+                .error(function(error){
+                    deferred.reject(error);
+                });
+
+                return deferred.promise;
+            };
+
+            this.deleteRoleByID = function(id){
+                var deferred = $q.defer();
+                var urlQuery = this.urlFormat(url.deleteRoleByID,id);
+                $http.delete(urlQuery,{})
+                .success(function(data){
+                    console.log(data);
+                    if (data.code == 1) {
+                        deferred.resolve(data);
+                    } else {
+                        deferred.reject(data);
+                    }
+                })
+                .error(function(error){
+                    deferred.reject(error);
+                });
+
+                return deferred.promise;
+            };
+
+            this.deleteCourseByID = function(id){
+                var deferred = $q.defer();
+                var urlQuery = this.urlFormat(url.deleteCourseByID,id);
+                $http.delete(urlQuery,{})
+                .success(function(data){
+                    console.log(data);
+                    if (data.code == 1) {
+                        deferred.resolve(data);
+                    } else {
+                        deferred.reject(data);
+                    }
+                })
+                .error(function(error){
+                    deferred.reject(error);
+                });
+
+                return deferred.promise;
+            };
+
+            this.deleteQuizByID = function(id){
+                var deferred = $q.defer();
+                var urlQuery = this.urlFormat(url.deleteQuizByID,id);
+                $http.delete(urlQuery,{})
+                .success(function(data){
+                    console.log(data);
+                    if (data.code == 1) {
+                        deferred.resolve(data);
+                    } else {
+                        deferred.reject(data);
+                    }
+                })
+                .error(function(error){
+                    deferred.reject(error);
+                });
+
+                return deferred.promise;
+            };
+
+            this.deleteFlyerByID = function(id){
+                var deferred = $q.defer();
+                var urlQuery = this.urlFormat(url.deleteFlyerByID,id);
+                $http.delete(urlQuery,{})
+                .success(function(data){
+                    console.log(data);
+                    if (data.code == 1) {
+                        deferred.resolve(data);
+                    } else {
+                        deferred.reject(data);
+                    }
+                })
+                .error(function(error){
+                    deferred.reject(error);
+                });
+
+                return deferred.promise;
+            };
         }]);

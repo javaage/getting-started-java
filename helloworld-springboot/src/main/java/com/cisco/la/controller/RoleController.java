@@ -43,6 +43,16 @@ public class RoleController {
 	@Autowired
 	private RoleService roleService;
 	
+	@RequestMapping(value = "{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Object deleteRole(HttpServletRequest request, @PathVariable("id") int id){
+		roleService.deleteRole(id);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("code", 1);
+		map.put("message", "Successfully");
+		return map;
+	}
+	
 	@RequestMapping(value = "rolename/{roleName}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Object getRoleByName(HttpServletRequest request, @PathVariable("roleName") String roleName){
 		RoleModel roleModel = roleService.getRoleByName(roleName);

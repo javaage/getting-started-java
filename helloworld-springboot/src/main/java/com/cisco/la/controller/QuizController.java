@@ -51,6 +51,15 @@ public class QuizController {
 	
 	@Autowired
 	private QuestionService questionService;
+	@RequestMapping(value = "{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Object deleteQuiz(HttpServletRequest request, @PathVariable("id") int id){
+		quizService.deleteQuiz(id);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("code", 1);
+		map.put("message", "Successfully");
+		return map;
+	}
 	
 	@RequestMapping(value = "{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Object getQuiz(HttpServletRequest request, @PathVariable("id") int id){

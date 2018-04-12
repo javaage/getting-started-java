@@ -79,4 +79,10 @@ public class RoleServiceImpl implements RoleService {
 		}
 	}
 
+	@Override
+	public void deleteRole(int id) {
+		RoleModelMapper roleModelMapper = sqlSession.getMapper(RoleModelMapper.class);
+		roleModelMapper.deleteByPrimaryKey(id);
+	}
+
 }

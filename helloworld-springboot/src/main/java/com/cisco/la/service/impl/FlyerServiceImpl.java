@@ -134,4 +134,10 @@ public class FlyerServiceImpl implements FlyerService {
 		return results;
 	}
 
+	@Override
+	public void deleteFlyer(int id) {
+		FlyerModelMapper flyerModelMapper = sqlSession.getMapper(FlyerModelMapper.class);
+		flyerModelMapper.deleteByPrimaryKey(id);
+	}
+
 }

@@ -116,6 +116,19 @@ function FlyerCtrl($rootScope, $scope, $log,$uibModal, services,NgTableParams, $
         });
     };
 
+    $scope.deleteFlyer = function(id){
+        if(confirm('Are you sure you want to delete?')){
+            services.deleteFlyerByID(id).then(function(result) {
+                if (result.code == 1) {
+                    $scope.getFlyerList();
+                }
+            }, function (error) {
+                console.log(error);    
+            });
+        }
+        
+    }
+
     $scope.updateFlyer = function(flyer){
         services.updateFlyer(flyer).then(function(result) {
             if (result.code == 1) {

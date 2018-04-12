@@ -20,8 +20,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -38,16 +36,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cisco.la.Application;
 import com.cisco.la.Application.Env;
-import com.cisco.la.common.CustomMessage;
 import com.cisco.la.common.SparkService;
-import com.cisco.la.model.MessageModel;
 import com.cisco.la.model.RoleHistoryModel;
-import com.cisco.la.model.RoleModel;
 import com.cisco.la.model.UserModel;
-import com.cisco.la.service.GoldenSampleService;
-import com.cisco.la.service.MessageService;
 import com.cisco.la.service.RoleHistoryService;
-import com.cisco.la.service.RoleService;
 import com.cisco.la.service.UserService;
 
 
@@ -60,20 +52,20 @@ public class UserController {
 	private UserService userService;
 	
 	@Autowired
-	private RoleService roleService;
-	
-	@Autowired
 	private SparkService sparkService;
 	
 	@Autowired
-	private GoldenSampleService goldenSampleService;
-	
-	@Autowired
-	private MessageService messageService;
-	
-	@Autowired
 	private RoleHistoryService roleHistoryService;
-	private Timer timer = new Timer();
+	
+	@RequestMapping(value = "{id:.+}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Object deleteUser(HttpServletRequest request, @PathVariable("id") String id){
+		userService.deleteUser(id);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("code", 1);
+		map.put("message", "Successfully");
+		return map;
+	}
 	
 	@RequestMapping(value = "{id:.+}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Object getUser(HttpServletRequest request, @PathVariable("id") String id){

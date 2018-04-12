@@ -10,7 +10,7 @@
     <javaClientGenerator targetPackage="com.cisco.la.mapper" targetProject="la" type="XMLMAPPER" />
 
     <table schema="public" tableName="LA_COURSE" domainObjectName="CourseModel">
-      <generatedKey column="CRS_ID" sqlStatement="SELECT nextval('la_course_crs_id_seq')" identity="true"/>
+      <generatedKey column="CRS_ID" sqlStatement="SELECT currval('la_course_crs_id_seq')" identity="true"/>
       <columnOverride column="CRS_ID" property="id" javaType="int" />
       <columnOverride column="CRS_NAME" property="courseName"  />
       <columnOverride column="CRS_PRICE" property="price" />
@@ -25,7 +25,7 @@
       <columnOverride column="HSTR_UPDATE_TIME" property="updateTime"  jdbcType="TIMESTAMP" />
     </table>
     <table schema="public" tableName="LA_GOLDEN_SAMPLE" domainObjectName="GoldenSampleModel">
-      <generatedKey column="SMPL_ID" sqlStatement="SELECT nextval('la_golden_sample_smpl_id_seq')" identity="true"/>
+      <generatedKey column="SMPL_ID" sqlStatement="SELECT currval('la_golden_sample_smpl_id_seq')" identity="true"/>
       <columnOverride column="SMPL_ID" property="id" javaType="int" />
       <columnOverride column="SMPL_NAME" property="goldenSampleName"  />
       <columnOverride column="SMPL_RL_ID" property="roleID"  />
@@ -40,7 +40,7 @@
       <columnOverride column="HSTR_UPDATE_TIME" property="updateTime"  jdbcType="TIMESTAMP" />
     </table>
     <table schema="public" tableName="LA_ROLE" domainObjectName="RoleModel">
-      <generatedKey column="RL_ID" sqlStatement="SELECT nextval('la_role_rl_id_seq')" identity="true"/>
+      <generatedKey column="RL_ID" sqlStatement="SELECT currval('la_role_rl_id_seq')" identity="true"/>
       <columnOverride column="RL_ID" property="id" javaType="int" />
       <columnOverride column="RL_NAME" property="roleName"  />
       <columnOverride column="RL_BU" property="bu"  />
@@ -63,7 +63,7 @@
     </table>
     
     <table schema="public" tableName="LA_RECORD" domainObjectName="RecordModel">
-    <generatedKey column="CRD_ID" sqlStatement="SELECT nextval('la_record_crd_id_seq')" identity="true"/>
+    <generatedKey column="CRD_ID" sqlStatement="SELECT currval('la_record_crd_id_seq')" identity="true"/>
       <columnOverride column="CRD_ID" property="id"  />
       <columnOverride column="CRD_REQUEST" property="request"  />
       <columnOverride column="CRD_RESPONSE" property="response"  />
@@ -71,7 +71,7 @@
     </table>
     
     <table schema="public" tableName="LA_MESSAGE" domainObjectName="MessageModel">
-    <generatedKey column="MSG_ID" sqlStatement="SELECT nextval('la_message_msg_id_seq')" identity="true"/>
+    <generatedKey column="MSG_ID" sqlStatement="SELECT currval('la_message_msg_id_seq')" identity="true"/>
       <columnOverride column="MSG_ID" property="id"  />
       <columnOverride column="MSG_USER_ID" property="userID"  />
       <columnOverride column="MSG_CONTENT" property="content"  />
@@ -92,7 +92,7 @@
     </table>
     
     <table schema="public" tableName="LA_QUIZ" domainObjectName="QuizModel">
-    <generatedKey column="QUZ_ID" sqlStatement="SELECT nextval('la_quiz_quz_id_seq')" identity="true"/>
+    <generatedKey column="QUZ_ID" sqlStatement="SELECT currval('la_quiz_quz_id_seq')" identity="true"/>
       <columnOverride column="QUZ_ID" property="id"  />
       <columnOverride column="QUZ_CRS_ID" property="courseID"  />
       <columnOverride column="QUZ_ACTIVE_TIME" property="activeTime" jdbcType="TIMESTAMP" />
@@ -103,7 +103,7 @@
     </table>
     
     <table schema="public" tableName="LA_PAPER" domainObjectName="PaperModel">
-    <generatedKey column="PPR_ID" sqlStatement="SELECT nextval('la_quiz_quz_id_seq')" identity="true"/>
+    <generatedKey column="PPR_ID" sqlStatement="SELECT currval('la_paper_ppr_id_seq')" identity="true"/>
       <columnOverride column="PPR_ID" property="id"  />
       <columnOverride column="PPR_QUZ_ID" property="quizID"  />
       <columnOverride column="PPR_USR_ID" property="userID" />
@@ -119,7 +119,7 @@
     </table>
     
     <table schema="public" tableName="LA_FLYER" domainObjectName="FlyerModel">
-    <generatedKey column="FLR_ID" sqlStatement="SELECT nextval('la_flyer_flr_id_seq')" identity="true"/>
+      <generatedKey column="FLR_ID" sqlStatement="SELECT currval('la_flyer_flr_id_seq')" identity="true"/>
       <columnOverride column="FLR_ID" property="id"  />
       <columnOverride column="FLR_CONTENT" property="content"  />
       <columnOverride column="FLR_ACTIVE_TIME" property="activeTime" jdbcType="TIMESTAMP" />
