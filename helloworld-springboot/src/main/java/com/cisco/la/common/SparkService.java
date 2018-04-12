@@ -32,29 +32,29 @@ import com.google.gson.Gson;
  */
 @Service
 public class SparkService {
-	public void sendMessage(String email, String message){
-		if(Application.envCurrent == Env.local){
-			return;
-		}
-		String urlSendMessage = "https://api.ciscospark.com/v1/messages";
-		try {
-			Pattern r = Pattern.compile("\\s");
-			Matcher m = r.matcher(message);
-			message = m.replaceAll(" ");
-			
-			JSONObject request = new JSONObject();
-			request.put("toPersonEmail", email);
-			request.put("text", message);
-			
-			Map<String, String> headers = new HashMap<String, String>();
-			headers.put("content-type", "application/json; charset=utf-8");
-			headers.put("authorization", "Bearer " + Application.boltToken);
-			
-			httpsConnection(urlSendMessage,"POST",request.toString(), headers);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-	}
+//	public void sendMessage(String email, String message){
+//		if(Application.envCurrent == Env.local){
+//			return;
+//		}
+//		String urlSendMessage = "https://api.ciscospark.com/v1/messages";
+//		try {
+//			Pattern r = Pattern.compile("\\s");
+//			Matcher m = r.matcher(message);
+//			message = m.replaceAll(" ");
+//			
+//			JSONObject request = new JSONObject();
+//			request.put("toPersonEmail", email);
+//			request.put("text", message);
+//			
+//			Map<String, String> headers = new HashMap<String, String>();
+//			headers.put("content-type", "application/json; charset=utf-8");
+//			headers.put("authorization", "Bearer " + Application.boltToken);
+//			
+//			httpsConnection(urlSendMessage,"POST",request.toString(), headers);
+//		} catch (Exception ex) {
+//			ex.printStackTrace();
+//		}
+//	}
 	
 	public void sendMarkdownMessage(String email, String message){
 		Application.logger.debug("sendMarkdownMessage");

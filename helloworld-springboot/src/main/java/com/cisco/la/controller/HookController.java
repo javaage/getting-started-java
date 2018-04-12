@@ -211,8 +211,12 @@ public class HookController {
 				speech = " ";
 				code.put("speech", " ");
 				code.put("displayText", " ");
-				break;
-			} 
+			} else{
+				sparkService.sendMarkdownMessage(userModel.getId(), CustomMessage.CHAT_BOLT_FALLBACK_MESSAGE);
+				code.put("speech", " ");
+				code.put("displayText", " ");
+			}
+			break;
 		case "flyer:weeklyTraining":
 			List<FlyerModel> listFlyerModel = flyerService.getWaitingFlyerListByID(userModel.getId());
 			
@@ -256,9 +260,9 @@ public class HookController {
 			
 			break;
 		default:
-			speech = CustomMessage.CHAT_BOLT_FALLBACK_MESSAGE;
-			code.put("speech", speech);
-			code.put("displayText", speech);
+			sparkService.sendMarkdownMessage(userModel.getId(), CustomMessage.CHAT_BOLT_FALLBACK_MESSAGE);
+			code.put("speech", " ");
+			code.put("displayText", " ");
 			break;
 		}
 		
