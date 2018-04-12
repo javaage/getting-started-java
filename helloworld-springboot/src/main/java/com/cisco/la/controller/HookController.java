@@ -375,6 +375,8 @@ public class HookController {
 				a = "3";
 			}else if(speech.contains("4")){
 				a = "4";
+			}else{
+				return false;
 			}
 			if(answer==null || answer.isEmpty()){
 				answer = a;
