@@ -22,6 +22,8 @@ public interface GoldenSampleService {
 	  
 	  public String getGoldenSampleStringByRoleID(String userID, int roleID);
 	  
+	  public String getGoldenSampleLinkByRoleID(String userID, int roleID);
+	  
 	  public CourseModel getRecentCourseModel(String userID, int roleID);
 	  
 	  public String getRecentCoursePref(String userID, int roleID);

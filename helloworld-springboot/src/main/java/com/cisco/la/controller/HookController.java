@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cisco.la.Application;
+import com.cisco.la.Application.Env;
 import com.cisco.la.common.CustomMessage;
 import com.cisco.la.common.SparkService;
 import com.cisco.la.model.CourseModel;
@@ -41,6 +42,7 @@ import com.cisco.la.model.FlyerModel;
 import com.cisco.la.model.MessageModel;
 import com.cisco.la.model.PaperModel;
 import com.cisco.la.model.RecordModel;
+import com.cisco.la.model.RoleHistoryModel;
 import com.cisco.la.model.RoleModel;
 import com.cisco.la.model.UserModel;
 import com.cisco.la.service.CourseService;
@@ -174,9 +176,13 @@ public class HookController {
 				roleModel = roleService.getRoleByID(userModel.getRoleID());
 				speech = speech.replace("@Role", roleModel.getRoleName());
 				speech = speech.replace("@Course", prefCourse);
+				sparkService.sendMarkdownMessage(personEmail, speech);
+				
+				addConfirmRegisterMessage(userModel);
+				
 				code.put("speech", " ");
 				code.put("displayText", " ");
-				sparkService.sendMarkdownMessage(personEmail, speech);
+				
 			} else {
 				speech = CustomMessage.CHAT_BOLT_QUERY_ROLE_MESSAGE_ONLY;
 				code.put("speech", speech);
@@ -201,8 +207,8 @@ public class HookController {
 				
 				if(beginQuiz(userModel.getId())){
 					speech = " ";
-					code.put("speech", " ");
-					code.put("displayText", " ");
+					code.put("speech", speech);
+					code.put("displayText", speech);
 				}
 			}
 			break;
@@ -326,6 +332,40 @@ public class HookController {
 		recordService.addRecord(recordModel);
 
 		return code;
+	}
+	
+	public void addConfirmRegisterMessage(UserModel userModel) {
+		MessageModel latestMessageModel = messageService.getLatestMessageByUserID();
+		int session = 1;
+		int level = 1;
+		int serial = 1;
+		if(latestMessageModel!=null){
+			session = latestMessageModel.getSession()+1;
+			level = latestMessageModel.getLevel()+1;
+			serial = latestMessageModel.getSerial()+1;
+		}
+		
+		if(Application.envCurrent != Env.local){
+			RoleModel roleModel = roleService.getRoleByID(userModel.getRoleID());
+			
+			String action = "input.confirmRegister";
+			String prefCourse = goldenSampleService.getGoldenSampleLinkByRoleID(userModel.getId(), roleModel.getId());
+	    	if(!prefCourse.isEmpty()){
+	    		Application.logger.debug(String.format(CustomMessage.CHAT_BOLT_CONFIRM_REGISTER_MESSAGE, prefCourse));
+				//result = sparkService.sendMarkdownMessage(userModel.getId(), String.format(CustomMessage.CHAT_BOLT_PREFER_ROLE_MESSAGE, roleModel.getRoleName(), prefCourse));
+	    		MessageModel messageModelPreferRole = new MessageModel();
+	    		messageModelPreferRole.setActive(true);
+	    		messageModelPreferRole.setContent(String.format(CustomMessage.CHAT_BOLT_CONFIRM_REGISTER_MESSAGE, prefCourse));
+	    		messageModelPreferRole.setCreateDate(new Date());
+	    		messageModelPreferRole.setLevel(level);
+	    		messageModelPreferRole.setSerial(serial);
+	    		messageModelPreferRole.setSession(session);
+	    		messageModelPreferRole.setUserID(userModel.getId());
+	    		messageModelPreferRole.setAction(action);
+	    		messageModelPreferRole.setIntent("accept");
+	    		messageService.addMessage(messageModelPreferRole);
+	    	}
+		}
 	}
 	
 	private boolean beginQuiz(String userID){

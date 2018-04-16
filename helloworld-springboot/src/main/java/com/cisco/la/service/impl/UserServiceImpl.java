@@ -173,6 +173,7 @@ public class UserServiceImpl implements UserService {
 		
 		Application.logger.debug("begin send");
 		if(Application.envCurrent != Env.local){
+			
 			if(userModel.getRoleID() == null || userModel.getRoleID()<=0){
 				sparkService.sendMarkdownMessage(userModel.getId(), String.format(CustomMessage.CHAT_BOLT_FALLBACK_MESSAGE, userModel.getName()));
 				

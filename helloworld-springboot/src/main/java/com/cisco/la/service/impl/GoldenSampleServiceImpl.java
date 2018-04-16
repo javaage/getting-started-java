@@ -86,7 +86,7 @@ public class GoldenSampleServiceImpl implements GoldenSampleService {
 			List<CourseModel> listOptional = courseService.getUserCourseListByList(userID, strOptional);
 			
 			if(listMandatory!=null && listMandatory.size()>0){
-				result.append("<br>### Mandatory:");
+				result.append("<br> Mandatory:");
 				for(CourseModel courseModel : listMandatory){
 					if(courseModel.getUrl()!=null && !courseModel.getUrl().isEmpty())
 						result.append(String.format("<br>[%s](%s)",courseModel.getCourseName(), courseModel.getUrl()));
@@ -96,7 +96,7 @@ public class GoldenSampleServiceImpl implements GoldenSampleService {
 			}
 			
 			if(listOptional!=null && listOptional.size()>0){
-				result.append("<br>### Optional:");
+				result.append("<br> Optional:");
 				for(CourseModel courseModel : listOptional){
 					if(courseModel.getUrl()!=null && !courseModel.getUrl().isEmpty())
 						result.append(String.format("<br>[%s](%s)",courseModel.getCourseName(), courseModel.getUrl()));
@@ -104,6 +104,8 @@ public class GoldenSampleServiceImpl implements GoldenSampleService {
 						result.append("<br>" + courseModel.getCourseName());
 				}
 			}
+			
+			result.append("<br><br>");
 			
 		}
 		Application.logger.debug(result.toString());
@@ -201,5 +203,44 @@ public class GoldenSampleServiceImpl implements GoldenSampleService {
 	public void deleteGoldenSample(int id) {
 		GoldenSampleModelMapper goldenSampleModelMapper = sqlSession.getMapper(GoldenSampleModelMapper.class);
 		goldenSampleModelMapper.deleteByPrimaryKey(id);
+	}
+
+	@Override
+	public String getGoldenSampleLinkByRoleID(String userID, int roleID) {
+		StringBuilder result = new StringBuilder("");
+		Application.logger.debug("getGoldenSampleLinkByRoleID enter" + roleID);
+		List<GoldenSampleModel> listSample = getGoldenSampleListByRoleID(roleID);
+		if(listSample!=null && listSample.size()>0){
+			String strMandatory = listSample.get(0).getMandatory();
+			String strOptional = listSample.get(0).getOptional();
+			Application.logger.debug(strMandatory);
+			Application.logger.debug(strOptional);
+			List<CourseModel> listMandatory = courseService.getUserCourseListByList(userID, strMandatory);
+			List<CourseModel> listOptional = courseService.getUserCourseListByList(userID, strOptional);
+			
+			if(listMandatory!=null && listMandatory.size()>0){
+				result.append("<br>");
+				for(CourseModel courseModel : listMandatory){
+					if(courseModel.getUrl()!=null && !courseModel.getUrl().isEmpty())
+						result.append(String.format("<br>[%s](%s)",courseModel.getCourseName(), courseModel.getUrl()));
+					else
+						result.append("<br>" + courseModel.getCourseName());
+				}
+			}
+			
+			if(listOptional!=null && listOptional.size()>0){
+				for(CourseModel courseModel : listOptional){
+					if(courseModel.getUrl()!=null && !courseModel.getUrl().isEmpty())
+						result.append(String.format("<br>[%s](%s)",courseModel.getCourseName(), courseModel.getUrl()));
+					else
+						result.append("<br>" + courseModel.getCourseName());
+				}
+			}
+			
+			result.append("<br>");
+			
+		}
+		Application.logger.debug(result.toString());
+		return result.toString();
 	}
 }
