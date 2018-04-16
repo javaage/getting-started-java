@@ -218,7 +218,7 @@ public class HookController {
 				code.put("speech", " ");
 				code.put("displayText", " ");
 			} else{
-				sparkService.sendMarkdownMessage(userModel.getId(), CustomMessage.CHAT_BOLT_FALLBACK_MESSAGE);
+				sparkService.sendMarkdownMessage(userModel.getId(), String.format(CustomMessage.CHAT_BOLT_FALLBACK_MESSAGE, userModel.getName()) );
 				code.put("speech", " ");
 				code.put("displayText", " ");
 			}
@@ -266,7 +266,7 @@ public class HookController {
 			
 			break;
 		default:
-			sparkService.sendMarkdownMessage(userModel.getId(), CustomMessage.CHAT_BOLT_FALLBACK_MESSAGE);
+			sparkService.sendMarkdownMessage(userModel.getId(), String.format(CustomMessage.CHAT_BOLT_FALLBACK_MESSAGE, userModel.getName()));
 			code.put("speech", " ");
 			code.put("displayText", " ");
 			break;

@@ -219,7 +219,6 @@ public class GoldenSampleServiceImpl implements GoldenSampleService {
 			List<CourseModel> listOptional = courseService.getUserCourseListByList(userID, strOptional);
 			
 			if(listMandatory!=null && listMandatory.size()>0){
-				result.append("<br>");
 				for(CourseModel courseModel : listMandatory){
 					if(courseModel.getUrl()!=null && !courseModel.getUrl().isEmpty())
 						result.append(String.format("<br>[%s](%s)",courseModel.getCourseName(), courseModel.getUrl()));

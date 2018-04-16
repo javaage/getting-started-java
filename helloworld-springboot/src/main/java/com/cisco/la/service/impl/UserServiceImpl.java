@@ -177,8 +177,8 @@ public class UserServiceImpl implements UserService {
 			if(userModel.getRoleID() == null || userModel.getRoleID()<=0){
 				sparkService.sendMarkdownMessage(userModel.getId(), String.format(CustomMessage.CHAT_BOLT_FALLBACK_MESSAGE, userModel.getName()));
 				
-				Application.logger.debug(String.format(CustomMessage.CHAT_BOLT_QUERY_ROLE_MESSAGE, userModel.getName()));
-				sparkService.sendMarkdownMessage(userModel.getId(), String.format(CustomMessage.CHAT_BOLT_QUERY_ROLE_MESSAGE, userModel.getName()));
+				Application.logger.debug(CustomMessage.CHAT_BOLT_QUERY_ROLE_MESSAGE);
+				sparkService.sendMarkdownMessage(userModel.getId(), CustomMessage.CHAT_BOLT_QUERY_ROLE_MESSAGE);
 			}else if(userModel.getRoleID() != oldUserModel.getRoleID()){
 				sparkService.sendMarkdownMessage(userModel.getId(), String.format(CustomMessage.CHAT_BOLT_FALLBACK_MESSAGE, userModel.getName()));
 				

@@ -145,17 +145,21 @@ public class ScheduledService {
 		
 		List<PaperModel> listPaperModel = paperService.getWaitingPaper();
 		for(PaperModel paperModel : listPaperModel){
-			sparkService.sendMarkdownMessage(paperModel.getUserID(), CustomMessage.CHAT_BOLT_FALLBACK_MESSAGE);
+			UserModel userModel = userService.getUserByID(paperModel.getUserID());
 			
-			QuizModel quizModel = quizService.getQuizByID(paperModel.getQuizID());
-			
-			CourseModel courseModel = courseService.getCourseByID(quizModel.getCourseID());
-			
-			long delta = courseModel.getStartDate().getTime() - new Date().getTime();
-			
-			String message = String.format(CustomMessage.CHAT_BOLT_START_QUIZ_PAPER, courseModel.getCourseName(), Util.getDaysSentence(delta));
-			
-			sparkService.sendMarkdownMessage(paperModel.getUserID(), message);
+			if(userModel!=null){
+				sparkService.sendMarkdownMessage(paperModel.getUserID(), String.format(CustomMessage.CHAT_BOLT_FALLBACK_MESSAGE, userModel.getName()));
+				
+				QuizModel quizModel = quizService.getQuizByID(paperModel.getQuizID());
+				
+				CourseModel courseModel = courseService.getCourseByID(quizModel.getCourseID());
+				
+				long delta = courseModel.getStartDate().getTime() - new Date().getTime();
+				
+				String message = String.format(CustomMessage.CHAT_BOLT_START_QUIZ_PAPER, courseModel.getCourseName(), Util.getDaysSentence(delta));
+				
+				sparkService.sendMarkdownMessage(paperModel.getUserID(), message);
+			}
 			
 			paperModel.setSession(new Date());
 			paperService.updatePaper(paperModel);
@@ -174,7 +178,7 @@ public class ScheduledService {
 			}
 				
 			for(UserModel userModel : listUserModel){
-				sparkService.sendMarkdownMessage(userModel.getId(), CustomMessage.CHAT_BOLT_FALLBACK_MESSAGE);
+				sparkService.sendMarkdownMessage(userModel.getId(), String.format(CustomMessage.CHAT_BOLT_FALLBACK_MESSAGE, userModel.getName()));
 				
 				sparkService.sendMarkdownMessage(userModel.getId(), flyerModel.getContent());
 			}
