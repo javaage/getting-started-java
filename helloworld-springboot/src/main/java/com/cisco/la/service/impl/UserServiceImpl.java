@@ -183,8 +183,8 @@ public class UserServiceImpl implements UserService {
 				sparkService.sendMarkdownMessage(userModel.getId(), String.format(CustomMessage.CHAT_BOLT_FALLBACK_MESSAGE, userModel.getName()));
 				
 				RoleModel roleModel = roleService.getRoleByID(userModel.getRoleID());
-				Application.logger.debug(String.format(CustomMessage.CHAT_BOLT_CONGRATS_ROLE_MESSAGE, userModel.getName(), roleModel.getRoleName()));
-				sparkService.sendMarkdownMessage(userModel.getId(), String.format(CustomMessage.CHAT_BOLT_CONGRATS_ROLE_MESSAGE, userModel.getName(), roleModel.getRoleName()));
+				Application.logger.debug(String.format(CustomMessage.CHAT_BOLT_CONGRATS_ROLE_MESSAGE, roleModel.getRoleName()));
+				sparkService.sendMarkdownMessage(userModel.getId(), String.format(CustomMessage.CHAT_BOLT_CONGRATS_ROLE_MESSAGE, roleModel.getRoleName()));
 				
 				String action = "input.changeRole";
 				String prefCourse = goldenSampleService.getGoldenSampleStringByRoleID(userModel.getId(), roleModel.getId());

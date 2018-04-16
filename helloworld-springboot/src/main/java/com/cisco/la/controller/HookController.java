@@ -190,6 +190,7 @@ public class HookController {
 			}
 			break;
 		case "accept":
+		case "thank":
 			List<MessageModel> activeMessages = messageService.getActiveMessage(personEmail,intentName,action);
 			
 			if(activeMessages.size()>0){
