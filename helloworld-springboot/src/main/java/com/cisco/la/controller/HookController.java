@@ -191,7 +191,7 @@ public class HookController {
 			break;
 		case "accept":
 		case "thank":
-			List<MessageModel> activeMessages = messageService.getActiveMessage(personEmail,intentName,action);
+			List<MessageModel> activeMessages = messageService.getActiveMessage(personEmail,"accept",action);
 			
 			if(activeMessages.size()>0){
 				for(MessageModel messageModel: activeMessages){
